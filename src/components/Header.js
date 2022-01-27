@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import HeaderContext from '../context/header/HeaderContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
 export default function Header() {
-  const { searchButton } = useContext(HeaderProvider);
+  const { searchButton } = useContext(HeaderContext);
   const history = useHistory();
-  const [inputSearch, setinputSearch] = useState(false);
+  const [inputSearch, setInputSearch] = useState(false);
 
   return (
     <header>
@@ -15,21 +16,21 @@ export default function Header() {
         type="button"
         onClick={ () => history.push('/profile') }
         onKeyDown={ () => history.push('/profile') }
-        data-testids="profile-top-btn"
+        data-testid="profile-top-btn"
       >
         <img
           src={ profileIcon }
           alt="profile-icon"
         />
       </button>
-      <span data-testids="page-title">{ }</span>
+      <span data-testid="page-title">{ }</span>
       {
         searchButton && (
           <button
             type="button"
-            onClick={ () => setinputSearch(!inputSearch) }
+            onClick={ () => setInputSearch(!inputSearch) }
             onKeyDown={ () => history.push('/profile') }
-            data-testids="search-top-btn"
+            data-testid="search-top-btn"
           >
             <img
               src={ searchIcon }

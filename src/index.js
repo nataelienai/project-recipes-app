@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import HeaderContext from './context/HeaderContext';
+import HeaderProvider from './context/header/HeaderProvider';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <BrowserRouter>
-    <HeaderContext>
+    <HeaderProvider>
       <App />
-    </HeaderContext>
+    </HeaderProvider>
   </BrowserRouter>,
   document.getElementById('root'),
 );
