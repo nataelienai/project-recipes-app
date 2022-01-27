@@ -1,10 +1,14 @@
 import React from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Route, Switch } from 'react-router-dom';
+import Explore from './pages/Explore';
 
 function App() {
   return (
-    <div className="meals" />
+    <Switch>
+      <Route exact path="/explore">
+        <Explore />
+      </Route>
+    </Switch>
   );
 }
 
