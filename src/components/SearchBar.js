@@ -5,7 +5,7 @@ export default function SearchBar() {
     <div>
       <input type="text" data-testid="search-input" />
       <label htmlFor="radio-ingredient">
-        ingrediente
+        Ingredient
         <input
           id="radio-ingredient"
           type="radio"
@@ -14,7 +14,7 @@ export default function SearchBar() {
       </label>
       <label htmlFor="radio-name">
 
-        nome
+        Name
         <input
           id="radio-name"
           type="radio"
@@ -29,7 +29,7 @@ export default function SearchBar() {
           data-testid="first-letter-search-radio"
         />
       </label>
-      primeira letra
+      First letter
 
       <button
         type="submit"
