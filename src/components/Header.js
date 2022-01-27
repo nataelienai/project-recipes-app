@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
 export default function Header() {
+  const { searchButton } = useContext(HeaderProvider);
   const history = useHistory();
   const [inputSearch, setinputSearch] = useState(false);
 
@@ -22,17 +23,21 @@ export default function Header() {
         />
       </button>
       <span data-testids="page-title">{ }</span>
-      <button
-        type="button"
-        onClick={ () => setinputSearch(!inputSearch) }
-        onKeyDown={ () => history.push('/profile') }
-        data-testids="search-top-btn"
-      >
-        <img
-          src={ searchIcon }
-          alt="search-icon"
-        />
-      </button>
+      {
+        searchButton && (
+          <button
+            type="button"
+            onClick={ () => setinputSearch(!inputSearch) }
+            onKeyDown={ () => history.push('/profile') }
+            data-testids="search-top-btn"
+          >
+            <img
+              src={ searchIcon }
+              alt="search-icon"
+            />
+          </button>
+        )
+      }
       {inputSearch && <SearchBar />}
     </header>
   );
