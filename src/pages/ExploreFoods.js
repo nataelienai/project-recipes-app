@@ -17,7 +17,7 @@ export default function ExploreFoods() {
         data-testid="explore-by-ingredient"
         onClick={ () => history.push('/explore/foods/ingredients') }
       >
-        By Ingridient
+        By Ingredient
       </button>
       <button
         type="button"
