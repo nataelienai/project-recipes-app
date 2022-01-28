@@ -28,3 +28,15 @@ export const getDrinkFirstletterApi = async (info) => {
   const response = await request.json();
   return response;
 };
+
+export const getRandomFoodApi = async () => {
+  const request = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+  const response = await request.json();
+  return response.meals[0];
+};
+
+export const getRandomDrinkApi = async () => {
+  const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
+  const response = await request.json();
+  return response.drinks[0];
+};
