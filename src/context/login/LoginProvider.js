@@ -1,5 +1,5 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { propTypes } from 'react-bootstrap/esm/Image';
 import LoginContext from './LoginContext';
 
 function LoginProvider({ children }) {
@@ -24,7 +24,7 @@ function LoginProvider({ children }) {
 }
 
 LoginProvider.propTypes = {
-  children: propTypes.element,
+  children: PropTypes.node,
 }.isRequired;
 
 export default LoginProvider;

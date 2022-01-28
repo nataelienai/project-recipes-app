@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import LoginContext from '../context/loginCont/LoginContext';
+import LoginContext from '../context/login/LoginContext';
 
 function Login() {
   const {

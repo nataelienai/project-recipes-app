@@ -23,8 +23,8 @@ export default function SearchBar() {
           onChange={ (e) => handleSearchInputs(e) }
         />
       </label>
-      <label htmlFor="radio-name">
 
+      <label htmlFor="radio-name">
         Name
         <input
           id="radio-name"
@@ -34,8 +34,8 @@ export default function SearchBar() {
           onChange={ (e) => handleSearchInputs(e) }
         />
       </label>
-      <label htmlFor="radio-first-letter">
 
+      <label htmlFor="radio-first-letter">
         <input
           id="radio-first-letter"
           type="radio"
@@ -43,8 +43,8 @@ export default function SearchBar() {
           name="search-types"
           onChange={ (e) => handleSearchInputs(e) }
         />
+        First letter
       </label>
-      First letter
 
       <button
         type="submit"

@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 
 export default function Explore() {
   const history = useHistory();
-
   return (
     <div>
       <button
