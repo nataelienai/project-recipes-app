@@ -40,3 +40,15 @@ export const getRandomDrinkApi = async () => {
   const response = await request.json();
   return response.drinks[0];
 };
+
+export const getFoodIngredientsApi = async () => {
+  const request = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
+  const response = await request.json();
+  return response.meals;
+};
+
+export const getDrinkIngredientsApi = async () => {
+  const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list');
+  const response = await request.json();
+  return response.drinks;
+};
