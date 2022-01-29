@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import HeaderContext from '../context/header/HeaderContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
-export default function Header() {
+export default function Header({ title }) {
   const { searchButton } = useContext(HeaderContext);
   const history = useHistory();
   const [inputSearch, setInputSearch] = useState(false);
@@ -21,7 +22,7 @@ export default function Header() {
         onClick={ () => history.push('/profile') }
         onKeyDown={ () => history.push('/profile') }
       />
-      <span data-testid="page-title">{ }</span>
+      <span data-testid="page-title">{title}</span>
       {
         searchButton && (
           <button
@@ -41,3 +42,6 @@ export default function Header() {
     </header>
   );
 }
+Header.propTypes = {
+  title: PropTypes.string,
+}.isRequired;

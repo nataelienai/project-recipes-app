@@ -26,7 +26,7 @@ function App() {
         </LoginProvider>
       </Route>
       <Route exact path="/foods">
-        <Header />
+        <Header title="Foods" />
         <Footer />
         { location.pathname === '/foods'
          && setpageDrinkOrFood('Food')}
@@ -34,7 +34,7 @@ function App() {
         <HeaderCards />
       </Route>
       <Route exact path="/drinks">
-        <Header />
+        <Header title="Drinks" />
         { location.pathname === '/drinks'
          && setpageDrinkOrFood('Drink')}
         {setSearchButton((true))}
@@ -43,29 +43,48 @@ function App() {
         <Footer />
       </Route>
       <Route exact path="/explore">
+        { location.pathname === '/explore'
+         && setSearchButton(false)}
+        <Header title="Explore" />
         <Explore />
         <Footer />
       </Route>
       <Route exact path="/explore/foods">
+        {location.pathname === '/explore/foods'
+         && setSearchButton(false)}
+        <Header title="Explore Foods" />
         <ExploreFoods />
         <Footer />
       </Route>
       <Route exact path="/explore/drinks">
+        {location.pathname === '/explore/drinks'
+         && setSearchButton(false)}
+        <Header title="Explore Drinks" />
         <ExploreDrinks />
         <Footer />
       </Route>
       <Route exact path="/explore/foods/ingredients">
+        {location.pathname === '/explore/foods/ingredients'
+         && setSearchButton(false)}
+        <Header title="Explore Ingredients" />
         <ExploreFoodIngredients />
         <Footer />
       </Route>
       <Route exact path="/explore/drinks/ingredients">
+        {location.pathname === '/explore/drinks/ingredients'
+         && setSearchButton(false)}
+        <Header title="Explore Ingredients" />
         <ExploreDrinkIngredients />
         <Footer />
       </Route>
       <Route exact path="/explore/foods/nationalities">
+        <Header title="Explore Nationalities" />
         <Footer />
       </Route>
       <Route exact path="/profile">
+        {location.pathname === '/profile'
+         && setSearchButton(false)}
+        <Header title="Profile" />
         <Footer />
       </Route>
     </Switch>
