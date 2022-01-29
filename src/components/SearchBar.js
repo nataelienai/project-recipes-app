@@ -28,22 +28,28 @@ export default function SearchBar() {
     formData[target.name] = target.value;
     setInputsLocalState(formData);
   }
-
+  function AlertEmptyApiResponse(data) {
+    if (data !== null) {
+      setdataApi(data);
+    } else {
+      global.alert('Sorry, we haven\'t found any recipes for these filters');
+    }
+  }
   function handleFetchs(type, info, pageType) {
     switch (type) {
     case 'Ingredient':
       if (pageType === 'Drink') {
-        getDrinkIngredientApi(info).then((data) => setdataApi(data.drinks));
+        getDrinkIngredientApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
       } else {
-        getFoodIngredientApi(info).then((data) => setdataApi(data.meals));
+        getFoodIngredientApi(info).then((data) => AlertEmptyApiResponse(data.meals));
       }
       break;
 
     case 'Name':
       if (pageType === 'Drink') {
-        getDrinkNameApi(info).then((data) => setdataApi(data.drinks));
+        getDrinkNameApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
       } else {
-        getFoodNameApi(info).then((data) => setdataApi(data.meals));
+        getFoodNameApi(info).then((data) => AlertEmptyApiResponse(data.meals));
       }
 
       break;
@@ -52,10 +58,10 @@ export default function SearchBar() {
       if (info.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else if (pageType === 'Drink') {
-        getDrinkFirstletterApi(info).then((data) => setdataApi(data.drinks));
+        getDrinkFirstletterApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
       } else {
         getFoodFirstletterApi(info)
-          .then((data) => setdataApi(data.meals));
+          .then((data) => AlertEmptyApiResponse(data.meals));
       }
       break;
     default: {
@@ -64,7 +70,6 @@ export default function SearchBar() {
     }
   }
   function handleClick() {
-    setdataApi([]);
     handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood);
   }
   return (
