@@ -26,11 +26,7 @@ export default function HeaderCards() {
   }
 
   useEffect(() => {
-    if (!dataApi) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters');
-    } else {
-      setcardOnScreen(card(dataApi));
-    }
+    setcardOnScreen(card(dataApi));
   }, [dataApi]);
   return (
     <section>
