@@ -70,7 +70,6 @@ export default function SearchBar() {
     }
   }
   function handleClick() {
-    setdataApi([]);
     handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood);
   }
   return (
