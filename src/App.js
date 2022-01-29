@@ -11,6 +11,7 @@ import ExploreFoodIngredients from './pages/ExploreFoodIngredients';
 import ExploreFoods from './pages/ExploreFoods';
 import Login from './pages/Login';
 import HeaderCards from './components/HeaderCards';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 
 function App() {
   const {
@@ -86,6 +87,9 @@ function App() {
          && setSearchButton(false)}
         <Header title="Profile" />
         <Footer />
+      </Route>
+      <Route exact path="/favorite-recipes">
+        <FavoriteRecipes />
       </Route>
     </Switch>
   );
