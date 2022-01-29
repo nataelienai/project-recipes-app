@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import HeaderCards from './components/HeaderCards';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import Profile from './pages/Profile';
+import DoneRecipes from './pages/DoneRecipes';
 
 function App() {
   const {
@@ -76,13 +77,12 @@ function App() {
       </Route>
 
       <Route exact path="/done-recipes">
-        <Footer />
+        <DoneRecipes />
       </Route>
 
       <Route exact path="/favorite-recipes">
         <FavoriteRecipes />
       </Route>
-
     </Switch>
   );
 }

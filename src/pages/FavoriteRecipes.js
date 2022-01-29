@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function FavoriteRecipes() {
   const location = useLocation();
@@ -14,7 +13,7 @@ export default function FavoriteRecipes() {
   return (
     <div>
       <Header title="Favorite Recipes" />
-      <Footer />
+
     </div>
   );
 }
