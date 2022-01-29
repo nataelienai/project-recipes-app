@@ -11,6 +11,7 @@ import ExploreFoodIngredients from './pages/ExploreFoodIngredients';
 import ExploreFoods from './pages/ExploreFoods';
 import Login from './pages/Login';
 import HeaderCards from './components/HeaderCards';
+import Profile from './pages/Profile';
 
 function App() {
   const {
@@ -20,11 +21,13 @@ function App() {
   const location = useLocation();
   return (
     <Switch>
+
       <Route exact path="/">
         <LoginProvider>
           <Login />
         </LoginProvider>
       </Route>
+
       <Route exact path="/foods">
         <Header title="Foods" />
         <Footer />
@@ -33,6 +36,7 @@ function App() {
         {setSearchButton((true))}
         <HeaderCards />
       </Route>
+
       <Route exact path="/drinks">
         <Header title="Drinks" />
         { location.pathname === '/drinks'
@@ -42,6 +46,7 @@ function App() {
         <HeaderCards />
         <Footer />
       </Route>
+
       <Route exact path="/explore">
         { location.pathname === '/explore'
          && setSearchButton(false)}
@@ -49,6 +54,7 @@ function App() {
         <Explore />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods">
         {location.pathname === '/explore/foods'
          && setSearchButton(false)}
@@ -56,6 +62,7 @@ function App() {
         <ExploreFoods />
         <Footer />
       </Route>
+
       <Route exact path="/explore/drinks">
         {location.pathname === '/explore/drinks'
          && setSearchButton(false)}
@@ -63,6 +70,7 @@ function App() {
         <ExploreDrinks />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods/ingredients">
         {location.pathname === '/explore/foods/ingredients'
          && setSearchButton(false)}
@@ -70,6 +78,7 @@ function App() {
         <ExploreFoodIngredients />
         <Footer />
       </Route>
+
       <Route exact path="/explore/drinks/ingredients">
         {location.pathname === '/explore/drinks/ingredients'
          && setSearchButton(false)}
@@ -77,16 +86,31 @@ function App() {
         <ExploreDrinkIngredients />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods/nationalities">
         <Header title="Explore Nationalities" />
         <Footer />
       </Route>
+
       <Route exact path="/profile">
         {location.pathname === '/profile'
          && setSearchButton(false)}
         <Header title="Profile" />
+        <LoginProvider>
+          <Profile />
+          <Footer />
+        </LoginProvider>
+      </Route>
+
+      <Route exact path="/done-recipes">
+
         <Footer />
       </Route>
+
+      <Route exact path="/favorite-recipes">
+        <Footer />
+      </Route>
+
     </Switch>
   );
 }
