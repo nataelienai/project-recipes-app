@@ -19,11 +19,10 @@ export default function SearchBar() {
   const [inputsLocalState, setInputsLocalState] = useState(INITIAL_STATE);
   const { inputTextSearch, searchRadioBtn } = inputsLocalState;
   const {
-    setdataApiIngredient,
-    setdataApiName,
-    setdataApiFirstletter,
+    setdataApi,
     pageDrinkOrFood,
   } = useContext(HeaderContext);
+
   function handleSearchInputs({ target }) {
     const formData = { ...inputsLocalState };
     formData[target.name] = target.value;
@@ -32,37 +31,41 @@ export default function SearchBar() {
 
   function handleFetchs(type, info, pageType) {
     switch (type) {
+    case 'Ingredient':
+      if (pageType === 'Drink') {
+        getDrinkIngredientApi(info).then((data) => setdataApi(data.drinks));
+      } else {
+        getFoodIngredientApi(info).then((data) => setdataApi(data.meals));
+      }
+      break;
+
+    case 'Name':
+      if (pageType === 'Drink') {
+        getDrinkNameApi(info).then((data) => setdataApi(data.drinks));
+      } else {
+        getFoodNameApi(info).then((data) => setdataApi(data.meals));
+      }
+
+      break;
+
     case 'First letter':
       if (info.length > 1) {
         global.alert('Your search must have only 1 (one) character');
-      } else if (pageType === 'Food') {
-        getFoodFirstletterApi(info).then((data) => setdataApiFirstletter(data.meals));
+      } else if (pageType === 'Drink') {
+        getDrinkFirstletterApi(info).then((data) => setdataApi(data.drinks));
       } else {
-        getDrinkFirstletterApi(info).then((data) => setdataApiFirstletter(data.drinks));
+        getFoodFirstletterApi(info)
+          .then((data) => setdataApi(data.meals));
       }
       break;
-
-    case 'Ingredient':
-      if (pageType === 'Food') {
-        getFoodIngredientApi(info).then((data) => setdataApiIngredient(data.meals));
-      } else {
-        getDrinkIngredientApi(info).then((data) => setdataApiIngredient(data.drinks));
-      }
-
-      break;
-    case 'Name':
-      if (pageType === 'Food') {
-        getFoodNameApi(info).then((data) => setdataApiName(data.meals));
-      } else {
-        getDrinkNameApi(info).then((data) => setdataApiName(data.drinks));
-      }
-
-      break;
-
     default: {
       global.alert('escolha uma categoria');
     }
     }
+  }
+  function handleClick() {
+    setdataApi([]);
+    handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood);
   }
   return (
     <div>
@@ -114,7 +117,7 @@ export default function SearchBar() {
       <button
         type="submit"
         data-testid="exec-search-btn"
-        onClick={ () => handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood) }
+        onClick={ () => handleClick() }
       >
         Search
       </button>

@@ -5,9 +5,13 @@ import HeaderContext from './context/header/HeaderContext';
 import LoginProvider from './context/login/LoginProvider';
 import Explore from './pages/Explore';
 import Login from './pages/Login';
+import HeaderCards from './components/HeaderCards';
 
 function App() {
-  const { setSearchButton, setpageDrinkOrFood } = useContext(HeaderContext);
+  const {
+    setSearchButton,
+    setpageDrinkOrFood,
+  } = useContext(HeaderContext);
   const location = useLocation();
   return (
     <Switch>
@@ -17,15 +21,18 @@ function App() {
         </LoginProvider>
       </Route>
       <Route exact path="/foods">
-        <Header />
-        { setpageDrinkOrFood('Food')}
+        {location.pathname === '/foods'
+          && setpageDrinkOrFood('Food')}
         {setSearchButton((true))}
+        <Header />
+        <HeaderCards />
       </Route>
       <Route exact path="/drinks">
-        <Header />
-        { location.pathname === '/drinks'
-         && setpageDrinkOrFood('Drink')}
+        {location.pathname === '/drinks'
+          && setpageDrinkOrFood('Drink')}
         {setSearchButton((true))}
+        <Header />
+        <HeaderCards />
       </Route>
       <Route exact path="/explore">
         <Explore />
