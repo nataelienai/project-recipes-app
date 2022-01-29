@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import HeaderContext from './context/header/HeaderContext';
 import LoginProvider from './context/login/LoginProvider';
@@ -22,29 +23,42 @@ function App() {
       </Route>
       <Route exact path="/foods">
         <Header />
+        <Footer />
         { setpageDrinkOrFood('Food')}
         {setSearchButton((true))}
       </Route>
       <Route exact path="/drinks">
         <Header />
+        <Footer />
         { location.pathname === '/drinks'
          && setpageDrinkOrFood('Drink')}
         {setSearchButton((true))}
       </Route>
       <Route exact path="/explore">
         <Explore />
+        <Footer />
       </Route>
       <Route exact path="/explore/foods">
         <ExploreFoods />
+        <Footer />
       </Route>
       <Route exact path="/explore/drinks">
         <ExploreDrinks />
+        <Footer />
       </Route>
       <Route exact path="/explore/foods/ingredients">
         <ExploreFoodIngredients />
+        <Footer />
       </Route>
       <Route exact path="/explore/drinks/ingredients">
         <ExploreDrinkIngredients />
+        <Footer />
+      </Route>
+      <Route exact path="/explore/foods/nationalities">
+        <Footer />
+      </Route>
+      <Route exact path="/profile">
+        <Footer />
       </Route>
     </Switch>
   );
