@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import HeaderContext from '../context/header/HeaderContext';
+import Footer from './Footer';
 
 const MAX_CARDS = 12;
 export default function HeaderCards() {
@@ -29,8 +30,11 @@ export default function HeaderCards() {
     setcardOnScreen(card(dataApi));
   }, [dataApi]);
   return (
-    <section>
-      { cardOnScreen }
-    </section>
+    <>
+      <section>
+        { cardOnScreen }
+      </section>
+      <Footer />
+    </>
   );
 }
