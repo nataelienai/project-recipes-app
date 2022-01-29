@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import useLocalStorage from 'react-localstorage-hook';
 import LoginContext from './LoginContext';
 
 function LoginProvider({ children }) {
@@ -9,7 +8,6 @@ function LoginProvider({ children }) {
   const [btn, setBtn] = useState({ disabled: true });
   const [mealsToken, setmealsToken] = useState(1);
   const [cocktailsToken, setcocktailsToken] = useState(1);
-  const [values, setValue] = useLocalStorage('');
 
   const loginContextValue = {
     email,
@@ -22,8 +20,6 @@ function LoginProvider({ children }) {
     setmealsToken,
     cocktailsToken,
     setcocktailsToken,
-    values,
-    setValue,
   };
 
   return (

@@ -11,6 +11,7 @@ import ExploreFoodIngredients from './pages/ExploreFoodIngredients';
 import ExploreFoods from './pages/ExploreFoods';
 import Login from './pages/Login';
 import HeaderCards from './components/HeaderCards';
+import Profile from './pages/Profile';
 
 function App() {
   const {
@@ -20,11 +21,13 @@ function App() {
   const location = useLocation();
   return (
     <Switch>
+
       <Route exact path="/">
         <LoginProvider>
           <Login />
         </LoginProvider>
       </Route>
+
       <Route exact path="/foods">
         <Header />
         <Footer />
@@ -33,6 +36,7 @@ function App() {
         {setSearchButton((true))}
         <HeaderCards />
       </Route>
+
       <Route exact path="/drinks">
         <Header />
         { location.pathname === '/drinks'
@@ -42,32 +46,51 @@ function App() {
         <HeaderCards />
         <Footer />
       </Route>
+
       <Route exact path="/explore">
         <Explore />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods">
         <ExploreFoods />
         <Footer />
       </Route>
+
       <Route exact path="/explore/drinks">
         <ExploreDrinks />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods/ingredients">
         <ExploreFoodIngredients />
         <Footer />
       </Route>
+
       <Route exact path="/explore/drinks/ingredients">
         <ExploreDrinkIngredients />
         <Footer />
       </Route>
+
       <Route exact path="/explore/foods/nationalities">
         <Footer />
       </Route>
+
       <Route exact path="/profile">
+        <LoginProvider>
+          <Profile />
+          <Footer />
+        </LoginProvider>
+      </Route>
+
+      <Route exact path="/done-recipes">
         <Footer />
       </Route>
+
+      <Route exact path="/favorite-recipes">
+        <Footer />
+      </Route>
+
     </Switch>
   );
 }
