@@ -13,27 +13,25 @@ export default function Header({ title }) {
 
   return (
     <header>
-
-      <input
-        data-testid="profile-top-btn"
-        src={ profileIcon }
-        type="image"
-        alt="profile-icon"
+      <button
+        type="button"
+        title="Profile"
         onClick={ () => history.push('/profile') }
-        onKeyDown={ () => history.push('/profile') }
-      />
+      >
+        <img src={ profileIcon } alt="profile-icon" data-testid="profile-top-btn" />
+      </button>
+
       <span data-testid="page-title">{title}</span>
       {
         searchButton && (
           <button
             type="button"
             onClick={ () => setInputSearch(!inputSearch) }
-            onKeyDown={ () => history.push('/profile') }
-            data-testid="search-top-btn"
           >
             <img
               src={ searchIcon }
               alt="search-icon"
+              data-testid="search-top-btn"
             />
           </button>
         )
