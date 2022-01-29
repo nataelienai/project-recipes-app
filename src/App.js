@@ -93,6 +93,9 @@ function App() {
       </Route>
 
       <Route exact path="/profile">
+        {location.pathname === '/profile'
+         && setSearchButton(false)}
+        <Header title="Profile" />
         <LoginProvider>
           <Profile />
           <Footer />
@@ -100,6 +103,7 @@ function App() {
       </Route>
 
       <Route exact path="/done-recipes">
+
         <Footer />
       </Route>
 
