@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import LoginContext from '../context/login/LoginContext';
 
 function Login() {
+  const history = useHistory();
   const {
     email,
     setEmail,
@@ -9,6 +11,8 @@ function Login() {
     setPassword,
     btn,
     setBtn,
+    mealsToken,
+    cocktailsToken,
   } = useContext(LoginContext);
 
   useEffect(() => {
@@ -24,9 +28,17 @@ function Login() {
     }
   }, [email, password, setBtn]);
 
+  const btnLocalStorage = (e) => {
+    e.preventDefault();
+    localStorage.setItem('user', JSON.stringify({ email }));
+    localStorage.setItem('mealsToken', mealsToken);
+    localStorage.setItem('cocktailsToken', cocktailsToken);
+    history.push('/foods');
+  };
+
   return (
     <div>
-      <form>
+      <form onSubmit={ btnLocalStorage }>
 
         <h1>Login</h1>
 
