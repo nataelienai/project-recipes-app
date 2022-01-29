@@ -12,17 +12,15 @@ export default function Header() {
 
   return (
     <header>
-      <button
-        type="button"
+
+      <input
+        data-testid="profile-top-btn"
+        src={ profileIcon }
+        type="image"
+        alt="profile-icon"
         onClick={ () => history.push('/profile') }
         onKeyDown={ () => history.push('/profile') }
-        data-testid="profile-top-btn"
-      >
-        <img
-          src={ profileIcon }
-          alt="profile-icon"
-        />
-      </button>
+      />
       <span data-testid="page-title">{ }</span>
       {
         searchButton && (
