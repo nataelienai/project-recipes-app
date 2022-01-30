@@ -1,14 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import HeaderContext from '../context/header/HeaderContext';
-import Footer from './Footer';
 
 const MAX_CARDS = 12;
 export default function HeaderCards() {
   const {
     dataApi,
-    cardOnScreen,
     pageDrinkOrFood,
-    setcardOnScreen,
   } = useContext(HeaderContext);
   function card(data) {
     return data.slice(0, MAX_CARDS).map((item, i) => (
@@ -26,15 +23,9 @@ export default function HeaderCards() {
       </div>));
   }
 
-  useEffect(() => {
-    setcardOnScreen(card(dataApi));
-  }, [dataApi]);
   return (
-    <>
-      <section>
-        { cardOnScreen }
-      </section>
-      <Footer />
-    </>
+    <section>
+      { card(dataApi) }
+    </section>
   );
 }

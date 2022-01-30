@@ -8,7 +8,7 @@ export default function HeaderProvider({ children }) {
   const [dataApi, setdataApi] = useState([]);
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
-  const [cardOnScreen, setcardOnScreen] = useState();
+  const [buttonsCategory, setButtonsCategory] = useState([]);
   const history = useHistory();
 
   function redirectToDetails(pagetype) {
@@ -40,8 +40,8 @@ export default function HeaderProvider({ children }) {
     redirectToDetails,
     headerCardsValidation,
     setHeaderCardsValidation,
-    cardOnScreen,
-    setcardOnScreen,
+    buttonsCategory,
+    setButtonsCategory,
 
   };
   return (
