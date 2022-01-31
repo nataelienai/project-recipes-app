@@ -1,7 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
-import { getCategoryFoodsApi, getCategoryDrinksApi } from '../services/api';
+import {
+  getCategoryFoodsApi,
+  getCategoryDrinksApi,
+  getCategoryFoodsFiltersApi,
+  getCategoryDrinksFiltersApi } from '../services/api';
 
 const MAX_CATEGORYS = 5;
 export default function ButtonsCategory() {
@@ -9,15 +13,30 @@ export default function ButtonsCategory() {
   const {
     buttonsCategory,
     setButtonsCategory,
+    setdataApi,
   } = useContext(HeaderContext);
+
+  function HandleClickFilters(nameFilter) {
+    let apiResponse;
+    if (location.pathname === '/foods') {
+      apiResponse = getCategoryFoodsFiltersApi(nameFilter)
+        .then((data) => setdataApi(data.meals));
+    } else if (location.pathname === '/drinks') {
+      apiResponse = getCategoryDrinksFiltersApi(nameFilter)
+        .then((data) => setdataApi(data.drinks));
+    }
+    return apiResponse;
+  }
+
   function buttons(category) {
-    return category.map((item, i) => i < MAX_CATEGORYS && (
+    return category.map(({ strCategory }, i) => i < MAX_CATEGORYS && (
       <button
         key={ i }
         type="button"
-        data-testid={ `${item.strCategory}-category-filter` }
+        data-testid={ `${strCategory}-category-filter` }
+        onClick={ () => HandleClickFilters(strCategory) }
       >
-        {item.strCategory}
+        {strCategory}
       </button>
     ));
   }

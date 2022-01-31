@@ -20,7 +20,7 @@ export default function HeaderProvider({ children }) {
       break;
 
     default:
-      if (dataApi.length === 1) {
+      if (dataApi.length === 1 && dataApi[0].idMeal !== '52968') {
         history.push(`/foods/${dataApi[0].idMeal}`);
       }
       break;
