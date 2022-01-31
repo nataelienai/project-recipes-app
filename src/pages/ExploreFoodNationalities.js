@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import HeaderContext from '../context/header/HeaderContext';
 import useFirstNMealsByNationality from '../hooks/useFirstNMealsByNationality';
 import useNationalities from '../hooks/useNationalities';
 
@@ -12,7 +13,10 @@ export default function ExploreFoodNationalities() {
   const meals = useFirstNMealsByNationality(NUMBER_OF_MEALS, selectedNationality);
   const nationalities = useNationalities();
   const history = useHistory();
-
+  const { setSearchButton } = useContext(HeaderContext);
+  useEffect(() => {
+    setSearchButton(true);
+  }, []);
   const handleClick = (mealId) => {
     history.push(`/foods/${mealId}`);
   };
