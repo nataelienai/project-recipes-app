@@ -32,7 +32,7 @@ export default function SearchBar() {
     if (data !== null) {
       setdataApi(data);
     } else {
-      global.alert('Sorry, we haven\'t found any recipes for these filters');
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   }
   function handleFetchs(type, info, pageType) {
