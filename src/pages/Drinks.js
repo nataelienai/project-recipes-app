@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import HeaderCards from '../components/HeaderCards';
 import MainCards from '../components/MainCards';
 import ButtonsCategory from '../components/ButtonsCategory';
 
@@ -20,9 +19,7 @@ export default function Foods() {
       <Header title="Drinks" />
       <ButtonsCategory />
       <MainCards />
-      <HeaderCards />
       <Footer />
-
     </>
   );
 }
