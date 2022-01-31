@@ -13,7 +13,7 @@ export default function Details() {
   }
   return (
     <main>
-      <h1>d</h1>
+      <h1>ssd</h1>
       {/*       <img data-testid="recipe-photo" alt='recipe'></img>
       <span data-testid="recipe-title"></span>
       <button type='button' data-testid="share-btn">share</button>
