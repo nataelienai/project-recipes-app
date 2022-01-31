@@ -10,7 +10,6 @@ export default function HeaderProvider({ children }) {
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
   const [buttonsCategory, setButtonsCategory] = useState([]);
-  const [filterClicked, setFilterClicked] = useState(false);
   const history = useHistory();
   const location = useLocation();
   function redirectToDetails(pagetype) {
@@ -43,10 +42,6 @@ export default function HeaderProvider({ children }) {
     redirectToDetails(pageDrinkOrFood);
   }, [dataApi, pageDrinkOrFood]);
 
-  useEffect(() => {
-    if (!filterClicked) handleMainCardsApi();
-  }, [filterClicked]);
-
   const contextValue = {
     searchButton,
     setSearchButton,
@@ -60,8 +55,6 @@ export default function HeaderProvider({ children }) {
     buttonsCategory,
     setButtonsCategory,
     handleMainCardsApi,
-    filterClicked,
-    setFilterClicked,
 
   };
   return (
