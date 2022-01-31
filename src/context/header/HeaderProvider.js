@@ -10,6 +10,7 @@ export default function HeaderProvider({ children }) {
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
   const [buttonsCategory, setButtonsCategory] = useState([]);
+  const [getIdOfPath, setGetIdOfPath] = useState('');
   const history = useHistory();
   const location = useLocation();
   function redirectToDetails(pagetype) {
@@ -55,7 +56,8 @@ export default function HeaderProvider({ children }) {
     buttonsCategory,
     setButtonsCategory,
     handleMainCardsApi,
-
+    getIdOfPath,
+    setGetIdOfPath,
   };
   return (
     <div>

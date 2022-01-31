@@ -30,7 +30,13 @@ function App() {
       <Route exact path="/drinks">
         <Drinks />
       </Route>
+      <Route path="/foods/">
+        <h1>details</h1>
+      </Route>
 
+      <Route path="/drinks/">
+        <h1>details</h1>
+      </Route>
       <Route exact path="/explore">
         <Explore />
       </Route>
