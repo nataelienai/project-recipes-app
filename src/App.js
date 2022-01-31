@@ -55,6 +55,10 @@ function App() {
         <ExploreFoodNationalities />
       </Route>
 
+      <Route exact path="/explore/drinks/nationalities">
+        <h1>Not Found</h1>
+      </Route>
+
       <Route exact path="/profile">
         <LoginProvider>
           <Profile />
