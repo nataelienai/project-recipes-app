@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
-/* import '../Styles/MainCard.css'; */
+import '../Styles/mainCards.css';
 
 const MAX_CARDS = 12;
 export default function MainCards() {
@@ -18,15 +18,13 @@ export default function MainCards() {
 
   function cards(data) {
     return data.map((item, i) => i < MAX_CARDS && (
-      <div
+      <button
+        type="button"
         key={ i }
         data-testid={ `${i}-recipe-card` }
-      /*   onKeyDown={
-          () => redirectCards(pageDrinkOrFood === 'Food' ? item.idMeal : item.idDrink)
-        }
         onClick={
           () => redirectCards(pageDrinkOrFood === 'Food' ? item.idMeal : item.idDrink)
-        } */
+        }
       >
         <img
           data-testid={ `${i}-card-img` }
@@ -38,12 +36,11 @@ export default function MainCards() {
           {' '}
           {pageDrinkOrFood === 'Food' ? item.strMeal : item.strDrink}
         </span>
-      </div>));
+      </button>));
   }
 
   useEffect(() => {
     handleMainCardsApi();
-    redirectCards('i');
   }, []);
   return (
     <section>
