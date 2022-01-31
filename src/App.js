@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import HeaderContext from './context/header/HeaderContext';
 import LoginProvider from './context/login/LoginProvider';
 import Explore from './pages/Explore';
 import ExploreDrinkIngredients from './pages/ExploreDrinkIngredients';
@@ -10,17 +9,13 @@ import ExploreDrinks from './pages/ExploreDrinks';
 import ExploreFoodIngredients from './pages/ExploreFoodIngredients';
 import ExploreFoods from './pages/ExploreFoods';
 import Login from './pages/Login';
-import HeaderCards from './components/HeaderCards';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import Profile from './pages/Profile';
+import Foods from './pages/Foods';
+import Drinks from './pages/Drinks';
 import DoneRecipes from './pages/DoneRecipes';
 
 function App() {
-  const {
-    setSearchButton,
-    setpageDrinkOrFood,
-  } = useContext(HeaderContext);
-  const location = useLocation();
   return (
     <Switch>
       <Route exact path="/">
@@ -30,19 +25,11 @@ function App() {
       </Route>
 
       <Route exact path="/foods">
-        { location.pathname === '/foods'
-         && setpageDrinkOrFood('Food')}
-        {setSearchButton((true))}
-        <Header title="Foods" />
-        <HeaderCards />
+        <Foods />
       </Route>
 
       <Route exact path="/drinks">
-        <Header title="Drinks" />
-        { location.pathname === '/drinks'
-         && setpageDrinkOrFood('Drink')}
-        {setSearchButton((true))}
-        <HeaderCards />
+        <Drinks />
       </Route>
 
       <Route exact path="/explore">

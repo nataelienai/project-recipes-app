@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import HeaderContext from './HeaderContext';
+import { getFoodsMainPageApi, getDrinksMainPageApi } from '../../services/api';
 
 export default function HeaderProvider({ children }) {
   const [searchButton, setSearchButton] = useState(false);
   const [dataApi, setdataApi] = useState([]);
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
-  const [cardOnScreen, setcardOnScreen] = useState();
+  const [buttonsCategory, setButtonsCategory] = useState([]);
   const history = useHistory();
-
+  const location = useLocation();
   function redirectToDetails(pagetype) {
     switch (pagetype) {
     case 'Drink':
@@ -20,16 +21,27 @@ export default function HeaderProvider({ children }) {
       break;
 
     default:
-      if (dataApi.length === 1) {
+      if (dataApi.length === 1 && dataApi[0].idMeal !== '52968') {
         history.push(`/foods/${dataApi[0].idMeal}`);
       }
       break;
     }
   }
+  function handleMainCardsApi() {
+    let apiResponse;
 
+    if (location.pathname === '/foods') {
+      apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
+    } else if (location.pathname === '/drinks') {
+      apiResponse = getDrinksMainPageApi().then((data) => setdataApi(data.drinks));
+    }
+
+    return apiResponse;
+  }
   useEffect(() => {
     redirectToDetails(pageDrinkOrFood);
   }, [dataApi, pageDrinkOrFood]);
+
   const contextValue = {
     searchButton,
     setSearchButton,
@@ -40,8 +52,9 @@ export default function HeaderProvider({ children }) {
     redirectToDetails,
     headerCardsValidation,
     setHeaderCardsValidation,
-    cardOnScreen,
-    setcardOnScreen,
+    buttonsCategory,
+    setButtonsCategory,
+    handleMainCardsApi,
 
   };
   return (
