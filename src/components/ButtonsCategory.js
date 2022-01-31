@@ -70,6 +70,13 @@ export default function ButtonsCategory() {
   }, []);
   return (
     <section>
+      <button
+        type="button"
+        onClick={ () => handleMainCardsApi() }
+        data-testid="All-category-filter"
+      >
+        All
+      </button>
       {buttons(buttonsCategory)}
     </section>
   );
