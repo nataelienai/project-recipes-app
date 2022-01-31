@@ -1,36 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import useFirstNMealsByNationality from '../hooks/useFirstNMealsByNationality';
+import useNationalities from '../hooks/useNationalities';
 
-const MAX_NUMBER_OF_MEALS = 12;
+const NUMBER_OF_MEALS = 12;
 
 export default function ExploreFoodNationalities() {
-  const [nationalities, setNationalities] = useState([]);
   const [selectedNationality, setSelectedNationality] = useState('');
-  const [meals, setMeals] = useState([]);
+  const meals = useFirstNMealsByNationality(NUMBER_OF_MEALS, selectedNationality);
+  const nationalities = useNationalities();
   const history = useHistory();
-
-  useEffect(() => {
-    fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list')
-      .then((response) => response.json())
-      .then((data) => data.meals)
-      .then(setNationalities);
-  }, []);
-
-  useEffect(() => {
-    if (selectedNationality) {
-      fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${selectedNationality}`)
-        .then((response) => response.json())
-        .then((data) => data.meals.slice(0, MAX_NUMBER_OF_MEALS))
-        .then(setMeals);
-    } else {
-      fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
-        .then((response) => response.json())
-        .then((data) => data.meals.slice(0, MAX_NUMBER_OF_MEALS))
-        .then(setMeals);
-    }
-  }, [selectedNationality]);
 
   const handleClick = (mealId) => {
     history.push(`/foods/${mealId}`);
