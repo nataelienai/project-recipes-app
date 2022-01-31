@@ -1,19 +1,18 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Footer from './components/Footer';
-import Header from './components/Header';
 import LoginProvider from './context/login/LoginProvider';
+import DoneRecipes from './pages/DoneRecipes';
+import Drinks from './pages/Drinks';
 import Explore from './pages/Explore';
 import ExploreDrinkIngredients from './pages/ExploreDrinkIngredients';
 import ExploreDrinks from './pages/ExploreDrinks';
 import ExploreFoodIngredients from './pages/ExploreFoodIngredients';
+import ExploreFoodNationalities from './pages/ExploreFoodNationalities';
 import ExploreFoods from './pages/ExploreFoods';
-import Login from './pages/Login';
 import FavoriteRecipes from './pages/FavoriteRecipes';
-import Profile from './pages/Profile';
 import Foods from './pages/Foods';
-import Drinks from './pages/Drinks';
-import DoneRecipes from './pages/DoneRecipes';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -53,8 +52,11 @@ function App() {
       </Route>
 
       <Route exact path="/explore/foods/nationalities">
-        <Header title="Explore Nationalities" />
-        <Footer />
+        <ExploreFoodNationalities />
+      </Route>
+
+      <Route exact path="/explore/drinks/nationalities">
+        <h1>Not Found</h1>
       </Route>
 
       <Route exact path="/profile">
