@@ -14,9 +14,12 @@ export default function ButtonsCategory() {
     buttonsCategory,
     setButtonsCategory,
     setdataApi,
+    filterClicked,
+    setFilterClicked,
   } = useContext(HeaderContext);
 
   function HandleClickFilters(nameFilter) {
+    setFilterClicked(!filterClicked);
     let apiResponse;
     if (location.pathname === '/foods') {
       apiResponse = getCategoryFoodsFiltersApi(nameFilter)
@@ -42,7 +45,7 @@ export default function ButtonsCategory() {
   }
   function handleCategoryApi() {
     let apiResponse;
-    /*   */
+
     if (location.pathname === '/foods') {
       apiResponse = getCategoryFoodsApi()
         .then((data) => setButtonsCategory(data.meals));

@@ -1,16 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
-import { getFoodsMainPageApi, getDrinksMainPageApi } from '../services/api';
 
 const MAX_CARDS = 12;
 export default function MainCards() {
   const {
     pageDrinkOrFood,
-    setdataApi,
     dataApi,
+    handleMainCardsApi,
   } = useContext(HeaderContext);
-  const location = useLocation();
 
   function cards(data) {
     return data.map((item, i) => i < MAX_CARDS && (
@@ -27,18 +24,9 @@ export default function MainCards() {
         </span>
       </div>));
   }
-  function handleApi() {
-    let apiResponse;
-    /*   */
-    if (location.pathname === '/foods') {
-      apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
-    } else if (location.pathname === '/drinks') {
-      apiResponse = getDrinksMainPageApi().then((data) => setdataApi(data.drinks));
-    }
-    return apiResponse;
-  }
+
   useEffect(() => {
-    handleApi();
+    handleMainCardsApi();
   }, []);
   return (
     <section>
