@@ -84,3 +84,21 @@ export const getDrinkIngredientsApi = async () => {
   const response = await request.json();
   return response.drinks;
 };
+
+export const getNationalitiesApi = async () => {
+  const request = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list');
+  const response = await request.json();
+  return response.meals;
+};
+
+export const getMealsByNationalityApi = async (nationality) => {
+  const request = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${nationality}`);
+  const response = await request.json();
+  return response.meals;
+};
+
+export const getMealsApi = async () => {
+  const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+  const response = await request.json();
+  return response.meals;
+};
