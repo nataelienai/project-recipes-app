@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
-import '../Styles/mainCards.css';
+import '../styles/mainCards.css';
 
 const MAX_CARDS = 12;
 export default function MainCards() {
