@@ -10,7 +10,7 @@ export default function HeaderProvider({ children }) {
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
   const [buttonsCategory, setButtonsCategory] = useState([]);
-  const [getIdOfPath, setGetIdOfPath] = useState('');
+  const [idDetails, setIdDetails] = useState();
   const history = useHistory();
   const location = useLocation();
   function redirectToDetails(pagetype) {
@@ -30,7 +30,6 @@ export default function HeaderProvider({ children }) {
   }
   function handleMainCardsApi() {
     let apiResponse;
-
     if (location.pathname === '/foods') {
       apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
     } else if (location.pathname === '/drinks') {
@@ -39,6 +38,7 @@ export default function HeaderProvider({ children }) {
 
     return apiResponse;
   }
+
   useEffect(() => {
     redirectToDetails(pageDrinkOrFood);
   }, [dataApi, pageDrinkOrFood]);
@@ -56,8 +56,8 @@ export default function HeaderProvider({ children }) {
     buttonsCategory,
     setButtonsCategory,
     handleMainCardsApi,
-    getIdOfPath,
-    setGetIdOfPath,
+    idDetails,
+    setIdDetails,
   };
   return (
     <div>

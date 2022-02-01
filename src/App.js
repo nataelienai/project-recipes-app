@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoginProvider from './context/login/LoginProvider';
+import Details from './pages/Details';
 import DoneRecipes from './pages/DoneRecipes';
 import Drinks from './pages/Drinks';
 import Explore from './pages/Explore';
@@ -31,11 +32,11 @@ function App() {
         <Drinks />
       </Route>
       <Route path="/foods/">
-        <h1>details</h1>
+        <Details />
       </Route>
 
       <Route path="/drinks/">
-        <h1>details</h1>
+        <Details />
       </Route>
       <Route exact path="/explore">
         <Explore />

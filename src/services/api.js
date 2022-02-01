@@ -9,11 +9,6 @@ export const getCategoryFoodsFiltersApi = async (info) => {
   const response = request.json();
   return response;
 };
-export const getFoodsDetailsApi = async (info) => {
-  const request = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${info}`);
-  const response = request.json();
-  return response;
-};
 export const getCategoryFoodsApi = async () => {
   const request = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
   const response = request.json();
@@ -21,6 +16,11 @@ export const getCategoryFoodsApi = async () => {
 };
 export const getFoodIngredientApi = async (info) => {
   const request = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${info}`);
+  const response = request.json();
+  return response;
+};
+export const getFoodsDetailsApi = async (info) => {
+  const request = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${info}`);
   const response = request.json();
   return response;
 };
@@ -45,11 +45,6 @@ export const getCategoryDrinksFiltersApi = async (info) => {
   const response = request.json();
   return response;
 };
-export const getDrinksDetailsApi = async (info) => {
-  const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${info}`);
-  const response = request.json();
-  return response;
-};
 export const getCategoryDrinksApi = async () => {
   const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
   const response = request.json();
@@ -57,6 +52,11 @@ export const getCategoryDrinksApi = async () => {
 };
 export const getDrinkIngredientApi = async (info) => {
   const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${info}`);
+  const response = request.json();
+  return response;
+};
+export const getDrinksDetailsApi = async (info) => {
+  const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${info}`);
   const response = request.json();
   return response;
 };
