@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Ingredients from '../components/Ingredients';
+import RecommendationCard from '../components/RecommendationCard';
+import VideoCard from '../components/VideoCard';
 
 import HeaderContext from '../context/header/HeaderContext';
 import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
@@ -22,7 +25,6 @@ export default function Details() {
     return url.replace('watch?v=', 'embed/');
   }
   function filterIngredientsAndMeasure() {
-    console.log(responseApiDetails);
     if (responseApiDetails) {
       const ingredient = Object.entries(responseApiDetails[0])
         .filter((entry) => entry[0]
@@ -50,8 +52,8 @@ export default function Details() {
 
   useEffect(() => {
     if (PATH_LOCATION_ARRAY.includes('foods')) setpageDrinkOrFood('Food');
+    if (PATH_LOCATION_ARRAY.includes('drinks')) setpageDrinkOrFood('Drinks');
     handleResponseApiDetails(ID_OF_PATH_LOCATION[0]);
-    console.log(responseApiDetails);
   }, []);
 
   useEffect(() => {
@@ -79,32 +81,16 @@ export default function Details() {
             {' '}
             {pageDrinkOrFood === 'Food' ? recipe.strCategory : recipe.strAlcoholic}
           </span>
-          <ul>
-            {ingredientApi.map((igr, indexigr) => (
-              <li
-                key={ indexigr }
-                data-testid={ `${indexigr}-ingredient-name-and-measure` }
-              >
-                {' '}
-                {`${igr} - ${MeasureApi[indexigr]}`}
-                {' '}
-              </li>))}
-          </ul>
+          <Ingredients ingredientApi={ ingredientApi } Measure={ MeasureApi } />
           <p data-testid="instructions">
             {' '}
             {recipe.strInstructions}
           </p>
+          <RecommendationCard />
           {pageDrinkOrFood === 'Food'
         && (
-          <iframe
-            data-testid="video"
-            width="400"
-            height="250"
-            src={ `${handleYoutubeSrc(recipe.strYoutube)}` }
-            title="YouTube video player"
-          />
+          <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
-          <section data-testid={ `${index}-recomendation-card` } />
           <button data-testid="start-recipe-btn" type="button">start</button>
         </section>
       ))}
