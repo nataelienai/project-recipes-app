@@ -1,13 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function IngredientListItem({ ingredient, index }) {
-  const [isIngredientChecked, setIsIngredientChecked] = useState(false);
-
-  const toggleCheckbox = () => {
-    setIsIngredientChecked((prevState) => !prevState);
-  };
-
+export default function IngredientListItem({ ingredient, index, checked, onToggle }) {
   return (
     <li
       key={ ingredient }
@@ -15,8 +9,8 @@ export default function IngredientListItem({ ingredient, index }) {
     >
       <input
         type="checkbox"
-        checked={ isIngredientChecked }
-        onChange={ toggleCheckbox }
+        checked={ checked }
+        onChange={ onToggle }
       />
       <span>{ ingredient }</span>
     </li>
@@ -26,4 +20,6 @@ export default function IngredientListItem({ ingredient, index }) {
 IngredientListItem.propTypes = {
   ingredient: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
+  checked: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
 };
