@@ -73,16 +73,18 @@ export default function Details() {
           <span data-testid="recipe-title">
             {pageDrinkOrFood === 'Food' ? recipe.strMeal : recipe.strDrink}
           </span>
-          <span>{pageDrinkOrFood === 'Food' ? null : recipe.strAlcoholic}</span>
           <button type="button" data-testid="share-btn">share</button>
           <button type="button" data-testid="favorite-btn">favorite</button>
           <span data-testid="recipe-category">
             {' '}
-            { recipe.strCategory }
+            {pageDrinkOrFood === 'Food' ? recipe.strCategory : recipe.strAlcoholic}
           </span>
           <ul>
             {ingredientApi.map((igr, indexigr) => (
-              <li key={ indexigr } data-testid={ `${index}-ingredient-name-and-measure` }>
+              <li
+                key={ indexigr }
+                data-testid={ `${indexigr}-ingredient-name-and-measure` }
+              >
                 {' '}
                 {`${igr} - ${MeasureApi[indexigr]}`}
                 {' '}
