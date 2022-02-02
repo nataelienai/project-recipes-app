@@ -53,10 +53,12 @@ export default function Details() {
     let responseApi;
     if (location.pathname === `/foods/${id}`) {
       responseApi = getFoodsDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.meals));
+        .then((data) => setResponseApiDetails(data.meals))
+        .catch(() => {});
     } else {
       responseApi = getDrinksDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.drinks));
+        .then((data) => setResponseApiDetails(data.drinks))
+        .catch(() => {});
     }
     return responseApi;
   }
