@@ -28,6 +28,7 @@ export default function SearchBar() {
     formData[target.name] = target.value;
     setInputsLocalState(formData);
   }
+
   function AlertEmptyApiResponse(data) {
     if (data !== null) {
       setdataApi(data);
@@ -69,9 +70,11 @@ export default function SearchBar() {
     }
     }
   }
+
   function handleClick() {
     handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood);
   }
+
   return (
     <div>
       <input

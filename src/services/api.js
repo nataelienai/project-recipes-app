@@ -1,4 +1,5 @@
 /* Foods */
+
 export const getFoodsMainPageApi = async () => {
   const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   const response = request.json();
@@ -19,6 +20,11 @@ export const getFoodIngredientApi = async (info) => {
   const response = request.json();
   return response;
 };
+export const getFoodsDetailsApi = async (info) => {
+  const request = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${info}`);
+  const response = request.json();
+  return response;
+};
 export const getFoodNameApi = async (info) => {
   const request = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${info}`);
   const response = request.json();
@@ -29,7 +35,9 @@ export const getFoodFirstletterApi = async (info) => {
   const response = await request.json();
   return response;
 };
+
 /* Drinks */
+
 export const getDrinksMainPageApi = async () => {
   const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   const response = request.json();
@@ -50,6 +58,11 @@ export const getDrinkIngredientApi = async (info) => {
   const response = request.json();
   return response;
 };
+export const getDrinksDetailsApi = async (info) => {
+  const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${info}`);
+  const response = request.json();
+  return response;
+};
 export const getDrinkNameApi = async (info) => {
   const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${info}`);
   const response = request.json();
@@ -60,7 +73,9 @@ export const getDrinkFirstletterApi = async (info) => {
   const response = await request.json();
   return response;
 };
+
 /* Random */
+
 export const getRandomFoodApi = async () => {
   const request = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
   const response = await request.json();
@@ -72,7 +87,9 @@ export const getRandomDrinkApi = async () => {
   const response = await request.json();
   return response.drinks[0];
 };
+
 /* Ingredientes */
+
 export const getFoodIngredientsApi = async () => {
   const request = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
   const response = await request.json();

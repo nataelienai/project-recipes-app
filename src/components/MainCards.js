@@ -10,10 +10,13 @@ export default function MainCards() {
     dataApi,
     handleMainCardsApi,
   } = useContext(HeaderContext);
+
   const history = useHistory();
+
   function redirectCards(id) {
-    if (pageDrinkOrFood === 'Food')history.push(`/foods/${id}`);
-    else { history.push(`/drinks/${id}`); }
+    if (pageDrinkOrFood === 'Food') {
+      history.push(`/foods/${id}`);
+    } else { history.push(`/drinks/${id}`); }
   }
 
   function cards(data) {
@@ -42,6 +45,7 @@ export default function MainCards() {
   useEffect(() => {
     handleMainCardsApi();
   }, []);
+
   return (
     <section>
       {cards(dataApi)}

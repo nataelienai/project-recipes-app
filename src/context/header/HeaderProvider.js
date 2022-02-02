@@ -6,30 +6,36 @@ import { getFoodsMainPageApi, getDrinksMainPageApi } from '../../services/api';
 
 export default function HeaderProvider({ children }) {
   const [searchButton, setSearchButton] = useState(false);
-  const [dataApi, setdataApi] = useState([]);
-  const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
-  const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
-  const [buttonsCategory, setButtonsCategory] = useState([]);
-  const history = useHistory();
-  const location = useLocation();
-  function redirectToDetails(pagetype) {
-    switch (pagetype) {
-    case 'Drink':
-      if (dataApi.length === 1) {
-        history.push(`/drinks/${dataApi[0].idDrink}`);
-      }
-      break;
 
-    default:
-      if (dataApi.length === 1 && dataApi[0].idMeal !== '52968') {
-        history.push(`/foods/${dataApi[0].idMeal}`);
-      }
-      break;
+  const [dataApi, setdataApi] = useState([]);
+
+  const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
+
+  const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
+
+  const [buttonsCategory, setButtonsCategory] = useState([]);
+
+  const [idDetails, setIdDetails] = useState();
+
+  const [recipeStarted, setRecipeStarted] = useState(false);
+
+  const history = useHistory();
+
+  const location = useLocation();
+
+  function redirectToDetails(page) {
+    if (dataApi.length === 1
+      && page === 'Food'
+      && dataApi[0].idMeal !== '52968') {
+      history.push(`/foods/${dataApi[0].idMeal}`);
+    }
+    if (dataApi.length === 1 && page === 'Drink') {
+      history.push(`/drinks/${dataApi[0].idDrink}`);
     }
   }
+
   function handleMainCardsApi() {
     let apiResponse;
-
     if (location.pathname === '/foods') {
       apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
     } else if (location.pathname === '/drinks') {
@@ -38,6 +44,7 @@ export default function HeaderProvider({ children }) {
 
     return apiResponse;
   }
+
   useEffect(() => {
     redirectToDetails(pageDrinkOrFood);
   }, [dataApi, pageDrinkOrFood]);
@@ -55,7 +62,10 @@ export default function HeaderProvider({ children }) {
     buttonsCategory,
     setButtonsCategory,
     handleMainCardsApi,
-
+    idDetails,
+    setIdDetails,
+    setRecipeStarted,
+    recipeStarted,
   };
   return (
     <div>
