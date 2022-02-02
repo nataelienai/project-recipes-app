@@ -14,6 +14,7 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import Foods from './pages/Foods';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
@@ -38,6 +39,14 @@ function App() {
       <Route path="/drinks/">
         <Details />
       </Route>
+      <Route exact path="/foods/:recipeId/in-progress">
+        <RecipeInProgress />
+      </Route>
+
+      <Route exact path="/drinks/:recipeId/in-progress">
+        <RecipeInProgress />
+      </Route>
+
       <Route exact path="/explore">
         <Explore />
       </Route>

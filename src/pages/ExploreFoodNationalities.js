@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -14,9 +14,11 @@ export default function ExploreFoodNationalities() {
   const nationalities = useNationalities();
   const history = useHistory();
   const { setSearchButton } = useContext(HeaderContext);
+
   useEffect(() => {
     setSearchButton(true);
   }, []);
+
   const handleClick = (mealId) => {
     history.push(`/foods/${mealId}`);
   };
