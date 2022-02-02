@@ -6,6 +6,10 @@ import VideoCard from '../components/VideoCard';
 import '../styles/DetailScreen.css';
 import HeaderContext from '../context/header/HeaderContext';
 import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
+import {
+  getDoneRecipes,
+  setInProgressRecipes,
+  getInProgressRecipes } from '../services/localStorage';
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
 
 const LAST_ARRAY_ITEM = -1;
@@ -13,8 +17,8 @@ export default function Details() {
   const {
     pageDrinkOrFood,
     setpageDrinkOrFood,
-    setRecipeStarted,
     recipeStarted,
+    setRecipeStarted,
   } = useContext(HeaderContext);
 
   const [ingredientApi, setingredientApi] = useState([]);
@@ -23,11 +27,13 @@ export default function Details() {
 
   const [responseApiDetails, setResponseApiDetails] = useState([]);
 
+  const [doneRecipes, setDoneRecipes] = useState(false);
+
   const location = useLocation();
 
   const PATH_LOCATION_ARRAY = location.pathname.split('/');
 
-  const ID_OF_PATH_LOCATION = PATH_LOCATION_ARRAY.slice(LAST_ARRAY_ITEM);
+  const ID_OF_PATH_LOCATION = (PATH_LOCATION_ARRAY.slice(LAST_ARRAY_ITEM))[0];
 
   const BUTTON_START_RECIPE = useRef();
 
@@ -42,6 +48,7 @@ export default function Details() {
           .includes('Ingredient') && entry[1] !== null && entry[1] !== '')
         .map((igr) => igr[1]);
       setingredientApi(ingredient);
+
       const measure = Object.entries(responseApiDetails[0])
         .filter((entry) => entry[0].includes('Measure') && entry[1] !== null)
         .map((igr) => igr[1]);
@@ -51,6 +58,7 @@ export default function Details() {
 
   function handleResponseApiDetails(id) {
     let responseApi;
+
     if (location.pathname === `/foods/${id}`) {
       responseApi = getFoodsDetailsApi(id)
         .then((data) => setResponseApiDetails(data.meals));
@@ -62,18 +70,61 @@ export default function Details() {
   }
 
   function startRecipeBtn() {
-    setRecipeStarted(!recipeStarted);
-  }
-  function changeRecipeProgress() {
-    if (recipeStarted) BUTTON_START_RECIPE.current.innerHTML = 'Continue Recipe';
-    else {
-      BUTTON_START_RECIPE.current.innerHTML = 'Start Recipe';
+    const { meals: mealsLS, cocktails: drinksLS } = getInProgressRecipes();
+
+    setRecipeStarted(true);
+
+    if (location.pathname === `/foods/${ID_OF_PATH_LOCATION}`) {
+      setInProgressRecipes({
+        meals: { ...mealsLS,
+          [ID_OF_PATH_LOCATION]: [] },
+        cocktails: { ...drinksLS },
+      });
+    } else {
+      setInProgressRecipes({
+        meals: { ...mealsLS },
+        cocktails: { ...drinksLS,
+          [ID_OF_PATH_LOCATION]: [] },
+      });
     }
   }
+
+  function changeRecipeProgress() {
+    const recipeInProgressLS = getInProgressRecipes();
+
+    const changeNameBtn = (name) => { BUTTON_START_RECIPE.current.innerHTML = name; };
+
+    if (location.pathname === `/foods/${ID_OF_PATH_LOCATION}`
+     && Object.keys(recipeInProgressLS.meals).includes(ID_OF_PATH_LOCATION)) {
+      changeNameBtn('Continue Recipe');
+    } else if (location.pathname === `/drinks/${ID_OF_PATH_LOCATION}`
+    && Object.keys(recipeInProgressLS.cocktails).includes(ID_OF_PATH_LOCATION)) {
+      changeNameBtn('Continue Recipe');
+    } else {
+      changeNameBtn('Start Recipe');
+    }
+  }
+
+  function checkDoneRecipes() {
+    const doneRecipe = getDoneRecipes();
+
+    const validateDoneRecipe = doneRecipe
+      .some((id) => (pageDrinkOrFood === 'Food'
+        ? id.idMeal : id.idDrink === ID_OF_PATH_LOCATION));
+
+    if (doneRecipe.length > 0 && validateDoneRecipe) {
+      setDoneRecipes(true);
+    } else { setDoneRecipes(false); }
+  }
+
   useEffect(() => {
     if (PATH_LOCATION_ARRAY.includes('foods')) setpageDrinkOrFood('Food');
     if (PATH_LOCATION_ARRAY.includes('drinks')) setpageDrinkOrFood('Drinks');
-    handleResponseApiDetails(ID_OF_PATH_LOCATION[0]);
+    handleResponseApiDetails(ID_OF_PATH_LOCATION);
+    checkDoneRecipes();
+    return () => {
+      setRecipeStarted(false);
+    };
   }, []);
 
   useEffect(() => {
@@ -84,7 +135,7 @@ export default function Details() {
   }, [responseApiDetails]);
 
   useEffect(() => {
-    if (responseApiDetails.length > 0) {
+    if (responseApiDetails.length > 0 && recipeStarted) {
       changeRecipeProgress();
     }
   }, [recipeStarted]);
@@ -133,15 +184,20 @@ export default function Details() {
           <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
 
-          <button
-            ref={ BUTTON_START_RECIPE }
-            data-testid="start-recipe-btn"
-            type="button"
-            className="btn-StartRecipe"
-            onClick={ () => startRecipeBtn() }
-          >
-            Start Recipe
-          </button>
+          {
+            !doneRecipes
+         && (
+           <button
+             ref={ BUTTON_START_RECIPE }
+             data-testid="start-recipe-btn"
+             type="button"
+             className="btn-StartRecipe"
+             onClick={ () => startRecipeBtn() }
+           >
+             Start Recipe
+           </button>
+         )
+          }
 
         </section>
       ))}
