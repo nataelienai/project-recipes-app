@@ -1,15 +1,16 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import FinishRecipeButton from '../components/FinishRecipeButton';
 import IngredientList from '../components/IngredientList';
 import ShareButton from '../components/ShareButton';
 import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
 import useRecipeDetailsById from '../hooks/useRecipeDetailsById';
 
 export default function RecipeInProgress() {
+  const { pathname } = useLocation();
   const { recipeId } = useParams();
   const recipe = useRecipeDetailsById(recipeId);
   const ingredients = useIngredientsFromRecipe(recipe);
-  const { pathname } = useLocation();
 
   function getRecipeDetails() {
     const isDrink = pathname.startsWith('/drinks');
@@ -46,7 +47,7 @@ export default function RecipeInProgress() {
         <h2 data-testid="recipe-category">{category}</h2>
         <IngredientList ingredients={ ingredients } />
         <p data-testid="instructions">{instructions}</p>
-        <button type="button" data-testid="finish-recipe-btn">Finish Recipe</button>
+        <FinishRecipeButton />
       </div>
     );
   }
