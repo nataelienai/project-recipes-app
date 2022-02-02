@@ -23,19 +23,14 @@ export default function HeaderProvider({ children }) {
 
   const location = useLocation();
 
-  function redirectToDetails(pagetype) {
-    switch (pagetype) {
-    case 'Drink':
-      if (dataApi.length === 1) {
-        history.push(`/drinks/${dataApi[0].idDrink}`);
-      }
-      break;
-
-    default:
-      if (dataApi.length === 1 && dataApi[0].idMeal !== '52968') {
-        history.push(`/foods/${dataApi[0].idMeal}`);
-      }
-      break;
+  function redirectToDetails(page) {
+    if (dataApi.length === 1
+      && page === 'Food'
+      && dataApi[0].idMeal !== '52968') {
+      history.push(`/foods/${dataApi[0].idMeal}`);
+    }
+    if (dataApi.length === 1 && page === 'Drink') {
+      history.push(`/drinks/${dataApi[0].idDrink}`);
     }
   }
 
