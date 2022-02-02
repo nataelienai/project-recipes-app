@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
 import VideoCard from '../components/VideoCard';
-
+import '../Styles/DetailScreen.css';
 import HeaderContext from '../context/header/HeaderContext';
 import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
@@ -91,7 +91,13 @@ export default function Details() {
         && (
           <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
-          <button data-testid="start-recipe-btn" type="button">start</button>
+          <button
+            data-testid="start-recipe-btn"
+            type="button"
+            className="btn-StartRecipe"
+          >
+            Start Recipe
+          </button>
         </section>
       ))}
     </main>

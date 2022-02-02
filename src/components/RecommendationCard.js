@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import HeaderContext from '../context/header/HeaderContext';
 import { getFoodsMainPageApi, getDrinksMainPageApi } from '../services/api';
-import '../Styles/carousel.css';
 
 const MAX_CARDS = 6;
 export default function RecommendationCard() {

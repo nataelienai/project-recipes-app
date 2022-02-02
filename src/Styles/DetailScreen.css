@@ -1,11 +1,15 @@
 .carousel{
   max-height: 80vh;
   display: flex;
-  background: blue;
   overflow-x: scroll;
   text-align: center;
-
 }
+
 .carousel section{
 padding: 0 1vw;
+}
+
+.btn-StartRecipe{
+position: fixed;
+bottom: 0;
 }
