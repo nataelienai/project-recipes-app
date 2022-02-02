@@ -13,6 +13,7 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import Foods from './pages/Foods';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
@@ -34,9 +35,14 @@ function App() {
         <h1>details</h1>
       </Route>
 
-      <Route path="/drinks/">
-        <h1>details</h1>
+      <Route exact path="/foods/:recipeId/in-progress">
+        <RecipeInProgress />
       </Route>
+
+      <Route exact path="/drinks/:recipeId/in-progress">
+        <RecipeInProgress />
+      </Route>
+
       <Route exact path="/explore">
         <Explore />
       </Route>

@@ -14,9 +14,11 @@ export default function ExploreFoodNationalities() {
   const nationalities = useNationalities();
   const history = useHistory();
   const { setSearchButton } = useContext(HeaderContext);
+
   useEffect(() => {
     setSearchButton(true);
   }, []);
+
   const handleClick = (mealId) => {
     history.push(`/foods/${mealId}`);
   };
