@@ -32,13 +32,15 @@ function App() {
       <Route exact path="/drinks">
         <Drinks />
       </Route>
-      <Route path="/foods/">
+
+      <Route exact path="/foods/:id">
         <Details />
       </Route>
 
-      <Route path="/drinks/">
+      <Route exact path="/drinks/:id">
         <Details />
       </Route>
+
       <Route exact path="/foods/:recipeId/in-progress">
         <RecipeInProgress />
       </Route>
