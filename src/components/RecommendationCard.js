@@ -5,7 +5,9 @@ import { getFoodsMainPageApi, getDrinksMainPageApi } from '../services/api';
 const MAX_CARDS = 6;
 export default function RecommendationCard() {
   const { pageDrinkOrFood } = useContext(HeaderContext);
+
   const [dataApi, SetdataApi] = useState([]);
+
   function handleFetchs() {
     if (pageDrinkOrFood === 'Food') {
       getDrinksMainPageApi().then((data) => SetdataApi(data.drinks));
@@ -13,9 +15,9 @@ export default function RecommendationCard() {
       getFoodsMainPageApi().then((data) => SetdataApi(data.meals));
     }
   }
+
   useEffect(() => {
     handleFetchs();
-    console.log(dataApi);
   }, []);
 
   return (

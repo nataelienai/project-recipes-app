@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
@@ -13,17 +13,28 @@ export default function Details() {
   const {
     pageDrinkOrFood,
     setpageDrinkOrFood,
+    setRecipeStarted,
+    recipeStarted,
   } = useContext(HeaderContext);
+
   const [ingredientApi, setingredientApi] = useState([]);
+
   const [MeasureApi, setMeasureApi] = useState([]);
+
   const [responseApiDetails, setResponseApiDetails] = useState([]);
+
   const location = useLocation();
+
   const PATH_LOCATION_ARRAY = location.pathname.split('/');
+
   const ID_OF_PATH_LOCATION = PATH_LOCATION_ARRAY.slice(LAST_ARRAY_ITEM);
+
+  const BUTTON_START_RECIPE = useRef();
 
   function handleYoutubeSrc(url) {
     return url.replace('watch?v=', 'embed/');
   }
+
   function filterIngredientsAndMeasure() {
     if (responseApiDetails) {
       const ingredient = Object.entries(responseApiDetails[0])
@@ -50,6 +61,15 @@ export default function Details() {
     return responseApi;
   }
 
+  function startRecipeBtn() {
+    setRecipeStarted(!recipeStarted);
+  }
+  function changeRecipeProgress() {
+    if (recipeStarted) BUTTON_START_RECIPE.current.innerHTML = 'Continue Recipe';
+    else {
+      BUTTON_START_RECIPE.current.innerHTML = 'Start Recipe';
+    }
+  }
   useEffect(() => {
     if (PATH_LOCATION_ARRAY.includes('foods')) setpageDrinkOrFood('Food');
     if (PATH_LOCATION_ARRAY.includes('drinks')) setpageDrinkOrFood('Drinks');
@@ -59,45 +79,70 @@ export default function Details() {
   useEffect(() => {
     if (responseApiDetails.length > 0) {
       filterIngredientsAndMeasure();
+      changeRecipeProgress();
     }
   }, [responseApiDetails]);
 
+  useEffect(() => {
+    if (responseApiDetails.length > 0) {
+      changeRecipeProgress();
+    }
+  }, [recipeStarted]);
+
   return (
     <main>
+
       { responseApiDetails.map((recipe, index) => (
+
         <section key={ index }>
+
           <img
             data-testid="recipe-photo"
             alt="recipe"
             src={ pageDrinkOrFood === 'Food'
               ? `${recipe.strMealThumb}` : `${recipe.strDrinkThumb}` }
           />
+
           <span data-testid="recipe-title">
             {pageDrinkOrFood === 'Food' ? recipe.strMeal : recipe.strDrink}
+
           </span>
+
           <button type="button" data-testid="share-btn">share</button>
+
           <button type="button" data-testid="favorite-btn">favorite</button>
+
           <span data-testid="recipe-category">
             {' '}
             {pageDrinkOrFood === 'Food' ? recipe.strCategory : recipe.strAlcoholic}
+
           </span>
+
           <Ingredients ingredientApi={ ingredientApi } Measure={ MeasureApi } />
+
           <p data-testid="instructions">
             {' '}
             {recipe.strInstructions}
+
           </p>
+
           <RecommendationCard />
+
           {pageDrinkOrFood === 'Food'
         && (
           <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
+
           <button
+            ref={ BUTTON_START_RECIPE }
             data-testid="start-recipe-btn"
             type="button"
             className="btn-StartRecipe"
+            onClick={ () => startRecipeBtn() }
           >
             Start Recipe
           </button>
+
         </section>
       ))}
     </main>

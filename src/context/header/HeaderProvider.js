@@ -6,13 +6,23 @@ import { getFoodsMainPageApi, getDrinksMainPageApi } from '../../services/api';
 
 export default function HeaderProvider({ children }) {
   const [searchButton, setSearchButton] = useState(false);
+
   const [dataApi, setdataApi] = useState([]);
+
   const [pageDrinkOrFood, setpageDrinkOrFood] = useState('');
+
   const [headerCardsValidation, setHeaderCardsValidation] = useState(false);
+
   const [buttonsCategory, setButtonsCategory] = useState([]);
+
   const [idDetails, setIdDetails] = useState();
+
+  const [recipeStarted, setRecipeStarted] = useState(false);
+
   const history = useHistory();
+
   const location = useLocation();
+
   function redirectToDetails(pagetype) {
     switch (pagetype) {
     case 'Drink':
@@ -28,6 +38,7 @@ export default function HeaderProvider({ children }) {
       break;
     }
   }
+
   function handleMainCardsApi() {
     let apiResponse;
     if (location.pathname === '/foods') {
@@ -58,6 +69,8 @@ export default function HeaderProvider({ children }) {
     handleMainCardsApi,
     idDetails,
     setIdDetails,
+    setRecipeStarted,
+    recipeStarted,
   };
   return (
     <div>

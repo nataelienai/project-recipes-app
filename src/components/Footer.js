@@ -7,6 +7,7 @@ import '../Styles/footer.css';
 
 export default function Footer() {
   const history = useHistory();
+
   return (
     <footer data-testid="footer">
       <button

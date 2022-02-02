@@ -8,11 +8,14 @@ import SearchBar from './SearchBar';
 
 export default function Header({ title }) {
   const { searchButton } = useContext(HeaderContext);
+
   const history = useHistory();
+
   const [inputSearch, setInputSearch] = useState(false);
 
   return (
     <header>
+
       <button
         type="button"
         title="Profile"
@@ -22,6 +25,7 @@ export default function Header({ title }) {
       </button>
 
       <span data-testid="page-title">{title}</span>
+
       {
         searchButton && (
           <button
@@ -36,7 +40,9 @@ export default function Header({ title }) {
           </button>
         )
       }
+
       {inputSearch && <SearchBar />}
+
     </header>
   );
 }
