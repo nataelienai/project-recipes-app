@@ -1,16 +1,16 @@
-.carousel{
-  max-height: 80vh;
+.carousel {
   display: flex;
+  max-height: 80vh;
   overflow-x: scroll;
   text-align: center;
 }
 
-.carousel section{
-padding: 0 1vw;
+.carousel section {
+  padding: 0 1vw;
 }
 
-.btn-StartRecipe{
-position: fixed;
-bottom: 0;
-left: 30vw;
+.btn-StartRecipe {
+  bottom: 0;
+  position: fixed;
+  left: 30vw;
 }
