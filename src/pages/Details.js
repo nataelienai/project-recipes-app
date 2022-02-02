@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
 import VideoCard from '../components/VideoCard';
@@ -12,7 +12,6 @@ import {
   getInProgressRecipes } from '../services/localStorage';
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
 
-const LAST_ARRAY_ITEM = -1;
 export default function Details() {
   const {
     pageDrinkOrFood,
@@ -29,11 +28,11 @@ export default function Details() {
 
   const [doneRecipes, setDoneRecipes] = useState(false);
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const PATH_LOCATION_ARRAY = location.pathname.split('/');
+  const history = useHistory();
 
-  const ID_OF_PATH_LOCATION = (PATH_LOCATION_ARRAY.slice(LAST_ARRAY_ITEM))[0];
+  const { idDetailsUrl } = useParams();
 
   const BUTTON_START_RECIPE = useRef();
 
@@ -59,7 +58,7 @@ export default function Details() {
   function handleResponseApiDetails(id) {
     let responseApi;
 
-    if (location.pathname === `/foods/${id}`) {
+    if (pathname === `/foods/${id}`) {
       responseApi = getFoodsDetailsApi(id)
         .then((data) => setResponseApiDetails(data.meals));
     } else {
@@ -71,21 +70,22 @@ export default function Details() {
 
   function startRecipeBtn() {
     const { meals: mealsLS, cocktails: drinksLS } = getInProgressRecipes();
-
     setRecipeStarted(true);
 
-    if (location.pathname === `/foods/${ID_OF_PATH_LOCATION}`) {
+    if (pathname === `/foods/${idDetailsUrl}`) {
       setInProgressRecipes({
         meals: { ...mealsLS,
-          [ID_OF_PATH_LOCATION]: [] },
+          [idDetailsUrl]: [] },
         cocktails: { ...drinksLS },
       });
+      history.push(`/foods/${idDetailsUrl}/in-progress`);
     } else {
       setInProgressRecipes({
         meals: { ...mealsLS },
         cocktails: { ...drinksLS,
-          [ID_OF_PATH_LOCATION]: [] },
+          [idDetailsUrl]: [] },
       });
+      history.push(`/drinks/${idDetailsUrl}/in-progress`);
     }
   }
 
@@ -94,11 +94,11 @@ export default function Details() {
 
     const changeNameBtn = (name) => { BUTTON_START_RECIPE.current.innerHTML = name; };
 
-    if (location.pathname === `/foods/${ID_OF_PATH_LOCATION}`
-     && Object.keys(recipeInProgressLS.meals).includes(ID_OF_PATH_LOCATION)) {
+    if (pathname.startsWith('/foods')
+     && Object.keys(recipeInProgressLS.meals).includes(idDetailsUrl)) {
       changeNameBtn('Continue Recipe');
-    } else if (location.pathname === `/drinks/${ID_OF_PATH_LOCATION}`
-    && Object.keys(recipeInProgressLS.cocktails).includes(ID_OF_PATH_LOCATION)) {
+    } else if (pathname.startsWith('/drinks')
+    && Object.keys(recipeInProgressLS.cocktails).includes(idDetailsUrl)) {
       changeNameBtn('Continue Recipe');
     } else {
       changeNameBtn('Start Recipe');
@@ -110,7 +110,7 @@ export default function Details() {
 
     const validateDoneRecipe = doneRecipe
       .some((id) => (pageDrinkOrFood === 'Food'
-        ? id.idMeal : id.idDrink === ID_OF_PATH_LOCATION));
+        ? id.idMeal : id.idDrink === idDetailsUrl));
 
     if (doneRecipe.length > 0 && validateDoneRecipe) {
       setDoneRecipes(true);
@@ -118,9 +118,9 @@ export default function Details() {
   }
 
   useEffect(() => {
-    if (PATH_LOCATION_ARRAY.includes('foods')) setpageDrinkOrFood('Food');
-    if (PATH_LOCATION_ARRAY.includes('drinks')) setpageDrinkOrFood('Drinks');
-    handleResponseApiDetails(ID_OF_PATH_LOCATION);
+    if (pathname.includes('foods')) setpageDrinkOrFood('Food');
+    if (pathname.includes('drinks')) setpageDrinkOrFood('Drinks');
+    handleResponseApiDetails(idDetailsUrl);
     checkDoneRecipes();
     return () => {
       setRecipeStarted(false);

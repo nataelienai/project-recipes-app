@@ -9,11 +9,13 @@ export default function MainCards() {
     pageDrinkOrFood,
     dataApi,
     handleMainCardsApi,
+    setIdDetails,
   } = useContext(HeaderContext);
 
   const history = useHistory();
 
   function redirectCards(id) {
+    setIdDetails(id);
     if (pageDrinkOrFood === 'Food') {
       history.push(`/foods/${id}`);
     } else { history.push(`/drinks/${id}`); }
