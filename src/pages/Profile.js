@@ -5,7 +5,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Profile() {
-  const { email } = JSON.parse(localStorage.getItem('user'));
+  let emailLocalStorage;
+  if (localStorage.getItem('user') !== null) {
+    const { email } = JSON.parse(localStorage.getItem('user'));
+    emailLocalStorage = email;
+  }
   const history = useHistory();
   const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
@@ -18,13 +22,13 @@ function Profile() {
       <div>
 
         <p data-testid="profile-email">
-          {email}
+          { emailLocalStorage }
         </p>
 
         <button
           type="button"
           data-testid="profile-done-btn"
-          onClick={ (e) => e.preventDefault(history.push('/done-recipes')) }
+          onClick={ () => history.push('/done-recipes') }
         >
           Done Recipes
         </button>
