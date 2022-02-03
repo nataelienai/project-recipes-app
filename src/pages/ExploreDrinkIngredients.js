@@ -19,7 +19,7 @@ export default function ExploreDrinkIngredients() {
 
   function handleClick(ingredientName) {
     setIngredientFilter({ isActive: true, ingredientName });
-    history.push('/foods');
+    history.push('/drinks');
   }
 
   function handleKeyPress(event, ingredientName) {
