@@ -3,5 +3,6 @@
   box-sizing: border-box;
   display: block;
   position: fixed;
+  left: 0%;
   width: 100%;
 }

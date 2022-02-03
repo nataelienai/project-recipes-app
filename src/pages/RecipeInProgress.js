@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import FinishRecipeButton from '../components/FinishRecipeButton';
 import IngredientList from '../components/IngredientList';
 import ShareButton from '../components/ShareButton';
+import FavoriteButton from '../components/FavoriteButton';
 import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
 import useRecipeDetailsById from '../hooks/useRecipeDetailsById';
 import '../styles/RecipeInProgress.css';
@@ -43,7 +44,11 @@ export default function RecipeInProgress() {
           data-testid="recipe-photo"
         />
         <h1 data-testid="recipe-title">{name}</h1>
-        <button type="button" data-testid="favorite-btn">Favorite</button>
+        <FavoriteButton
+          responseApiDetails={ [recipe] }
+          pageDrinkOrFood={ pathname.startsWith('/drinks') ? 'Drink' : 'Food' }
+          idDetailsUrl={ recipeId }
+        />
         <ShareButton />
         <h2 data-testid="recipe-category">{category}</h2>
         <IngredientList ingredients={ ingredients } />
