@@ -1,10 +1,10 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import HeaderContext from '../context/header/HeaderContext';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import MainCards from '../components/MainCards';
 import ButtonsCategory from '../components/ButtonsCategory';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import MainCards from '../components/MainCards';
+import HeaderContext from '../context/header/HeaderContext';
 
 export default function Foods() {
   const location = useLocation();

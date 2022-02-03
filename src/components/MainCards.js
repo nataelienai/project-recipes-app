@@ -9,13 +9,14 @@ export default function MainCards() {
     pageDrinkOrFood,
     dataApi,
     handleMainCardsApi,
-    setGetIdOfPath,
   } = useContext(HeaderContext);
+
   const history = useHistory();
+
   function redirectCards(id) {
-    setGetIdOfPath(id);
-    if (pageDrinkOrFood === 'Food')history.push(`/foods/${id}`);
-    else { history.push(`/drinks/${id}`); }
+    if (pageDrinkOrFood === 'Food') {
+      history.push(`/foods/${id}`);
+    } else { history.push(`/drinks/${id}`); }
   }
 
   function cards(data) {
@@ -44,6 +45,7 @@ export default function MainCards() {
   useEffect(() => {
     handleMainCardsApi();
   }, []);
+
   return (
     <section>
       {cards(dataApi)}

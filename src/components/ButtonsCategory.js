@@ -10,12 +10,14 @@ import {
 const MAX_CATEGORYS = 5;
 export default function ButtonsCategory() {
   const location = useLocation();
+
   const {
     buttonsCategory,
     setButtonsCategory,
     setdataApi,
     handleMainCardsApi,
   } = useContext(HeaderContext);
+
   const [singlefilterclicked, setSinglefilterclicked] = useState();
 
   function handleApiFilterResponse(nameFilter) {
@@ -53,6 +55,7 @@ export default function ButtonsCategory() {
       </button>
     ));
   }
+
   function handleCategoryButtonsApi() {
     let apiResponse;
 
@@ -65,11 +68,14 @@ export default function ButtonsCategory() {
     }
     return apiResponse;
   }
+
   useEffect(() => {
     handleCategoryButtonsApi();
   }, []);
+
   return (
     <section>
+
       <button
         type="button"
         onClick={ () => handleMainCardsApi() }
@@ -77,7 +83,9 @@ export default function ButtonsCategory() {
       >
         All
       </button>
+
       {buttons(buttonsCategory)}
+
     </section>
   );
 }
