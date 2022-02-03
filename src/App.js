@@ -5,6 +5,7 @@ import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
 import Details from './pages/Details';
 import DoneRecipes from './pages/DoneRecipes';
+import Details from './pages/Details';
 import Drinks from './pages/Drinks';
 import Explore from './pages/Explore';
 import ExploreDrinkIngredients from './pages/ExploreDrinkIngredients';
@@ -34,12 +35,11 @@ function App() {
       <Route exact path="/drinks">
         <Drinks />
       </Route>
-
-      <Route exact path="/foods/:id">
+      <Route exact path="/foods/:idDetailsUrl">
         <Details />
       </Route>
 
-      <Route exact path="/drinks/:id">
+      <Route exact path="/drinks/:idDetailsUrl">
         <Details />
       </Route>
 

@@ -1,34 +1,34 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
 import VideoCard from '../components/VideoCard';
 import HeaderContext from '../context/header/HeaderContext';
 import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
+import {
+  getDoneRecipes,
+  setInProgressRecipes,
+  getInProgressRecipes } from '../services/localStorage';
+import FavoriteButton from '../components/FavoriteButton';
 import '../styles/DetailScreen.css';
+
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
 
-const LAST_ARRAY_ITEM = -1;
 export default function Details() {
   const {
     pageDrinkOrFood,
     setpageDrinkOrFood,
-    setRecipeStarted,
     recipeStarted,
+    setRecipeStarted,
   } = useContext(HeaderContext);
 
   const [ingredientApi, setingredientApi] = useState([]);
-
   const [MeasureApi, setMeasureApi] = useState([]);
-
   const [responseApiDetails, setResponseApiDetails] = useState([]);
-
-  const location = useLocation();
-
-  const PATH_LOCATION_ARRAY = location.pathname.split('/');
-
-  const ID_OF_PATH_LOCATION = PATH_LOCATION_ARRAY.slice(LAST_ARRAY_ITEM);
-
+  const [doneRecipes, setDoneRecipes] = useState(false);
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const { idDetailsUrl } = useParams();
   const BUTTON_START_RECIPE = useRef();
 
   function handleYoutubeSrc(url) {
@@ -42,6 +42,7 @@ export default function Details() {
           .includes('Ingredient') && entry[1] !== null && entry[1] !== '')
         .map((igr) => igr[1]);
       setingredientApi(ingredient);
+
       const measure = Object.entries(responseApiDetails[0])
         .filter((entry) => entry[0].includes('Measure') && entry[1] !== null)
         .map((igr) => igr[1]);
@@ -51,7 +52,8 @@ export default function Details() {
 
   function handleResponseApiDetails(id) {
     let responseApi;
-    if (location.pathname === `/foods/${id}`) {
+
+    if (pathname === `/foods/${id}`) {
       responseApi = getFoodsDetailsApi(id)
         .then((data) => setResponseApiDetails(data.meals))
         .catch(() => {});
@@ -64,18 +66,61 @@ export default function Details() {
   }
 
   function startRecipeBtn() {
-    setRecipeStarted(!recipeStarted);
-  }
-  function changeRecipeProgress() {
-    if (recipeStarted) BUTTON_START_RECIPE.current.innerHTML = 'Continue Recipe';
-    else {
-      BUTTON_START_RECIPE.current.innerHTML = 'Start Recipe';
+    const { meals: mealsLS, cocktails: drinksLS } = getInProgressRecipes();
+    setRecipeStarted(true);
+
+    if (pathname === `/foods/${idDetailsUrl}`) {
+      setInProgressRecipes({
+        meals: { ...mealsLS,
+          [idDetailsUrl]: [] },
+        cocktails: { ...drinksLS },
+      });
+      history.push(`/foods/${idDetailsUrl}/in-progress`);
+    } else {
+      setInProgressRecipes({
+        meals: { ...mealsLS },
+        cocktails: { ...drinksLS,
+          [idDetailsUrl]: [] },
+      });
+      history.push(`/drinks/${idDetailsUrl}/in-progress`);
     }
   }
+
+  function changeRecipeProgress() {
+    const recipeInProgressLS = getInProgressRecipes();
+
+    const changeNameBtn = (name) => { BUTTON_START_RECIPE.current.innerHTML = name; };
+
+    if (pathname.startsWith('/foods')
+     && Object.keys(recipeInProgressLS.meals).includes(idDetailsUrl)) {
+      changeNameBtn('Continue Recipe');
+    } else if (pathname.startsWith('/drinks')
+    && Object.keys(recipeInProgressLS.cocktails).includes(idDetailsUrl)) {
+      changeNameBtn('Continue Recipe');
+    } else {
+      changeNameBtn('Start Recipe');
+    }
+  }
+
+  function checkDoneRecipes() {
+    const doneRecipe = getDoneRecipes();
+
+    const validateDoneRecipe = doneRecipe
+      .some((id) => (id.idMeal || id.idDrink === idDetailsUrl));
+
+    if (doneRecipe.length > 0 && validateDoneRecipe) {
+      setDoneRecipes(true);
+    } else { setDoneRecipes(false); }
+  }
+
   useEffect(() => {
-    if (PATH_LOCATION_ARRAY.includes('foods')) setpageDrinkOrFood('Food');
-    if (PATH_LOCATION_ARRAY.includes('drinks')) setpageDrinkOrFood('Drinks');
-    handleResponseApiDetails(ID_OF_PATH_LOCATION[0]);
+    if (pathname.includes('foods')) setpageDrinkOrFood('Food');
+    if (pathname.includes('drinks')) setpageDrinkOrFood('Drinks');
+    handleResponseApiDetails(idDetailsUrl);
+    checkDoneRecipes();
+    return () => {
+      setRecipeStarted(false);
+    };
   }, []);
 
   useEffect(() => {
@@ -86,7 +131,7 @@ export default function Details() {
   }, [responseApiDetails]);
 
   useEffect(() => {
-    if (responseApiDetails.length > 0) {
+    if (responseApiDetails.length > 0 && recipeStarted) {
       changeRecipeProgress();
     }
   }, [recipeStarted]);
@@ -106,17 +151,20 @@ export default function Details() {
           />
 
           <span data-testid="recipe-title">
-            {pageDrinkOrFood === 'Food' ? recipe.strMeal : recipe.strDrink}
+            {recipe.strMeal || recipe.strDrink}
 
           </span>
 
+          <FavoriteButton
+            pageDrinkOrFood={ pageDrinkOrFood }
+            responseApiDetails={ responseApiDetails }
+            idDetailsUrl={ idDetailsUrl }
+          />
           <button type="button" data-testid="share-btn">share</button>
-
-          <button type="button" data-testid="favorite-btn">favorite</button>
 
           <span data-testid="recipe-category">
             {' '}
-            {pageDrinkOrFood === 'Food' ? recipe.strCategory : recipe.strAlcoholic}
+            {recipe.strAlcoholic || recipe.strCategory }
 
           </span>
 
@@ -135,15 +183,20 @@ export default function Details() {
           <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
 
-          <button
-            ref={ BUTTON_START_RECIPE }
-            data-testid="start-recipe-btn"
-            type="button"
-            className="btn-StartRecipe"
-            onClick={ () => startRecipeBtn() }
-          >
-            Start Recipe
-          </button>
+          {
+            !doneRecipes
+         && (
+           <button
+             ref={ BUTTON_START_RECIPE }
+             data-testid="start-recipe-btn"
+             type="button"
+             className="btn-StartRecipe"
+             onClick={ () => startRecipeBtn() }
+           >
+             Start Recipe
+           </button>
+         )
+          }
 
         </section>
       ))}
