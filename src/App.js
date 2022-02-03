@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import HeaderProvider from './context/header/HeaderProvider';
 import LoginProvider from './context/login/LoginProvider';
 import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
@@ -21,80 +22,82 @@ import RecipeInProgress from './pages/RecipeInProgress';
 function App() {
   return (
     <Switch>
-      <Route exact path="/">
-        <LoginProvider>
-          <Login />
-        </LoginProvider>
-      </Route>
+      <HeaderProvider>
+        <Route exact path="/">
+          <LoginProvider>
+            <Login />
+          </LoginProvider>
+        </Route>
 
-      <Route exact path="/foods">
-        <Foods />
-      </Route>
+        <Route exact path="/foods">
+          <Foods />
+        </Route>
 
-      <Route exact path="/drinks">
-        <Drinks />
-      </Route>
-      <Route exact path="/foods/:idDetailsUrl">
-        <Details />
-      </Route>
+        <Route exact path="/drinks">
+          <Drinks />
+        </Route>
+        <Route exact path="/foods/:idDetailsUrl">
+          <Details />
+        </Route>
 
-      <Route exact path="/drinks/:idDetailsUrl">
-        <Details />
-      </Route>
+        <Route exact path="/drinks/:idDetailsUrl">
+          <Details />
+        </Route>
 
-      <Route exact path="/foods/:recipeId/in-progress">
-        <RecipeInProgressProvider>
-          <RecipeInProgress />
-        </RecipeInProgressProvider>
-      </Route>
+        <Route exact path="/foods/:recipeId/in-progress">
+          <RecipeInProgressProvider>
+            <RecipeInProgress />
+          </RecipeInProgressProvider>
+        </Route>
 
-      <Route exact path="/drinks/:recipeId/in-progress">
-        <RecipeInProgressProvider>
-          <RecipeInProgress />
-        </RecipeInProgressProvider>
-      </Route>
+        <Route exact path="/drinks/:recipeId/in-progress">
+          <RecipeInProgressProvider>
+            <RecipeInProgress />
+          </RecipeInProgressProvider>
+        </Route>
 
-      <Route exact path="/explore">
-        <Explore />
-      </Route>
+        <Route exact path="/explore">
+          <Explore />
+        </Route>
 
-      <Route exact path="/explore/foods">
-        <ExploreFoods />
-      </Route>
+        <Route exact path="/explore/foods">
+          <ExploreFoods />
+        </Route>
 
-      <Route exact path="/explore/drinks">
-        <ExploreDrinks />
-      </Route>
+        <Route exact path="/explore/drinks">
+          <ExploreDrinks />
+        </Route>
 
-      <Route exact path="/explore/foods/ingredients">
-        <ExploreFoodIngredients />
-      </Route>
+        <Route exact path="/explore/foods/ingredients">
+          <ExploreFoodIngredients />
+        </Route>
 
-      <Route exact path="/explore/drinks/ingredients">
-        <ExploreDrinkIngredients />
-      </Route>
+        <Route exact path="/explore/drinks/ingredients">
+          <ExploreDrinkIngredients />
+        </Route>
 
-      <Route exact path="/explore/foods/nationalities">
-        <ExploreFoodNationalities />
-      </Route>
+        <Route exact path="/explore/foods/nationalities">
+          <ExploreFoodNationalities />
+        </Route>
 
-      <Route exact path="/explore/drinks/nationalities">
-        <h1>Not Found</h1>
-      </Route>
+        <Route exact path="/explore/drinks/nationalities">
+          <h1>Not Found</h1>
+        </Route>
 
-      <Route exact path="/profile">
-        <LoginProvider>
-          <Profile />
-        </LoginProvider>
-      </Route>
+        <Route exact path="/profile">
+          <LoginProvider>
+            <Profile />
+          </LoginProvider>
+        </Route>
 
-      <Route exact path="/done-recipes">
-        <DoneRecipes />
-      </Route>
+        <Route exact path="/done-recipes">
+          <DoneRecipes />
+        </Route>
 
-      <Route exact path="/favorite-recipes">
-        <FavoriteRecipes />
-      </Route>
+        <Route exact path="/favorite-recipes">
+          <FavoriteRecipes />
+        </Route>
+      </HeaderProvider>
     </Switch>
   );
 }
