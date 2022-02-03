@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoginProvider from './context/login/LoginProvider';
+import RecipeInProgressProvider
+from './context/recipe-in-progress/RecipeInProgressProvider';
 import Details from './pages/Details';
 import DoneRecipes from './pages/DoneRecipes';
 import Drinks from './pages/Drinks';
@@ -32,21 +34,24 @@ function App() {
       <Route exact path="/drinks">
         <Drinks />
       </Route>
-
-      <Route exact path="/foods/:id">
+      <Route exact path="/foods/:idDetailsUrl">
         <Details />
       </Route>
 
-      <Route exact path="/drinks/:id">
+      <Route exact path="/drinks/:idDetailsUrl">
         <Details />
       </Route>
 
       <Route exact path="/foods/:recipeId/in-progress">
-        <RecipeInProgress />
+        <RecipeInProgressProvider>
+          <RecipeInProgress />
+        </RecipeInProgressProvider>
       </Route>
 
       <Route exact path="/drinks/:recipeId/in-progress">
-        <RecipeInProgress />
+        <RecipeInProgressProvider>
+          <RecipeInProgress />
+        </RecipeInProgressProvider>
       </Route>
 
       <Route exact path="/explore">
