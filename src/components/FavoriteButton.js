@@ -41,7 +41,6 @@ export default function FavoriteButton({
   }, []);
 
   function handleClickFavorite() {
-    console.log(removeFavoriteOfLocalStorage());
     if (validadeFavoriteLS()) {
       const removeFavorite = removeFavoriteOfLocalStorage();
       setfavoriteRecipes(removeFavorite);

@@ -19,9 +19,7 @@ export default function DoneRecipes() {
     setShareBtnClicked(!shareBtnClicked);
     setTimeout(() => { setShareBtnClicked(false); }, TWO_SECONDS);
   }
-  function handleFiltersButtons(type) {
-    console.log(type);
-  }
+
   function redirectToDetailsRecipes(page) {
     history.push(`${page}`);
   }
