@@ -24,9 +24,9 @@ export default function DoneRecipeCard({ doneRecipeState }) {
   }
 
   return (
-    <>
-      {' '}
-      {doneRecipeState.map(({
+    <div>
+
+      { doneRecipeState.map(({
         type,
         id,
         nationality,
@@ -88,7 +88,7 @@ export default function DoneRecipeCard({ doneRecipeState }) {
 
       ))}
 
-    </>
+    </div>
   );
 }
 DoneRecipeCard.propTypes = {
