@@ -1,10 +1,19 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import RecipeInProgressContext
+from '../context/recipe-in-progress/RecipeInProgressContext';
 import useCheckedIngredients from '../hooks/useCheckedIngredients';
 import IngredientListItem from './IngredientListItem';
 
 export default function IngredientList({ ingredients }) {
   const [checkedIngredients, setCheckedIngredients] = useCheckedIngredients();
+  const { setIsAllIngredientsChecked } = useContext(RecipeInProgressContext);
+
+  useEffect(() => {
+    const isAllIngredientsChecked = checkedIngredients.length === ingredients.length;
+
+    setIsAllIngredientsChecked(isAllIngredientsChecked);
+  }, [setIsAllIngredientsChecked, checkedIngredients, ingredients]);
 
   function isIngredientChecked(ingredient) {
     return checkedIngredients.includes(ingredient);
