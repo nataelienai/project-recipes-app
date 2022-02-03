@@ -5,7 +5,6 @@ const MAX_CARDS = 12;
 export default function HeaderCards() {
   const {
     dataApi,
-    pageDrinkOrFood,
   } = useContext(HeaderContext);
 
   function card(data) {
@@ -17,13 +16,13 @@ export default function HeaderCards() {
           data-testid={ `${i}-card-img` }
           alt="card"
           src={ pageDrinkOrFood === 'Food'
-            ? `${item.strMealThumb}` : `${item.strDrinkThumb}` }
+            ? `${item.strDrinkThumb}` : `${item.strMealThumb}` }
         />
 
         <span data-testid={ `${i}-card-name` }>
           {' '}
 
-          {pageDrinkOrFood === 'Food' ? item.strMeal : item.strDrink}
+          {item.strMeal || item.strDrink}
 
         </span>
 
