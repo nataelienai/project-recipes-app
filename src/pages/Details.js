@@ -10,6 +10,7 @@ import {
   getDoneRecipes,
   setInProgressRecipes,
   getInProgressRecipes } from '../services/localStorage';
+import FavoriteButton from '../components/FavoriteButton';
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
 
 export default function Details() {
@@ -21,19 +22,12 @@ export default function Details() {
   } = useContext(HeaderContext);
 
   const [ingredientApi, setingredientApi] = useState([]);
-
   const [MeasureApi, setMeasureApi] = useState([]);
-
   const [responseApiDetails, setResponseApiDetails] = useState([]);
-
   const [doneRecipes, setDoneRecipes] = useState(false);
-
   const { pathname } = useLocation();
-
   const history = useHistory();
-
   const { idDetailsUrl } = useParams();
-
   const BUTTON_START_RECIPE = useRef();
 
   function handleYoutubeSrc(url) {
@@ -109,8 +103,7 @@ export default function Details() {
     const doneRecipe = getDoneRecipes();
 
     const validateDoneRecipe = doneRecipe
-      .some((id) => (pageDrinkOrFood === 'Food'
-        ? id.idMeal : id.idDrink === idDetailsUrl));
+      .some((id) => (id.idMeal || id.idDrink === idDetailsUrl));
 
     if (doneRecipe.length > 0 && validateDoneRecipe) {
       setDoneRecipes(true);
@@ -155,17 +148,20 @@ export default function Details() {
           />
 
           <span data-testid="recipe-title">
-            {pageDrinkOrFood === 'Food' ? recipe.strMeal : recipe.strDrink}
+            {recipe.strMeal || recipe.strDrink}
 
           </span>
 
+          <FavoriteButton
+            pageDrinkOrFood={ pageDrinkOrFood }
+            responseApiDetails={ responseApiDetails }
+            idDetailsUrl={ idDetailsUrl }
+          />
           <button type="button" data-testid="share-btn">share</button>
-
-          <button type="button" data-testid="favorite-btn">favorite</button>
 
           <span data-testid="recipe-category">
             {' '}
-            {pageDrinkOrFood === 'Food' ? recipe.strCategory : recipe.strAlcoholic}
+            {recipe.strCategory || recipe.strAlcoholic}
 
           </span>
 

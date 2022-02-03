@@ -28,7 +28,7 @@ export default function MainCards() {
         key={ i }
         data-testid={ `${i}-recipe-card` }
         onClick={
-          () => redirectCards(pageDrinkOrFood === 'Food' ? item.idMeal : item.idDrink)
+          () => redirectCards(item.idMeal || item.idDrink)
         }
       >
         <img
@@ -39,7 +39,7 @@ export default function MainCards() {
         />
         <span data-testid={ `${i}-card-name` }>
           {' '}
-          {pageDrinkOrFood === 'Food' ? item.strMeal : item.strDrink}
+          { item.strMeal || item.strDrink }
         </span>
       </button>));
   }

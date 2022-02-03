@@ -31,10 +31,10 @@ export default function RecommendationCard() {
               ? `${card.strDrinkThumb}` : `${card.strMealThumb}` }
           />
           <span data-testid={ `${index}-recomendation-title` }>
-            {pageDrinkOrFood === 'Food' ? card.strDrink : card.strMeal }
+            { card.strDrink || card.strMeal }
           </span>
           <span data-testid="recipe-category">
-            {pageDrinkOrFood === 'Food' ? card.strAlcoholic : card.strCategory}
+            { card.strAlcoholic || card.strCategory}
           </span>
         </section>))}
     </section>

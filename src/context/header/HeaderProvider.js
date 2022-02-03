@@ -19,6 +19,8 @@ export default function HeaderProvider({ children }) {
 
   const [recipeStarted, setRecipeStarted] = useState(false);
 
+  const [favorited, setFavorited] = useState(false);
+
   const history = useHistory();
 
   const location = useLocation();
@@ -66,6 +68,8 @@ export default function HeaderProvider({ children }) {
     setIdDetails,
     setRecipeStarted,
     recipeStarted,
+    favorited,
+    setFavorited,
   };
   return (
     <div>
