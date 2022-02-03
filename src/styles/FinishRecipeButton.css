@@ -2,7 +2,7 @@
   bottom: 0;
   box-sizing: border-box;
   display: block;
-  position: fixed;
   left: 0%;
+  position: fixed;
   width: 100%;
 }
