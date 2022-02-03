@@ -3,7 +3,6 @@ import { useLocation, useHistory, useParams } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
 import VideoCard from '../components/VideoCard';
-import '../styles/DetailScreen.css';
 import HeaderContext from '../context/header/HeaderContext';
 import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
 import {
@@ -11,6 +10,8 @@ import {
   setInProgressRecipes,
   getInProgressRecipes } from '../services/localStorage';
 import FavoriteButton from '../components/FavoriteButton';
+import '../styles/DetailScreen.css';
+
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
 
 export default function Details() {
@@ -54,10 +55,12 @@ export default function Details() {
 
     if (pathname === `/foods/${id}`) {
       responseApi = getFoodsDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.meals));
+        .then((data) => setResponseApiDetails(data.meals))
+        .catch(() => {});
     } else {
       responseApi = getDrinksDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.drinks));
+        .then((data) => setResponseApiDetails(data.drinks))
+        .catch(() => {});
     }
     return responseApi;
   }
@@ -161,7 +164,7 @@ export default function Details() {
 
           <span data-testid="recipe-category">
             {' '}
-            {recipe.strCategory || recipe.strAlcoholic}
+            {recipe.strAlcoholic || recipe.strCategory }
 
           </span>
 

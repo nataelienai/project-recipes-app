@@ -15,7 +15,7 @@ export default function FavoriteButton({
     const newFavoriteObject = responseApiDetails
       .map((recipe) => ({
         id: recipe.idMeal || recipe.idDrink,
-        type: pageDrinkOrFood,
+        type: pageDrinkOrFood === 'Food' ? 'food' : 'drink',
         nationality: recipe.strArea || '',
         category: recipe.strCategory || '',
         alcoholicOrNot: recipe.strAlcoholic || '',
@@ -54,10 +54,13 @@ export default function FavoriteButton({
   return (
     <button
       type="button"
-      data-testid="favorite-btn"
       onClick={ () => handleClickFavorite() }
     >
-      <img src={ !favorited ? whiteHeartIcon : blackHeartIcon } alt="favorite" />
+      <img
+        src={ !favorited ? whiteHeartIcon : blackHeartIcon }
+        alt="favorite"
+        data-testid="favorite-btn"
+      />
     </button>
   );
 }
