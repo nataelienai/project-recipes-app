@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import RecipeInProgressContext
+from '../context/recipe-in-progress/RecipeInProgressContext';
 
 export default function FinishRecipeButton() {
   const history = useHistory();
+  const { isAllIngredientsChecked } = useContext(RecipeInProgressContext);
 
   function handleClick() {
     history.push('/done-recipes');
@@ -11,8 +14,10 @@ export default function FinishRecipeButton() {
   return (
     <button
       type="button"
-      data-testid="finish-recipe-btn"
+      className="finish-recipe-btn"
       onClick={ handleClick }
+      disabled={ !isAllIngredientsChecked }
+      data-testid="finish-recipe-btn"
     >
       Finish Recipe
     </button>
