@@ -1,7 +1,7 @@
 .finish-recipe-btn {
+  bottom: 0;
   box-sizing: border-box;
   display: block;
   position: fixed;
-  bottom: 0;
   width: 100%;
 }
