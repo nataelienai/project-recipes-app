@@ -5,6 +5,7 @@ import IngredientList from '../components/IngredientList';
 import ShareButton from '../components/ShareButton';
 import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
 import useRecipeDetailsById from '../hooks/useRecipeDetailsById';
+import '../styles/RecipeInProgress.css';
 
 export default function RecipeInProgress() {
   const { pathname } = useLocation();

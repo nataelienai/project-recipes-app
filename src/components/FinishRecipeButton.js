@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import RecipeInProgressContext
 from '../context/recipe-in-progress/RecipeInProgressContext';
+import '../styles/FinishRecipeButton.css';
 
 export default function FinishRecipeButton() {
   const history = useHistory();
