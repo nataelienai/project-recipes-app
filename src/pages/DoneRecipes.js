@@ -33,7 +33,8 @@ export default function DoneRecipes() {
         setDoneRecipesState={ setDoneRecipesState }
       />
 
-      <DoneRecipeCard doneRecipeState={ doneRecipeState } />
+      {doneRecipeState.length > 1
+        && <DoneRecipeCard doneRecipeState={ doneRecipeState } />}
     </>
   );
 }
