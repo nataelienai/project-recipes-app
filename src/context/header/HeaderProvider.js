@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import HeaderContext from './HeaderContext';
-import { getFoodsMainPageApi, getDrinksMainPageApi } from '../../services/api';
+import {
+  getFoodsMainPageApi,
+  getDrinksMainPageApi,
+  getMealsByIngredient,
+  getDrinksByIngredient,
+} from '../../services/api';
 
 export default function HeaderProvider({ children }) {
   const [searchButton, setSearchButton] = useState(false);
@@ -25,6 +30,10 @@ export default function HeaderProvider({ children }) {
 
   const location = useLocation();
 
+  const [ingredientFilter, setIngredientFilter] = useState(
+    { isActive: false, ingredientName: '' },
+  );
+
   function redirectToDetails(page) {
     if (dataApi.length === 1
       && page === 'Food'
@@ -39,11 +48,21 @@ export default function HeaderProvider({ children }) {
   function handleMainCardsApi() {
     let apiResponse;
     if (location.pathname === '/foods') {
-      apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
+      if (ingredientFilter.isActive) {
+        const { ingredientName } = ingredientFilter;
+        apiResponse = getMealsByIngredient(ingredientName).then(setdataApi);
+      } else {
+        apiResponse = getFoodsMainPageApi().then((data) => setdataApi(data.meals));
+      }
     } else if (location.pathname === '/drinks') {
-      apiResponse = getDrinksMainPageApi().then((data) => setdataApi(data.drinks));
+      if (ingredientFilter.isActive) {
+        const { ingredientName } = ingredientFilter;
+        apiResponse = getDrinksByIngredient(ingredientName).then(setdataApi);
+      } else {
+        apiResponse = getDrinksMainPageApi().then((data) => setdataApi(data.drinks));
+      }
     }
-
+    setIngredientFilter({ isActive: false, ingredientName: '' });
     return apiResponse;
   }
 
@@ -70,6 +89,7 @@ export default function HeaderProvider({ children }) {
     recipeStarted,
     favorited,
     setFavorited,
+    setIngredientFilter,
   };
   return (
     <div>

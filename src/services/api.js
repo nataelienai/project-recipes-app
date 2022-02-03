@@ -131,3 +131,15 @@ export const getDrinkDetailsByIdApi = async (drinkId) => {
   const response = await request.json();
   return response.drinks[0];
 };
+
+export const getMealsByIngredient = async (ingredientName) => {
+  const request = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredientName}`);
+  const response = await request.json();
+  return response.meals;
+};
+
+export const getDrinksByIngredient = async (ingredientName) => {
+  const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredientName}`);
+  const response = await request.json();
+  return response.drinks;
+};
