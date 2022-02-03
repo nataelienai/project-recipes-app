@@ -19,8 +19,8 @@ export default function DoneRecipeCard({ doneRecipeState }) {
     return copy(url);
   }
 
-  function redirectToDetailsRecipes(page) {
-    history.push(`${page}`);
+  function redirectToDetailsRecipes(id, type) {
+    history.push(`/${type}s/${id}`);
   }
 
   return (
@@ -43,14 +43,14 @@ export default function DoneRecipeCard({ doneRecipeState }) {
             type="image"
             data-testid={ `${index}-horizontal-image` }
             alt=" card "
-            onClick={ () => redirectToDetailsRecipes('d') }
-            onKeyDown={ () => redirectToDetailsRecipes('d') }
+            onClick={ () => redirectToDetailsRecipes(id, type) }
+            onKeyDown={ () => redirectToDetailsRecipes(id, type) }
             src={ `${image}` }
           />
 
           <button
             type="button"
-            onClick={ () => redirectToDetailsRecipes('d') }
+            onClick={ () => redirectToDetailsRecipes(id, type) }
             data-testid={ `${index}-horizontal-name` }
           >
             {name}
