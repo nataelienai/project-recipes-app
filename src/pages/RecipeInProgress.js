@@ -36,7 +36,7 @@ export default function RecipeInProgress() {
     const { name, imgSource, category, instructions } = getRecipeDetails();
 
     return (
-      <div>
+      <div className="recipe-in-progress-page">
         <img
           src={ imgSource }
           alt={ name }

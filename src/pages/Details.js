@@ -10,6 +10,7 @@ import {
   setInProgressRecipes,
   getInProgressRecipes } from '../services/localStorage';
 import FavoriteButton from '../components/FavoriteButton';
+import ShareButton from '../components/ShareButton';
 import '../styles/DetailScreen.css';
 
 /* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
@@ -160,7 +161,7 @@ export default function Details() {
             responseApiDetails={ responseApiDetails }
             idDetailsUrl={ idDetailsUrl }
           />
-          <button type="button" data-testid="share-btn">share</button>
+          <ShareButton />
 
           <span data-testid="recipe-category">
             {' '}
