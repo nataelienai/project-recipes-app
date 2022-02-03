@@ -5,7 +5,6 @@ import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
 import Details from './pages/Details';
 import DoneRecipes from './pages/DoneRecipes';
-import Details from './pages/Details';
 import Drinks from './pages/Drinks';
 import Explore from './pages/Explore';
 import ExploreDrinkIngredients from './pages/ExploreDrinkIngredients';
