@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
@@ -6,11 +6,22 @@ import FiltersButtonsDoneRecipe from '../components/FiltersButtonsDoneRecipe';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
+const copy = require('clipboard-copy');
+
+const TWO_SECONDS = 2000;
 export default function FavoriteRecipes() {
   const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
   const getFavoriteFoodsLs = JSON.parse(localStorage.getItem('favoriteRecipes'));
-  console.log(getFavoriteFoodsLs[0].category);
+  const [shareBtnClicked, setShareBtnClicked] = useState(false);
+
+  function handleShareBtn(type, id) {
+    setShareBtnClicked(!shareBtnClicked);
+    const url = `http://localhost:3000/${type}s/${id}`;
+    setTimeout(() => { setShareBtnClicked(false); }, TWO_SECONDS);
+    return copy(url);
+  }
+
   useEffect(() => {
     if (location.pathname === '/favorite-recipes') setSearchButton(false);
   }, []);
@@ -31,6 +42,7 @@ export default function FavoriteRecipes() {
           </button>
           <button
             type="button"
+            onClick={ () => handleShareBtn(food.type, food.id) }
           >
             <img
               alt="share-bttn"
@@ -38,6 +50,7 @@ export default function FavoriteRecipes() {
               data-testid={ `${index}-horizontal-share-btn` }
             />
           </button>
+          <span>{shareBtnClicked && 'Link copied!'}</span>
           <img
             alt="food-fav"
             data-testid={ `${index}-horizontal-image` }
