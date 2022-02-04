@@ -20,8 +20,8 @@ export default function DoneRecipes() {
   }
 
   useEffect(() => {
-    handleDoneRecipesOfLS();
     if (location.pathname === '/done-recipes') setSearchButton(false);
+    handleDoneRecipesOfLS();
   }, []);
 
   return (
@@ -32,9 +32,10 @@ export default function DoneRecipes() {
         doneRecipeState={ doneRecipeState }
         setDoneRecipesState={ setDoneRecipesState }
       />
+      { doneRecipeState !== null && (
+        <DoneRecipeCard doneRecipeState={ doneRecipeState } />
 
-      {doneRecipeState.length > 1
-        && <DoneRecipeCard doneRecipeState={ doneRecipeState } />}
+      )}
     </>
   );
 }

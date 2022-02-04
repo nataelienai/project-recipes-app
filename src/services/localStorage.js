@@ -10,7 +10,7 @@ export function setInProgressRecipes(inProgressRecipes) {
 
 export function getDoneRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-  return doneRecipes || [{}];
+  return doneRecipes || [];
 }
 
 export function setDoneRecipes(doneRecipes) {
