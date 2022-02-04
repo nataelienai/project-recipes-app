@@ -10,7 +10,7 @@ export default function FavoriteRecipes() {
   const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
   const getFavoriteFoodsLs = JSON.parse(localStorage.getItem('favoriteRecipes'));
-
+  console.log(getFavoriteFoodsLs[0].category);
   useEffect(() => {
     if (location.pathname === '/favorite-recipes') setSearchButton(false);
   }, []);
@@ -45,10 +45,10 @@ export default function FavoriteRecipes() {
           />
           <h1 data-testid={ `${index}-horizontal-name` }>{food.name}</h1>
           <p data-testid={ `${index}-horizontal-top-text` }>
-            {`
-            ${food.nationality} - ${food.category}`}
+            { food.alcoholicOrNot
+              ? (`${food.nationality} - ${food.category} - ${food.alcoholicOrNot}`)
+              : (`${food.nationality} - ${food.category}`) }
           </p>
-
         </div>
       ))}
 
