@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
+import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
 import FiltersButtonsDoneRecipe from '../components/FiltersButtonsDoneRecipe';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -11,9 +12,11 @@ const copy = require('clipboard-copy');
 const TWO_SECONDS = 2000;
 export default function FavoriteRecipes() {
   const location = useLocation();
-  const { setSearchButton } = useContext(HeaderContext);
-  const getFavoriteFoodsLs = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  const { setSearchButton, favorited } = useContext(HeaderContext);
+  // const getFavoriteFoodsLs = JSON.parse(localStorage.getItem('favoriteRecipes'));
   const [shareBtnClicked, setShareBtnClicked] = useState(false);
+  const [shouldReload, setShouldReload] = useState(false);
+  const [newFavoriteRecipes, setNewFavoriteRecipes] = useState([]);
 
   function handleShareBtn(type, id) {
     setShareBtnClicked(!shareBtnClicked);
@@ -22,18 +25,34 @@ export default function FavoriteRecipes() {
     return copy(url);
   }
 
+  function removeFavoriteOfLocalStorage(idDetailsUrl) {
+    const favoritefilter = newFavoriteRecipes
+      .filter(({ id }) => id !== idDetailsUrl);
+    setfavoriteRecipes(favoritefilter);
+    setShouldReload(true);
+    console.log(favoritefilter, favorited, idDetailsUrl);
+  }
+
   useEffect(() => {
     if (location.pathname === '/favorite-recipes') setSearchButton(false);
   }, []);
+
+  useEffect(() => {
+    setNewFavoriteRecipes(getfavoriteRecipes());
+    return () => setShouldReload(false);
+  }, [shouldReload]);
 
   return (
     <div>
       <Header title="Favorite Recipes" />
       <FiltersButtonsDoneRecipe />
 
-      {getFavoriteFoodsLs.map((food, index) => (
+      {newFavoriteRecipes.map((food, index) => (
         <div key={ food.id }>
-          <button type="button">
+          <button
+            type="button"
+            onClick={ () => removeFavoriteOfLocalStorage(food.id) }
+          >
             <img
               alt="fav-bttn"
               src={ blackHeartIcon }
