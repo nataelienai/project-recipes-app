@@ -44,8 +44,10 @@ export default function FavoriteRecipes() {
             src={ food.image }
           />
           <h1 data-testid={ `${index}-horizontal-name` }>{food.name}</h1>
-          <p>{food.category}</p>
-          <p data-testid={ `${index}-horizontal-top-text` }>{food.nationality}</p>
+          <p data-testid={ `${index}-horizontal-top-text` }>
+            {`
+            ${food.nationality} - ${food.category}`}
+          </p>
 
         </div>
       ))}
