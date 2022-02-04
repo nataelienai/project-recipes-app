@@ -53,7 +53,7 @@ export default function RecipeInProgress() {
         <h2 data-testid="recipe-category">{category}</h2>
         <IngredientList ingredients={ ingredients } />
         <p data-testid="instructions">{instructions}</p>
-        <FinishRecipeButton />
+        <FinishRecipeButton recipe={ recipe } />
       </div>
     );
   }
