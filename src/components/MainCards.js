@@ -49,7 +49,7 @@ export default function MainCards() {
   }, []);
 
   return (
-    <section>
+    <section data-testid="meals-section">
       {cards(dataApi)}
     </section>
   );
