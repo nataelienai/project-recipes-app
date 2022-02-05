@@ -14,11 +14,10 @@ export default function MainCards() {
 
   const history = useHistory();
 
-  function redirectCards(id) {
+  function redirectCards(id, type) {
     setIdDetails(id);
-    if (pageDrinkOrFood === 'Food') {
-      history.push(`/foods/${id}`);
-    } else { history.push(`/drinks/${id}`); }
+    if (type === 'food' || type === 'Food') history.push(`/foods/${id}`);
+    else history.push(`/drinks/${id}`);
   }
 
   function cards(data) {
@@ -28,7 +27,7 @@ export default function MainCards() {
         key={ i }
         data-testid={ `${i}-recipe-card` }
         onClick={
-          () => redirectCards(item.idMeal || item.idDrink)
+          () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
         }
       >
         <img
