@@ -8,7 +8,7 @@ import renderWithRouter from './renderWithRouter';
 const url = '/favorite-recipes';
 
 describe(
-  'Testa todos os elementos da página de DRINKS', () => {
+  'Testa todos os elementos da página FAVORITE RECIPES', () => {
     test('01-Verificando se o icone profile existe.', () => {
       renderWithRouter(<App />, { route: url });
       const PROFILE_ICON = screen.getByTestId('profile-top-btn');
