@@ -8,11 +8,18 @@ export default function useIngredientsFromRecipe(recipe) {
       const recipeKeys = Object.keys(recipe);
 
       const recipeIngredients = recipeKeys.reduce((ingredientsAcc, key) => {
-        const isIngredient = key.includes('strIngredient');
+        const isIngredient = key.includes('Ingredient');
         const isValid = Boolean(recipe[key]);
 
         if (isIngredient && isValid) {
-          return [...ingredientsAcc, recipe[key]];
+          const measureKey = key.replace('Ingredient', 'Measure');
+          return [
+            ...ingredientsAcc,
+            {
+              name: recipe[key],
+              measure: recipe[measureKey],
+            },
+          ];
         }
         return ingredientsAcc;
       }, []);
