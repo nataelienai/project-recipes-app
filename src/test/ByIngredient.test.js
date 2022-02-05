@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 
-const url = '/explore/foods';
+const url = '/explore/foods/ingredients';
 
 describe(
   'Testa todos os elementos da página de DRINKS', () => {
@@ -18,47 +18,22 @@ describe(
 
     test('02-Verificando se o titulo Done Recipes existe.', () => {
       renderWithRouter(<App />, { route: url });
-      const TITLE_DONE = screen.getByText('Explore Foods');
-      expect(TITLE_DONE).toBeInTheDocument();
+      const TITLE_EXP = screen.getByText('Explore Ingredients');
+      expect(TITLE_EXP).toBeInTheDocument();
     });
 
-    test('03-Verificando se o botão By Ingredient existe', () => {
-      renderWithRouter(<App />, { route: url });
-      const BY_ING_BUTTON = screen.getByTestId('explore-by-ingredient');
-      expect(BY_ING_BUTTON).toBeInTheDocument();
+    test('03-Verificando se existe 12 igredients cards', async () => {
+      renderWithRouter(<App />, { route: '/foods' });
+      const MAIN_SECTION = await screen.findAllByTestId(/[0-9]-recipe-card/);
+      const size = 12;
+      expect(MAIN_SECTION).toHaveLength(size);
     });
 
-    test('04-Verificando se o botão By Ingredient redireciona', async () => {
+    test('04-Verificando se o card de Ingredient redireciona', async () => {
       const { history } = renderWithRouter(<App />, { route: url });
-      const BY_ING_BUTTON = await screen.findByTestId('explore-by-ingredient');
+      const BY_ING_BUTTON = await screen.findByTestId('0-ingredient-card');
       userEvent.click(BY_ING_BUTTON);
-      expect(history.location.pathname).toBe('/explore/foods/ingredients');
-    });
-
-    test('05-Verificando se o botão By Nationality existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const BY_NAT_BUTTON = await screen.findByTestId('explore-by-nationality');
-      expect(BY_NAT_BUTTON).toBeInTheDocument();
-    });
-
-    test('06-Verificando se o botão By Nationality redireciona', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const BY_NAT_BUTTON = await screen.findByTestId('explore-by-nationality');
-      userEvent.click(BY_NAT_BUTTON);
-      expect(history.location.pathname).toBe('/explore/foods/nationalities');
-    });
-
-    test('07-Verificando se o botão Surprise Me existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const SURPRISE_BUTTON = await screen.findByTestId('explore-surprise');
-      expect(SURPRISE_BUTTON).toBeInTheDocument();
-    });
-
-    test('08-Verificando se o botão Surprise Me redireciona', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const DRINKS_BUTTON = await screen.findByTestId('explore-surprise');
-      userEvent.click(DRINKS_BUTTON);
-      expect(history.location.pathname).toBe('/explore/foods');
+      expect(history.location.pathname).toBe('/foods');
     });
 
     test('09-Verificando se o botão DRINKS existe', async () => {
