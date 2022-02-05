@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import App from '../App';
 
 import renderWithRouter from './renderWithRouter';
+import userEvent from '@testing-library/user-event';
 
 // const INPUT_EMAIL_ID = 'email-input';
 // const INPUT_PASSWORD_ID = 'password-input';
@@ -82,8 +83,41 @@ describe(
 
     test('11-Verificando se o botão DRINKS existe', async () => {
       renderWithRouter(<App />, { route: '/foods' });
-      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-filter');
+      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
       expect(DRINKS_BUTTON).toBeInTheDocument();
+    });
+
+    test('12-Verificando se o botão DRINKS redireciona para /drinks', async () => {
+      const { history } = renderWithRouter(<App />, { route: '/foods' });
+      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
+      userEvent.click(DRINKS_BUTTON);
+      expect(history.location.pathname).toBe('/drinks');
+    });
+
+    test('13-Verificando se o botão EXPLORE existe', async () => {
+      renderWithRouter(<App />, { route: '/foods' });
+      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
+      expect(EXPLORE_BUTTON).toBeInTheDocument();
+    });
+
+    test('14-Verificando se o botão EXPLORE redireciona para /explore', async () => {
+      const { history } = renderWithRouter(<App />, { route: '/foods' });
+      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
+      userEvent.click(EXPLORE_BUTTON);
+      expect(history.location.pathname).toBe('/explore');
+    });
+
+    test('15-Verificando se o botão FOOD existe', async () => {
+      renderWithRouter(<App />, { route: '/foods' });
+      const EXPLORE_BUTTON = await screen.findByTestId('food-bottom-btn');
+      expect(EXPLORE_BUTTON).toBeInTheDocument();
+    });
+
+    test('16-Verificando se o botão FOOD redireciona para /foods', async () => {
+      const { history } = renderWithRouter(<App />, { route: '/drinks' });
+      const FOOD_BUTTON = await screen.findByTestId('food-bottom-btn');
+      userEvent.click(FOOD_BUTTON);
+      expect(history.location.pathname).toBe('/foods');
     });
 
     // test('?', () => {
