@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
 import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
-import FiltersButtonsDoneRecipe from '../components/FiltersButtonsDoneRecipe';
+import FiltersButtonsRecipes from '../components/FiltersButtonsRecipes';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
@@ -17,7 +17,8 @@ export default function FavoriteRecipes() {
   const [shareBtnClicked, setShareBtnClicked] = useState(false);
   const [shouldReload, setShouldReload] = useState(false);
   const [newFavoriteRecipes, setNewFavoriteRecipes] = useState([]);
-
+  const recipeFavoriteBackUp = getfavoriteRecipes();
+  const history = useHistory();
   function handleShareBtn(type, id) {
     setShareBtnClicked(!shareBtnClicked);
     const url = `http://localhost:3000/${type}s/${id}`;
@@ -32,20 +33,28 @@ export default function FavoriteRecipes() {
     setShouldReload(true);
     console.log(favoritefilter, favorited, idDetailsUrl);
   }
+  function redirectCards(id, type) {
+    if (type === 'food') history.push(`/foods/${id}`);
+    else history.push(`/drinks/${id}`);
+  }
 
   useEffect(() => {
     if (location.pathname === '/favorite-recipes') setSearchButton(false);
   }, []);
 
   useEffect(() => {
-    setNewFavoriteRecipes(getfavoriteRecipes());
+    setNewFavoriteRecipes(recipeFavoriteBackUp);
     return () => setShouldReload(false);
   }, [shouldReload]);
 
   return (
     <div>
       <Header title="Favorite Recipes" />
-      <FiltersButtonsDoneRecipe />
+      <FiltersButtonsRecipes
+        recipes={ newFavoriteRecipes }
+        setRecipes={ setNewFavoriteRecipes }
+        defaultRecipes={ recipeFavoriteBackUp }
+      />
 
       {newFavoriteRecipes.map((food, index) => (
         <div key={ food.id }>
@@ -70,12 +79,25 @@ export default function FavoriteRecipes() {
             />
           </button>
           <span>{shareBtnClicked && 'Link copied!'}</span>
-          <img
-            alt="food-fav"
-            data-testid={ `${index}-horizontal-image` }
-            src={ food.image }
-          />
-          <h1 data-testid={ `${index}-horizontal-name` }>{food.name}</h1>
+          <div
+            onClick={ () => redirectCards(food.id, food.type) }
+            onKeyDown={ (e) => {
+              if (e.key === 'Enter') { redirectCards(food.id, food.type); }
+            } }
+            tabIndex={ 0 }
+            role="link"
+          >
+            <img
+              type="image"
+              alt="food-fav"
+              data-testid={ `${index}-horizontal-image` }
+              src={ food.image }
+            />
+            <h1 data-testid={ `${index}-horizontal-name` }>
+              {food.name}
+            </h1>
+
+          </div>
           <p data-testid={ `${index}-horizontal-top-text` }>
             { food.alcoholicOrNot
               ? (`${food.nationality} - ${food.category} - ${food.alcoholicOrNot}`)
