@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import { getFoodsMainPageApi, getDrinksMainPageApi } from '../services/api';
 
@@ -8,12 +9,18 @@ export default function RecommendationCard() {
 
   const [dataApi, SetdataApi] = useState([]);
 
+  const history = useHistory();
+
   function handleFetchs() {
     if (pageDrinkOrFood === 'Food') {
       getDrinksMainPageApi().then((data) => SetdataApi(data.drinks));
     } else {
       getFoodsMainPageApi().then((data) => SetdataApi(data.meals));
     }
+  }
+  function redirectCards(id, type) {
+    if (type === 'drink' || type === 'Drinks') history.push(`/foods/${id}`);
+    else history.push(`/drinks/${id}`);
   }
 
   useEffect(() => {
@@ -23,7 +30,14 @@ export default function RecommendationCard() {
   return (
     <section className="carousel">
       {dataApi.map((card, index) => index < MAX_CARDS && (
-        <section key={ index } data-testid={ `${index}-recomendation-card` }>
+        <section
+          key={ index }
+          data-testid={ `${index}-recomendation-card` }
+          role="link"
+          tabIndex={ 0 }
+          onClick={ () => redirectCards(card.idMeal || card.idDrink, pageDrinkOrFood) }
+          onKeyDown={ () => redirectCards(card.idMeal || card.idDrink, pageDrinkOrFood) }
+        >
           <img
             data-testid={ `${index}-card-img` }
             alt="card"
