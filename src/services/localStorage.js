@@ -17,6 +17,11 @@ export function setDoneRecipes(doneRecipes) {
   localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
 }
 
+export function addDoneRecipe(recipe) {
+  const doneRecipes = getDoneRecipes();
+  setDoneRecipes(doneRecipes.concat(recipe));
+}
+
 export function getfavoriteRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   return doneRecipes || [];
