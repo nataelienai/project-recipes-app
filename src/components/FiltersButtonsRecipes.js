@@ -1,28 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import HeaderContext from '../context/header/HeaderContext';
 
-export default function FiltersButtonsDoneRecipe({
-  doneRecipeState,
-  setDoneRecipesState,
-}) {
-  const { doneRecipesBackUpState } = useContext(HeaderContext);
+export default function FiltersButtonsRecipes({ recipes, setRecipes, defaultRecipes }) {
   function handleFiltersButtons(type) {
     let recipeFiltred;
     switch (type) {
     case 'Food':
-      recipeFiltred = doneRecipeState
+      recipeFiltred = recipes
         .filter((recipe) => recipe.type !== 'drink');
-      setDoneRecipesState(recipeFiltred);
+      setRecipes(recipeFiltred);
       break;
     case 'Drink':
-      recipeFiltred = doneRecipeState
+      recipeFiltred = recipes
         .filter((recipe) => recipe.type !== 'food');
-      setDoneRecipesState(recipeFiltred);
+      setRecipes(recipeFiltred);
       break;
 
     default:
-      setDoneRecipesState(doneRecipesBackUpState);
+      setRecipes(defaultRecipes);
       break;
     }
   }
@@ -59,7 +54,7 @@ export default function FiltersButtonsDoneRecipe({
   );
 }
 
-FiltersButtonsDoneRecipe.propTypes = {
-  doneRecipeState: PropTypes.array,
-  setDoneRecipesState: PropTypes.func,
+FiltersButtonsRecipes.propTypes = {
+  recipes: PropTypes.array,
+  setRecipes: PropTypes.func,
 }.isRequired;
