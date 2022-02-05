@@ -1,18 +1,11 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
+import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 import renderWithRouter from './renderWithRouter';
-import userEvent from '@testing-library/user-event';
-
-// const INPUT_EMAIL_ID = 'email-input';
-// const INPUT_PASSWORD_ID = 'password-input';
-// const BUTTON_ID = 'login-submit-btn';
-// const email = 'email@email.com';
-// const password = '1234567';
 
 describe(
   'Testa todos os elementos da página de FOODS', () => {
