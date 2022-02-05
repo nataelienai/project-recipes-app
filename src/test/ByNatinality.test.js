@@ -6,19 +6,19 @@ import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 
-const url = '/explore/foods/ingredients';
+const url = '/explore/foods/nationalities';
 
 describe(
-  'Testa todos os elementos da página By Ingredients', () => {
+  'Testa todos os elementos da página de By Nationality', () => {
     test('01-Verificando se o icone profile existe.', () => {
       renderWithRouter(<App />, { route: url });
       const PROFILE_ICON = screen.getByTestId('profile-top-btn');
       expect(PROFILE_ICON).toBeInTheDocument();
     });
 
-    test('02-Verificando se o titulo Done Recipes existe.', () => {
+    test('02-Verificando se o tituloExplore Nationalities existe.', () => {
       renderWithRouter(<App />, { route: url });
-      const TITLE_EXP = screen.getByText('Explore Ingredients');
+      const TITLE_EXP = screen.getByText('Explore Nationalities');
       expect(TITLE_EXP).toBeInTheDocument();
     });
 
@@ -29,11 +29,12 @@ describe(
       expect(MAIN_SECTION).toHaveLength(size);
     });
 
-    test('04-Verificando se o card de Ingredient redireciona', async () => {
+    test('04-Verificando se o card redireciona', async () => {
       const { history } = renderWithRouter(<App />, { route: url });
-      const BY_ING_BUTTON = await screen.findByTestId('0-ingredient-card');
+      const BY_ING_BUTTON = await screen.findByTestId('0-card-img');
       userEvent.click(BY_ING_BUTTON);
-      expect(history.location.pathname).toBe('/foods');
+      const mock = '/foods/52977';
+      expect(history.location.pathname).toBe(mock);
     });
 
     test('09-Verificando se o botão DRINKS existe', async () => {

@@ -8,7 +8,7 @@ import App from '../App';
 import renderWithRouter from './renderWithRouter';
 
 describe(
-  'Testa todos os elementos da página de FOODS', () => {
+  'Testa todos os elementos da página FOODS', () => {
     test('01-Verificando se o icone profile existe.', () => {
       const { history } = renderWithRouter(<App />);
       history.push('/foods');
