@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DoneRecipeCard from '../components/DoneRecipeCard';
-import FiltersButtonsDoneRecipe from '../components/FiltersButtonsDoneRecipe';
+import FiltersButtonsRecipes from '../components/FiltersButtonsRecipes';
 import Header from '../components/Header';
 import HeaderContext from '../context/header/HeaderContext';
 import { getDoneRecipes } from '../services/localStorage';
@@ -9,32 +9,32 @@ import { getDoneRecipes } from '../services/localStorage';
 /* referencia tab index https://stackoverflow.com/questions/56441825/how-to-fix-button-interactive-role-must-be-focusable */
 export default function DoneRecipes() {
   const location = useLocation();
-  const { setSearchButton, setDoneRecipesBackUpState } = useContext(HeaderContext);
-
+  const { setSearchButton } = useContext(HeaderContext);
+  const recipesBackUpState = getDoneRecipes();
   const [doneRecipeState, setDoneRecipesState] = useState([]);
 
   function handleDoneRecipesOfLS() {
-    const doneRecipesLS = getDoneRecipes();
-    setDoneRecipesState(doneRecipesLS);
-    setDoneRecipesBackUpState(doneRecipesLS);
+    setDoneRecipesState(recipesBackUpState);
   }
 
   useEffect(() => {
-    handleDoneRecipesOfLS();
     if (location.pathname === '/done-recipes') setSearchButton(false);
+    handleDoneRecipesOfLS();
   }, []);
 
   return (
     <>
       <Header title="Done Recipes" />
 
-      <FiltersButtonsDoneRecipe
-        doneRecipeState={ doneRecipeState }
-        setDoneRecipesState={ setDoneRecipesState }
+      <FiltersButtonsRecipes
+        recipes={ doneRecipeState }
+        setRecipes={ setDoneRecipesState }
+        defaultRecipes={ recipesBackUpState }
       />
+      { doneRecipeState !== null && (
+        <DoneRecipeCard doneRecipeState={ doneRecipeState } />
 
-      {doneRecipeState.length > 1
-        && <DoneRecipeCard doneRecipeState={ doneRecipeState } />}
+      )}
     </>
   );
 }
