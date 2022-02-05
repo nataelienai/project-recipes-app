@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import RecipeInProgressContext
 from '../context/recipe-in-progress/RecipeInProgressContext';
+import { addDoneRecipe } from '../services/localStorage';
 import '../styles/FinishRecipeButton.css';
 
 export default function FinishRecipeButton({ recipe }) {
