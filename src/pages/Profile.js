@@ -3,27 +3,23 @@ import { useHistory, useLocation } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { clearStorage, getUser } from '../services/localStorage';
 
 function Profile() {
-  let emailLocalStorage;
-  if (localStorage.getItem('user') !== null) {
-    const { email } = JSON.parse(localStorage.getItem('user'));
-    emailLocalStorage = email;
-  }
   const history = useHistory();
   const location = useLocation();
+  const { email } = getUser();
   const { setSearchButton } = useContext(HeaderContext);
+
   useEffect(() => {
     if (location.pathname === '/profile') setSearchButton(false);
-  }, []);
+  }, [location, setSearchButton]);
+
   return (
     <>
       <Header title="Profile" />
       <div>
-
-        <p data-testid="profile-email">
-          { emailLocalStorage }
-        </p>
+        <p data-testid="profile-email">{email}</p>
 
         <button
           type="button"
@@ -36,7 +32,7 @@ function Profile() {
         <button
           type="button"
           data-testid="profile-favorite-btn"
-          onClick={ (e) => e.preventDefault(history.push('/favorite-recipes')) }
+          onClick={ () => history.push('/favorite-recipes') }
         >
           Favorite Recipes
         </button>
@@ -44,14 +40,13 @@ function Profile() {
         <button
           type="button"
           data-testid="profile-logout-btn"
-          onClick={ (e) => e.preventDefault(
-            localStorage.clear(),
-            history.push('/'),
-          ) }
+          onClick={ () => {
+            clearStorage();
+            history.push('/');
+          } }
         >
           Logout
         </button>
-
       </div>
       <Footer />
     </>

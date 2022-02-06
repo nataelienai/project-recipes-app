@@ -1,3 +1,20 @@
+export function setMealsToken(token) {
+  localStorage.setItem('mealsToken', token);
+}
+
+export function setCocktailsToken(token) {
+  localStorage.setItem('cocktailsToken', token);
+}
+
+export function getUser() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user || { email: '' };
+}
+
+export function setUser(email) {
+  localStorage.setItem('user', JSON.stringify({ email }));
+}
+
 export function getInProgressRecipes() {
   const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
@@ -41,4 +58,8 @@ export function removeRecipeFromFavorites(recipeId) {
   const favoriteRecipes = getfavoriteRecipes();
   const newFavoriteRecipes = favoriteRecipes.filter(({ id }) => id !== recipeId);
   setfavoriteRecipes(newFavoriteRecipes);
+}
+
+export function clearStorage() {
+  localStorage.clear();
 }

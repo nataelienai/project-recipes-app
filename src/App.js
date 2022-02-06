@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import HeaderProvider from './context/header/HeaderProvider';
-import LoginProvider from './context/login/LoginProvider';
 import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
 import Details from './pages/Details';
@@ -24,9 +23,7 @@ function App() {
     <Switch>
       <HeaderProvider>
         <Route exact path="/">
-          <LoginProvider>
-            <Login />
-          </LoginProvider>
+          <Login />
         </Route>
 
         <Route exact path="/foods">
@@ -85,9 +82,7 @@ function App() {
         </Route>
 
         <Route exact path="/profile">
-          <LoginProvider>
-            <Profile />
-          </LoginProvider>
+          <Profile />
         </Route>
 
         <Route exact path="/done-recipes">

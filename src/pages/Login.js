@@ -1,75 +1,62 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import LoginContext from '../context/login/LoginContext';
+import { setMealsToken, setCocktailsToken, setUser } from '../services/localStorage';
+
+const EMAIL_REGEX = /^[\w]+([.|\-|_][A-Za-z0-9]+)*@[a-z]{2,}(\.[a-z]{2,})+$/g;
+const PASSWORD_MIN_LENGTH = 6;
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const history = useHistory();
-
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    btn,
-    setBtn,
-    mealsToken,
-    cocktailsToken,
-  } = useContext(LoginContext);
+  const mealsToken = 1;
+  const cocktailsToken = 1;
 
   useEffect(() => {
-    const regex = {
-      email: /^[\w]+([.|\-|_][A-Za-z0-9]+)*@[a-z]{2,}(\.[a-z]{2,})+$/g,
-      rAfterAt: /@[a-z]{2,}(\.[a-z]{2,})+$/g,
-      rAfterAtDots: /(\.[a-z]{2,})+$/g };
-    const minCharacters = 6;
-    if (email.match(regex.email) && password.length > minCharacters) {
-      setBtn({ disabled: false });
+    if (email.match(EMAIL_REGEX) && password.length > PASSWORD_MIN_LENGTH) {
+      setIsButtonDisabled(false);
     } else {
-      setBtn({ disabled: true });
+      setIsButtonDisabled(true);
     }
-  }, [email, password, setBtn]);
+  }, [email, password]);
 
-  const btnLocalStorage = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('user', JSON.stringify({ email }));
-    localStorage.setItem('mealsToken', mealsToken);
-    localStorage.setItem('cocktailsToken', cocktailsToken);
+    setUser(email);
+    setMealsToken(mealsToken);
+    setCocktailsToken(cocktailsToken);
     history.push('/foods');
   };
 
   return (
     <div>
-      <form onSubmit={ btnLocalStorage }>
-
+      <form onSubmit={ handleSubmit }>
         <h1>Login</h1>
-
         <input
           type="text"
-          name="email_input"
+          name="email-input"
           placeholder="Email"
           data-testid="email-input"
           value={ email }
           onChange={ ({ target: { value } }) => setEmail(value) }
         />
-
         <input
-          type="text"
+          type="password"
           name="password-input"
           placeholder="Password"
           data-testid="password-input"
           value={ password }
           onChange={ ({ target: { value } }) => setPassword(value) }
         />
-
         <button
           type="submit"
-          name="login_submit_btn"
+          name="login-submit-btn"
           data-testid="login-submit-btn"
-          disabled={ btn.disabled }
+          disabled={ isButtonDisabled }
         >
           Enter
         </button>
-
       </form>
     </div>
   );
