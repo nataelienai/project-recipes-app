@@ -1,3 +1,45 @@
 img, .image-DoneCard {
-  max-width: 46vw;
+  max-height: 18vh;
+  border-radius: 50%;
+}
+.image-DoneCard {
+  max-height: 16vh;
+  
+  object-fit: fill;
+  /* margin: 3px 0; */
+  position: relative;
+  top: 5px;
+  right: 9px;
+}
+.card-main{
+  background-color: #EDEDED;
+  max-width: 18em;
+  margin: 0 0 0 1.7em;
+  border-radius: 15px;
+  height: 7em;
+  display: flex;
+  justify-content: space-around;
+}
+.cards-content{
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+}
+.filters-button{
+  display: flex;
+  gap: 2vw;
+  max-width: 90vw;
+  height: 3.3em;
+  overflow-x: scroll;
+
+}
+.filters-button button{
+  min-width: 7em;
+  font-size: revert;
+  height: max(2.5em);
+  /* padding: 5px
+px
+; */
+  margin-top: 7px;
 }

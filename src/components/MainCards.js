@@ -22,10 +22,10 @@ export default function MainCards() {
 
   function cards(data) {
     return data.map((item, i) => i < MAX_CARDS && (
-      <button
+      <div
         type="button"
         key={ i }
-        data-testid={ `${i}-recipe-card` }
+        className='card-main'
         onClick={
           () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
         }
@@ -40,7 +40,10 @@ export default function MainCards() {
           {' '}
           { item.strMeal || item.strDrink }
         </span>
-      </button>));
+        <span>
+          {item.strAlcoholic || item.strArea}
+        </span>
+      </div>));
   }
 
   useEffect(() => {
@@ -48,7 +51,7 @@ export default function MainCards() {
   }, []);
 
   return (
-    <section>
+    <section className="cards-content">
       {cards(dataApi)}
     </section>
   );
