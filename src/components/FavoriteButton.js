@@ -2,20 +2,24 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
+import {
+  addRecipeToFavorites,
+  removeRecipeFromFavorites,
+  getfavoriteRecipes,
+} from '../services/localStorage';
 
-export default function FavoriteButton({ recipe, isFood }) {
+export default function FavoriteButton({ recipe, isFood, testId, onToggle }) {
   const [isRecipeFavorite, setIsRecipeFavorite] = useState(false);
-  const favoriteLS = getfavoriteRecipes();
-  const recipeId = recipe.idMeal || recipe.idDrink;
+  const recipeId = recipe.idMeal || recipe.idDrink || recipe.id;
 
   useEffect(() => {
-    const isFavorite = favoriteLS.some(({ id }) => id === recipeId);
+    const favoriteRecipes = getfavoriteRecipes();
+    const isFavorite = favoriteRecipes.some(({ id }) => id === recipeId);
     setIsRecipeFavorite(isFavorite);
-  }, [favoriteLS, recipeId]);
+  }, [recipeId]);
 
-  function addRecipeToFavorites() {
-    const newFavoriteObject = {
+  function favoriteRecipe() {
+    const newFavoriteRecipe = {
       id: recipeId,
       type: isFood ? 'food' : 'drink',
       nationality: recipe.strArea || '',
@@ -24,25 +28,22 @@ export default function FavoriteButton({ recipe, isFood }) {
       name: recipe.strMeal || recipe.strDrink,
       image: recipe.strMealThumb || recipe.strDrinkThumb,
     };
-
-    return favoriteLS.concat(newFavoriteObject);
+    addRecipeToFavorites(newFavoriteRecipe);
+    setIsRecipeFavorite(true);
   }
 
-  function removeRecipeFromFavorites() {
-    const favoritefilter = favoriteLS.filter(({ id }) => id !== recipeId);
-    return favoritefilter;
+  function unfavoriteRecipe() {
+    removeRecipeFromFavorites(recipeId);
+    setIsRecipeFavorite(false);
   }
 
   function toggleFavorite() {
     if (isRecipeFavorite) {
-      const favorites = removeRecipeFromFavorites();
-      setfavoriteRecipes(favorites);
-      setIsRecipeFavorite(false);
+      unfavoriteRecipe();
     } else {
-      const favorites = addRecipeToFavorites();
-      setfavoriteRecipes(favorites);
-      setIsRecipeFavorite(true);
+      favoriteRecipe();
     }
+    onToggle();
   }
 
   return (
@@ -52,14 +53,20 @@ export default function FavoriteButton({ recipe, isFood }) {
     >
       <img
         src={ isRecipeFavorite ? blackHeartIcon : whiteHeartIcon }
-        alt="favorite"
-        data-testid="favorite-btn"
+        alt="Favorite button"
+        data-testid={ testId }
       />
     </button>
   );
 }
 
 FavoriteButton.propTypes = {
-  recipe: PropTypes.shape({}),
-  isFood: PropTypes.bool,
-}.isRequired;
+  recipe: PropTypes.objectOf(PropTypes.string).isRequired,
+  isFood: PropTypes.bool.isRequired,
+  testId: PropTypes.string.isRequired,
+  onToggle: PropTypes.func,
+};
+
+FavoriteButton.defaultProps = {
+  onToggle: () => {},
+};

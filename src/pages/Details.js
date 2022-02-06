@@ -76,12 +76,11 @@ export default function Details() {
           alt="recipe"
           src={ recipe.strMealThumb || recipe.strDrinkThumb }
         />
-
         <h1 data-testid="recipe-title">
           {recipe.strMeal || recipe.strDrink}
         </h1>
 
-        <FavoriteButton recipe={ recipe } isFood={ isFood } />
+        <FavoriteButton recipe={ recipe } isFood={ isFood } testId="favorite-btn" />
         <ShareButton recipeId={ idDetailsUrl } isFood={ isFood } testId="share-btn" />
 
         <h2 data-testid="recipe-category">

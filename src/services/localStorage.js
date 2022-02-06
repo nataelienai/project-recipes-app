@@ -30,3 +30,15 @@ export function getfavoriteRecipes() {
 export function setfavoriteRecipes(favoriteRecipes) {
   localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
 }
+
+export function addRecipeToFavorites(recipe) {
+  const favoriteRecipes = getfavoriteRecipes();
+  const newFavoriteRecipes = favoriteRecipes.concat(recipe);
+  setfavoriteRecipes(newFavoriteRecipes);
+}
+
+export function removeRecipeFromFavorites(recipeId) {
+  const favoriteRecipes = getfavoriteRecipes();
+  const newFavoriteRecipes = favoriteRecipes.filter(({ id }) => id !== recipeId);
+  setfavoriteRecipes(newFavoriteRecipes);
+}

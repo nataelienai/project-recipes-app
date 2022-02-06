@@ -1,26 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function FiltersButtonsRecipes({ unfilteredRecipes, setFilteredRecipes }) {
+export default function FiltersButtonsRecipes({ setActiveFilterFn }) {
   function handleFiltersButtons(type) {
-    let filteredRecipes;
-    switch (type) {
-    case 'Food':
-      filteredRecipes = unfilteredRecipes
-        .filter((recipe) => recipe.type !== 'drink');
-      setFilteredRecipes(filteredRecipes);
-      break;
+    const filterFunctions = {
+      Food: (recipe) => recipe.type === 'food',
+      Drink: (recipe) => recipe.type === 'drink',
+    };
 
-    case 'Drink':
-      filteredRecipes = unfilteredRecipes
-        .filter((recipe) => recipe.type !== 'food');
-      setFilteredRecipes(filteredRecipes);
-      break;
+    let activeFilterFn = filterFunctions[type];
 
-    default:
-      setFilteredRecipes(unfilteredRecipes);
-      break;
+    if (!activeFilterFn) {
+      activeFilterFn = () => true;
     }
+    setActiveFilterFn(() => activeFilterFn);
   }
 
   return (
@@ -32,7 +25,6 @@ export default function FiltersButtonsRecipes({ unfilteredRecipes, setFilteredRe
       >
         All
       </button>
-
       <button
         type="button"
         data-testid="filter-by-food-btn"
@@ -40,7 +32,6 @@ export default function FiltersButtonsRecipes({ unfilteredRecipes, setFilteredRe
       >
         Food
       </button>
-
       <button
         type="button"
         data-testid="filter-by-drink-btn"
@@ -53,6 +44,5 @@ export default function FiltersButtonsRecipes({ unfilteredRecipes, setFilteredRe
 }
 
 FiltersButtonsRecipes.propTypes = {
-  recipes: PropTypes.array,
-  setRecipes: PropTypes.func,
-}.isRequired;
+  setActiveFilterFn: PropTypes.func.isRequired,
+};

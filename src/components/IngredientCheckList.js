@@ -43,7 +43,7 @@ export default function IngredientCheckList({ ingredients }) {
     <ul>
       {ingredients.map((ingredient, index) => (
         <IngredientListItem
-          key={ ingredient.name }
+          key={ `${ingredient.name} - ${ingredient.measure}` }
           name={ ingredient.name }
           measure={ ingredient.measure }
           testId={ `${index}-ingredient-step` }

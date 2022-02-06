@@ -12,7 +12,7 @@ export default function Foods() {
   useEffect(() => {
     if (location.pathname === '/foods') setpageDrinkOrFood('Food');
     setSearchButton(true);
-  }, []);
+  }, [location, setpageDrinkOrFood, setSearchButton]);
 
   return (
     <>
@@ -20,7 +20,6 @@ export default function Foods() {
       <ButtonsCategory />
       <MainCards />
       <Footer />
-
     </>
   );
 }

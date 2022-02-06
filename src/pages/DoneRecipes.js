@@ -8,22 +8,23 @@ import { getDoneRecipes } from '../services/localStorage';
 
 /* referencia tab index https://stackoverflow.com/questions/56441825/how-to-fix-button-interactive-role-must-be-focusable */
 export default function DoneRecipes() {
-  const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
-  const unfilteredDoneRecipes = getDoneRecipes();
-  const [filteredDoneRecipes, setFilteredDoneRecipes] = useState([]);
+  const [activeFilterFn, setActiveFilterFn] = useState(() => () => true);
+  const [doneRecipes, setDoneRecipes] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === '/done-recipes') setSearchButton(false);
-    setFilteredDoneRecipes(unfilteredDoneRecipes);
-  }, []);
+    setDoneRecipes(getDoneRecipes());
+  }, [location, setSearchButton]);
+
+  const filteredDoneRecipes = doneRecipes.filter(activeFilterFn);
 
   return (
     <>
       <Header title="Done Recipes" />
       <FiltersButtonsRecipes
-        unfilteredRecipes={ unfilteredDoneRecipes }
-        setFilteredRecipes={ setFilteredDoneRecipes }
+        setActiveFilterFn={ setActiveFilterFn }
       />
       <DoneRecipeCard doneRecipes={ filteredDoneRecipes } />
     </>

@@ -2,59 +2,48 @@ import React, { useEffect, useContext, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
-import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
+import { getfavoriteRecipes } from '../services/localStorage';
 import FiltersButtonsRecipes from '../components/FiltersButtonsRecipes';
+import FavoriteButton from '../components/FavoriteButton';
 import ShareButton from '../components/ShareButton';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function FavoriteRecipes() {
-  const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
-  const [shouldReload, setShouldReload] = useState(false);
-  const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const unfilteredRecipes = getfavoriteRecipes();
+  const [activeFilterFn, setActiveFilterFn] = useState(() => () => true);
+  const [favorites, setFavorites] = useState([]);
+  const location = useLocation();
   const history = useHistory();
-
-  function removeFavoriteOfLocalStorage(idDetailsUrl) {
-    const favoritefilter = unfilteredRecipes
-      .filter(({ id }) => id !== idDetailsUrl);
-    setfavoriteRecipes(favoritefilter);
-    setShouldReload(true);
-  }
 
   function redirectCards(id, type) {
     if (type === 'food') history.push(`/foods/${id}`);
     else history.push(`/drinks/${id}`);
   }
 
-  useEffect(() => {
-    if (location.pathname === '/favorite-recipes') setSearchButton(false);
-  }, []);
+  function fetchRecipes() {
+    setFavorites(getfavoriteRecipes());
+  }
 
   useEffect(() => {
-    setFilteredRecipes(unfilteredRecipes);
-    return () => setShouldReload(false);
-  }, [shouldReload]);
+    if (location.pathname === '/favorite-recipes') setSearchButton(false);
+    fetchRecipes();
+  }, [location, setSearchButton]);
+
+  const filteredFavorites = favorites.filter(activeFilterFn);
 
   return (
     <div>
       <Header title="Favorite Recipes" />
       <FiltersButtonsRecipes
-        unfilteredRecipes={ unfilteredRecipes }
-        setFilteredRecipes={ setFilteredRecipes }
+        setActiveFilterFn={ setActiveFilterFn }
       />
-      {filteredRecipes.map((food, index) => (
+      {filteredFavorites.map((food, index) => (
         <div key={ food.id }>
-          <button
-            type="button"
-            onClick={ () => removeFavoriteOfLocalStorage(food.id) }
-          >
-            <img
-              alt="fav-bttn"
-              src={ blackHeartIcon }
-              data-testid={ `${index}-horizontal-favorite-btn` }
-            />
-          </button>
+          <FavoriteButton
+            recipe={ food }
+            isFood={ food.type === 'food' }
+            testId={ `${index}-horizontal-favorite-btn` }
+            onToggle={ () => fetchRecipes() }
+          />
           <ShareButton
             recipeId={ food.id }
             isFood={ food.type === 'food' }
