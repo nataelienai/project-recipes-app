@@ -82,7 +82,7 @@ export default function Details() {
         </h1>
 
         <FavoriteButton recipe={ recipe } isFood={ isFood } />
-        <ShareButton />
+        <ShareButton recipeId={ idDetailsUrl } isFood={ isFood } testId="share-btn" />
 
         <h2 data-testid="recipe-category">
           {recipe.strAlcoholic || recipe.strCategory }

@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import shareIcon from '../images/shareIcon.svg';
+import ShareButton from './ShareButton';
 import '../styles/mainCards.css';
 
-const copy = require('clipboard-copy');
-
-const TWO_SECONDS = 2000;
-export default function DoneRecipeCard({ doneRecipeState }) {
+export default function DoneRecipeCard({ doneRecipes }) {
   const history = useHistory();
-
-  const [shareBtnClicked, setShareBtnClicked] = useState(false);
-
-  function handleShareBtn(type, id) {
-    setShareBtnClicked(!shareBtnClicked);
-    const url = `http://localhost:3000/${type}s/${id}`;
-    setTimeout(() => { setShareBtnClicked(false); }, TWO_SECONDS);
-    return copy(url);
-  }
 
   function redirectToDetailsRecipes(id, type) {
     history.push(`/${type}s/${id}`);
@@ -25,8 +13,7 @@ export default function DoneRecipeCard({ doneRecipeState }) {
 
   return (
     <div>
-
-      { doneRecipeState.map(({
+      { doneRecipes.map(({
         type,
         id,
         nationality,
@@ -37,15 +24,15 @@ export default function DoneRecipeCard({ doneRecipeState }) {
         doneDate,
         tags,
       }, index) => (
-        <>
+        <div key={ id }>
           <input
             className="image-DoneCard"
             type="image"
             data-testid={ `${index}-horizontal-image` }
-            alt=" card "
+            alt={ `${name} card` }
             onClick={ () => redirectToDetailsRecipes(id, type) }
             onKeyDown={ () => redirectToDetailsRecipes(id, type) }
-            src={ `${image}` }
+            src={ image }
           />
 
           <button
@@ -63,18 +50,12 @@ export default function DoneRecipeCard({ doneRecipeState }) {
 
           <span data-testid={ `${index}-horizontal-done-date` }>{doneDate}</span>
 
-          <button
-            type="button"
-            onClick={ () => handleShareBtn(type, id) }
-          >
-            <img
-              src={ shareIcon }
-              alt="share-button"
-              data-testid={ `${index}-horizontal-share-btn` }
-            />
+          <ShareButton
+            recipeId={ id }
+            isFood={ type === 'food' }
+            testId={ `${index}-horizontal-share-btn` }
+          />
 
-          </button>
-          <span>{shareBtnClicked && 'Link copied!'}</span>
           {tags.map((tag) => (
             <span
               key={ index }
@@ -83,14 +64,11 @@ export default function DoneRecipeCard({ doneRecipeState }) {
               {tag}
             </span>
           ))}
-
-        </>
-
+        </div>
       ))}
-
     </div>
   );
 }
 DoneRecipeCard.propTypes = {
-  doneRecipeState: PropTypes.array,
+  doneRecipes: PropTypes.array,
 }.isRequired;

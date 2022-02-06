@@ -4,35 +4,24 @@ import HeaderContext from '../context/header/HeaderContext';
 import Header from '../components/Header';
 import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
 import FiltersButtonsRecipes from '../components/FiltersButtonsRecipes';
-import shareIcon from '../images/shareIcon.svg';
+import ShareButton from '../components/ShareButton';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-const copy = require('clipboard-copy');
-
-const TWO_SECONDS = 2000;
 export default function FavoriteRecipes() {
   const location = useLocation();
-  const { setSearchButton, favorited } = useContext(HeaderContext);
-  // const getFavoriteFoodsLs = JSON.parse(localStorage.getItem('favoriteRecipes'));
-  const [shareBtnClicked, setShareBtnClicked] = useState(false);
+  const { setSearchButton } = useContext(HeaderContext);
   const [shouldReload, setShouldReload] = useState(false);
-  const [newFavoriteRecipes, setNewFavoriteRecipes] = useState([]);
-  const recipeFavoriteBackUp = getfavoriteRecipes();
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const unfilteredRecipes = getfavoriteRecipes();
   const history = useHistory();
-  function handleShareBtn(type, id) {
-    setShareBtnClicked(!shareBtnClicked);
-    const url = `http://localhost:3000/${type}s/${id}`;
-    setTimeout(() => { setShareBtnClicked(false); }, TWO_SECONDS);
-    return copy(url);
-  }
 
   function removeFavoriteOfLocalStorage(idDetailsUrl) {
-    const favoritefilter = newFavoriteRecipes
+    const favoritefilter = unfilteredRecipes
       .filter(({ id }) => id !== idDetailsUrl);
     setfavoriteRecipes(favoritefilter);
     setShouldReload(true);
-    console.log(favoritefilter, favorited, idDetailsUrl);
   }
+
   function redirectCards(id, type) {
     if (type === 'food') history.push(`/foods/${id}`);
     else history.push(`/drinks/${id}`);
@@ -43,7 +32,7 @@ export default function FavoriteRecipes() {
   }, []);
 
   useEffect(() => {
-    setNewFavoriteRecipes(recipeFavoriteBackUp);
+    setFilteredRecipes(unfilteredRecipes);
     return () => setShouldReload(false);
   }, [shouldReload]);
 
@@ -51,12 +40,10 @@ export default function FavoriteRecipes() {
     <div>
       <Header title="Favorite Recipes" />
       <FiltersButtonsRecipes
-        recipes={ newFavoriteRecipes }
-        setRecipes={ setNewFavoriteRecipes }
-        defaultRecipes={ recipeFavoriteBackUp }
+        unfilteredRecipes={ unfilteredRecipes }
+        setFilteredRecipes={ setFilteredRecipes }
       />
-
-      {newFavoriteRecipes.map((food, index) => (
+      {filteredRecipes.map((food, index) => (
         <div key={ food.id }>
           <button
             type="button"
@@ -68,17 +55,11 @@ export default function FavoriteRecipes() {
               data-testid={ `${index}-horizontal-favorite-btn` }
             />
           </button>
-          <button
-            type="button"
-            onClick={ () => handleShareBtn(food.type, food.id) }
-          >
-            <img
-              alt="share-bttn"
-              src={ shareIcon }
-              data-testid={ `${index}-horizontal-share-btn` }
-            />
-          </button>
-          <span>{shareBtnClicked && 'Link copied!'}</span>
+          <ShareButton
+            recipeId={ food.id }
+            isFood={ food.type === 'food' }
+            testId={ `${index}-horizontal-share-btn` }
+          />
           <div
             onClick={ () => redirectCards(food.id, food.type) }
             onKeyDown={ (e) => {
@@ -96,7 +77,6 @@ export default function FavoriteRecipes() {
             <h1 data-testid={ `${index}-horizontal-name` }>
               {food.name}
             </h1>
-
           </div>
           <p data-testid={ `${index}-horizontal-top-text` }>
             { food.alcoholicOrNot
@@ -105,7 +85,6 @@ export default function FavoriteRecipes() {
           </p>
         </div>
       ))}
-
     </div>
   );
 }

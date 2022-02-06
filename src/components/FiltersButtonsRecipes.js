@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function FiltersButtonsRecipes({ recipes, setRecipes, defaultRecipes }) {
+export default function FiltersButtonsRecipes({ unfilteredRecipes, setFilteredRecipes }) {
   function handleFiltersButtons(type) {
-    let recipeFiltred;
+    let filteredRecipes;
     switch (type) {
     case 'Food':
-      recipeFiltred = recipes
+      filteredRecipes = unfilteredRecipes
         .filter((recipe) => recipe.type !== 'drink');
-      setRecipes(recipeFiltred);
+      setFilteredRecipes(filteredRecipes);
       break;
+
     case 'Drink':
-      recipeFiltred = recipes
+      filteredRecipes = unfilteredRecipes
         .filter((recipe) => recipe.type !== 'food');
-      setRecipes(recipeFiltred);
+      setFilteredRecipes(filteredRecipes);
       break;
 
     default:
-      setRecipes(defaultRecipes);
+      setFilteredRecipes(unfilteredRecipes);
       break;
     }
   }
@@ -29,7 +30,6 @@ export default function FiltersButtonsRecipes({ recipes, setRecipes, defaultReci
         data-testid="filter-by-all-btn"
         onClick={ () => handleFiltersButtons('All') }
       >
-        {' '}
         All
       </button>
 
@@ -38,7 +38,6 @@ export default function FiltersButtonsRecipes({ recipes, setRecipes, defaultReci
         data-testid="filter-by-food-btn"
         onClick={ () => handleFiltersButtons('Food') }
       >
-        {' '}
         Food
       </button>
 
@@ -47,7 +46,6 @@ export default function FiltersButtonsRecipes({ recipes, setRecipes, defaultReci
         data-testid="filter-by-drink-btn"
         onClick={ () => handleFiltersButtons('Drink') }
       >
-        {' '}
         Drinks
       </button>
     </>

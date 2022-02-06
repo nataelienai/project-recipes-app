@@ -44,7 +44,7 @@ export default function RecipeInProgress() {
         />
         <h1 data-testid="recipe-title">{name}</h1>
         <FavoriteButton recipe={ recipe } isFood={ isFood } />
-        <ShareButton />
+        <ShareButton recipeId={ recipeId } isFood={ isFood } testId="share-btn" />
         <h2 data-testid="recipe-category">{category}</h2>
         <IngredientCheckList ingredients={ ingredients } />
         <p data-testid="instructions">{instructions}</p>

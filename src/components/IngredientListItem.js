@@ -15,14 +15,18 @@ export default function IngredientListItem(props) {
           onChange={ onToggle }
         />
       )}
-      <span>{`${name} - ${measure}`}</span>
+      {
+        measure
+          ? <span>{`${name} - ${measure}`}</span>
+          : <span>{name}</span>
+      }
     </li>
   );
 }
 
 IngredientListItem.propTypes = {
   name: PropTypes.string.isRequired,
-  measure: PropTypes.string.isRequired,
+  measure: PropTypes.string,
   testId: PropTypes.string.isRequired,
   hasCheckbox: PropTypes.bool,
   checked: PropTypes.bool,
@@ -30,6 +34,7 @@ IngredientListItem.propTypes = {
 };
 
 IngredientListItem.defaultProps = {
+  measure: '',
   hasCheckbox: false,
   checked: false,
   onToggle: () => {},

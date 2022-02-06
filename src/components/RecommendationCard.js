@@ -22,7 +22,7 @@ export default function RecommendationCard() {
   }, [isFood]);
 
   function redirectCards(id) {
-    if (isFood) history.push(`/foods/${id}`);
+    if (!isFood) history.push(`/foods/${id}`);
     else history.push(`/drinks/${id}`);
   }
 

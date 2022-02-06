@@ -10,31 +10,22 @@ import { getDoneRecipes } from '../services/localStorage';
 export default function DoneRecipes() {
   const location = useLocation();
   const { setSearchButton } = useContext(HeaderContext);
-  const recipesBackUpState = getDoneRecipes();
-  const [doneRecipeState, setDoneRecipesState] = useState([]);
-
-  function handleDoneRecipesOfLS() {
-    setDoneRecipesState(recipesBackUpState);
-  }
+  const unfilteredDoneRecipes = getDoneRecipes();
+  const [filteredDoneRecipes, setFilteredDoneRecipes] = useState([]);
 
   useEffect(() => {
     if (location.pathname === '/done-recipes') setSearchButton(false);
-    handleDoneRecipesOfLS();
+    setFilteredDoneRecipes(unfilteredDoneRecipes);
   }, []);
 
   return (
     <>
       <Header title="Done Recipes" />
-
       <FiltersButtonsRecipes
-        recipes={ doneRecipeState }
-        setRecipes={ setDoneRecipesState }
-        defaultRecipes={ recipesBackUpState }
+        unfilteredRecipes={ unfilteredDoneRecipes }
+        setFilteredRecipes={ setFilteredDoneRecipes }
       />
-      { doneRecipeState !== null && (
-        <DoneRecipeCard doneRecipeState={ doneRecipeState } />
-
-      )}
+      <DoneRecipeCard doneRecipes={ filteredDoneRecipes } />
     </>
   );
 }
