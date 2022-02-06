@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import FinishRecipeButton from '../components/FinishRecipeButton';
-import IngredientList from '../components/IngredientList';
+import IngredientCheckList from '../components/IngredientCheckList';
 import ShareButton from '../components/ShareButton';
 import FavoriteButton from '../components/FavoriteButton';
 import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
@@ -13,10 +13,9 @@ export default function RecipeInProgress() {
   const { recipeId } = useParams();
   const recipe = useRecipeDetailsById(recipeId);
   const ingredients = useIngredientsFromRecipe(recipe);
+  const isFood = pathname.startsWith('/foods');
 
   function getRecipeDetails() {
-    const isDrink = pathname.startsWith('/drinks');
-
     const recipeDetails = {
       name: recipe.strMeal,
       imgSource: recipe.strMealThumb,
@@ -24,7 +23,7 @@ export default function RecipeInProgress() {
       instructions: recipe.strInstructions,
     };
 
-    if (isDrink) {
+    if (!isFood) {
       recipeDetails.name = recipe.strDrink;
       recipeDetails.imgSource = recipe.strDrinkThumb;
       recipeDetails.category = recipe.strAlcoholic;
@@ -44,14 +43,10 @@ export default function RecipeInProgress() {
           data-testid="recipe-photo"
         />
         <h1 data-testid="recipe-title">{name}</h1>
-        <FavoriteButton
-          responseApiDetails={ [recipe] }
-          pageDrinkOrFood={ pathname.startsWith('/drinks') ? 'Drink' : 'Food' }
-          idDetailsUrl={ recipeId }
-        />
+        <FavoriteButton recipe={ recipe } isFood={ isFood } />
         <ShareButton />
         <h2 data-testid="recipe-category">{category}</h2>
-        <IngredientList ingredients={ ingredients } />
+        <IngredientCheckList ingredients={ ingredients } />
         <p data-testid="instructions">{instructions}</p>
         <FinishRecipeButton recipe={ recipe } />
       </div>

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
-import Ingredients from '../components/Ingredients';
+import useRecipeDetailsById from '../hooks/useRecipeDetailsById';
+import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
+import IngredientList from '../components/IngredientList';
 import RecommendationCard from '../components/RecommendationCard';
 import VideoCard from '../components/VideoCard';
-import HeaderContext from '../context/header/HeaderContext';
-import { getDrinksDetailsApi, getFoodsDetailsApi } from '../services/api';
 import {
   getDoneRecipes,
   setInProgressRecipes,
@@ -13,50 +13,16 @@ import FavoriteButton from '../components/FavoriteButton';
 import ShareButton from '../components/ShareButton';
 import '../styles/DetailScreen.css';
 
-/* referencia de como filtrar os ingredientes https://github.com/tryber/sd-016-b-project-recipes-app/pull/328/files */
-
 export default function Details() {
-  const {
-    pageDrinkOrFood,
-    setpageDrinkOrFood,
-  } = useContext(HeaderContext);
-
-  const [ingredientApi, setingredientApi] = useState([]);
-  const [MeasureApi, setMeasureApi] = useState([]);
-  const [responseApiDetails, setResponseApiDetails] = useState([]);
+  const { idDetailsUrl } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
-  const { idDetailsUrl } = useParams();
+  const recipe = useRecipeDetailsById(idDetailsUrl);
+  const ingredients = useIngredientsFromRecipe(recipe);
+  const isFood = pathname.startsWith('/foods');
 
   function handleYoutubeSrc(url) {
     return url.replace('watch?v=', 'embed/');
-  }
-
-  function filterIngredientsAndMeasure() {
-    if (responseApiDetails) {
-      const ingredient = Object.entries(responseApiDetails[0])
-        .filter((entry) => entry[0]
-          .includes('Ingredient') && entry[1] !== null && entry[1] !== '')
-        .map((igr) => igr[1]);
-      setingredientApi(ingredient);
-
-      const measure = Object.entries(responseApiDetails[0])
-        .filter((entry) => entry[0].includes('Measure') && entry[1] !== null)
-        .map((igr) => igr[1]);
-      setMeasureApi(measure);
-    }
-  }
-
-  function handleResponseApiDetails(id) {
-    if (pathname === `/foods/${id}`) {
-      getFoodsDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.meals))
-        .catch(() => {});
-    } else {
-      getDrinksDetailsApi(id)
-        .then((data) => setResponseApiDetails(data.drinks))
-        .catch(() => {});
-    }
   }
 
   function redirectToRecipeProgress() {
@@ -66,7 +32,7 @@ export default function Details() {
   function startRecipe() {
     const { meals, cocktails } = getInProgressRecipes();
 
-    if (pathname.startsWith('/foods')) {
+    if (isFood) {
       setInProgressRecipes({
         meals: {
           ...meals,
@@ -87,96 +53,66 @@ export default function Details() {
   }
 
   function isRecipeDone() {
-    const doneRecipe = getDoneRecipes();
-
-    const isDone = doneRecipe.some(({ id }) => id === idDetailsUrl);
+    const doneRecipes = getDoneRecipes();
+    const isDone = doneRecipes.some(({ id }) => id === idDetailsUrl);
 
     return isDone;
   }
 
   function isRecipeInProgress() {
     const { meals, cocktails } = getInProgressRecipes();
-    const recipes = pathname.startsWith('/foods') ? meals : cocktails;
-
-    const recipeIds = Object.keys(recipes);
-    const isInProgress = recipeIds.includes(idDetailsUrl);
+    const inProgressRecipes = isFood ? meals : cocktails;
+    const inProgressRecipeIds = Object.keys(inProgressRecipes);
+    const isInProgress = inProgressRecipeIds.includes(idDetailsUrl);
 
     return isInProgress;
   }
 
-  useEffect(() => {
-    if (pathname.includes('foods')) setpageDrinkOrFood('Food');
-    if (pathname.includes('drinks')) setpageDrinkOrFood('Drinks');
-    handleResponseApiDetails(idDetailsUrl);
-  }, []);
-
-  useEffect(() => {
-    if (responseApiDetails.length > 0) {
-      filterIngredientsAndMeasure();
-    }
-  }, [responseApiDetails]);
-
-  return (
+  return recipe && (
     <main>
+      <section>
+        <img
+          data-testid="recipe-photo"
+          alt="recipe"
+          src={ recipe.strMealThumb || recipe.strDrinkThumb }
+        />
 
-      { responseApiDetails.map((recipe, index) => (
+        <h1 data-testid="recipe-title">
+          {recipe.strMeal || recipe.strDrink}
+        </h1>
 
-        <section key={ index }>
+        <FavoriteButton recipe={ recipe } isFood={ isFood } />
+        <ShareButton />
 
-          <img
-            data-testid="recipe-photo"
-            alt="recipe"
-            src={ pageDrinkOrFood === 'Food'
-              ? `${recipe.strMealThumb}` : `${recipe.strDrinkThumb}` }
-          />
+        <h2 data-testid="recipe-category">
+          {recipe.strAlcoholic || recipe.strCategory }
+        </h2>
 
-          <span data-testid="recipe-title">
-            {recipe.strMeal || recipe.strDrink}
+        <IngredientList ingredients={ ingredients } />
 
-          </span>
+        <p data-testid="instructions">
+          {recipe.strInstructions}
+        </p>
 
-          <FavoriteButton
-            pageDrinkOrFood={ pageDrinkOrFood }
-            responseApiDetails={ responseApiDetails }
-            idDetailsUrl={ idDetailsUrl }
-          />
-          <ShareButton />
+        <RecommendationCard />
 
-          <span data-testid="recipe-category">
-            {' '}
-            {recipe.strAlcoholic || recipe.strCategory }
+        {isFood && (
+          <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
+        )}
 
-          </span>
-
-          <Ingredients ingredientApi={ ingredientApi } Measure={ MeasureApi } />
-
-          <p data-testid="instructions">
-            {' '}
-            {recipe.strInstructions}
-
-          </p>
-
-          <RecommendationCard />
-
-          {pageDrinkOrFood === 'Food' && (
-            <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
-          )}
-
-          {!isRecipeDone() && (
-            <button
-              data-testid="start-recipe-btn"
-              type="button"
-              className="btn-StartRecipe"
-              onClick={
-                isRecipeInProgress() ? redirectToRecipeProgress : startRecipe
-              }
-            >
-              { isRecipeInProgress() ? 'Continue Recipe' : 'Start Recipe' }
-            </button>
-          )}
-
-        </section>
-      ))}
+        {!isRecipeDone() && (
+          <button
+            data-testid="start-recipe-btn"
+            type="button"
+            className="btn-StartRecipe"
+            onClick={
+              isRecipeInProgress() ? redirectToRecipeProgress : startRecipe
+            }
+          >
+            { isRecipeInProgress() ? 'Continue Recipe' : 'Start Recipe' }
+          </button>
+        )}
+      </section>
     </main>
   );
 }

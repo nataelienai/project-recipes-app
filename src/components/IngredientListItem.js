@@ -2,17 +2,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function IngredientListItem(props) {
-  const { name, measure, index, checked, onToggle } = props;
+  const { name, measure, testId, hasCheckbox, checked, onToggle } = props;
   return (
     <li
       key={ name }
-      data-testid={ `${index}-ingredient-step` }
+      data-testid={ testId }
     >
-      <input
-        type="checkbox"
-        checked={ checked }
-        onChange={ onToggle }
-      />
+      {hasCheckbox && (
+        <input
+          type="checkbox"
+          checked={ checked }
+          onChange={ onToggle }
+        />
+      )}
       <span>{`${name} - ${measure}`}</span>
     </li>
   );
@@ -21,7 +23,14 @@ export default function IngredientListItem(props) {
 IngredientListItem.propTypes = {
   name: PropTypes.string.isRequired,
   measure: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
+  testId: PropTypes.string.isRequired,
+  hasCheckbox: PropTypes.bool,
+  checked: PropTypes.bool,
+  onToggle: PropTypes.func,
+};
+
+IngredientListItem.defaultProps = {
+  hasCheckbox: false,
+  checked: false,
+  onToggle: () => {},
 };

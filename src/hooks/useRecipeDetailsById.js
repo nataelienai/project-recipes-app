@@ -8,9 +8,11 @@ export default function useRecipeDetailsById(recipeId) {
 
   useEffect(() => {
     if (pathname.startsWith('/foods')) {
-      getMealDetailsByIdApi(recipeId).then(setRecipe);
+      getMealDetailsByIdApi(recipeId).then(setRecipe)
+        .catch(() => {});
     } else {
-      getDrinkDetailsByIdApi(recipeId).then(setRecipe);
+      getDrinkDetailsByIdApi(recipeId).then(setRecipe)
+        .catch(() => {});
     }
   }, [recipeId, pathname]);
 
