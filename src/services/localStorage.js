@@ -10,11 +10,16 @@ export function setInProgressRecipes(inProgressRecipes) {
 
 export function getDoneRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-  return doneRecipes || [{}];
+  return doneRecipes || [];
 }
 
 export function setDoneRecipes(doneRecipes) {
   localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+}
+
+export function addDoneRecipe(recipe) {
+  const doneRecipes = getDoneRecipes();
+  setDoneRecipes(doneRecipes.concat(recipe));
 }
 
 export function getfavoriteRecipes() {

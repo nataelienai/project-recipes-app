@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import Ingredients from '../components/Ingredients';
 import RecommendationCard from '../components/RecommendationCard';
@@ -19,18 +19,14 @@ export default function Details() {
   const {
     pageDrinkOrFood,
     setpageDrinkOrFood,
-    recipeStarted,
-    setRecipeStarted,
   } = useContext(HeaderContext);
 
   const [ingredientApi, setingredientApi] = useState([]);
   const [MeasureApi, setMeasureApi] = useState([]);
   const [responseApiDetails, setResponseApiDetails] = useState([]);
-  const [doneRecipes, setDoneRecipes] = useState(false);
   const { pathname } = useLocation();
   const history = useHistory();
   const { idDetailsUrl } = useParams();
-  const BUTTON_START_RECIPE = useRef();
 
   function handleYoutubeSrc(url) {
     return url.replace('watch?v=', 'embed/');
@@ -52,90 +48,73 @@ export default function Details() {
   }
 
   function handleResponseApiDetails(id) {
-    let responseApi;
-
     if (pathname === `/foods/${id}`) {
-      responseApi = getFoodsDetailsApi(id)
+      getFoodsDetailsApi(id)
         .then((data) => setResponseApiDetails(data.meals))
         .catch(() => {});
     } else {
-      responseApi = getDrinksDetailsApi(id)
+      getDrinksDetailsApi(id)
         .then((data) => setResponseApiDetails(data.drinks))
         .catch(() => {});
     }
-    return responseApi;
   }
 
-  function startRecipeBtn() {
-    const { meals: mealsLS, cocktails: drinksLS } = getInProgressRecipes();
-    setRecipeStarted(true);
+  function redirectToRecipeProgress() {
+    history.push(`${pathname}/in-progress`);
+  }
 
-    if (pathname === `/foods/${idDetailsUrl}`) {
+  function startRecipe() {
+    const { meals, cocktails } = getInProgressRecipes();
+
+    if (pathname.startsWith('/foods')) {
       setInProgressRecipes({
-        meals: { ...mealsLS,
-          [idDetailsUrl]: [] },
-        cocktails: { ...drinksLS },
+        meals: {
+          ...meals,
+          [idDetailsUrl]: [],
+        },
+        cocktails,
       });
-      history.push(`/foods/${idDetailsUrl}/in-progress`);
     } else {
       setInProgressRecipes({
-        meals: { ...mealsLS },
-        cocktails: { ...drinksLS,
-          [idDetailsUrl]: [] },
+        meals,
+        cocktails: {
+          ...cocktails,
+          [idDetailsUrl]: [],
+        },
       });
-      history.push(`/drinks/${idDetailsUrl}/in-progress`);
     }
+    redirectToRecipeProgress();
   }
 
-  function changeRecipeProgress() {
-    const recipeInProgressLS = getInProgressRecipes();
-
-    const changeNameBtn = (name) => { BUTTON_START_RECIPE.current.innerHTML = name; };
-
-    if (pathname.startsWith('/foods')
-     && Object.keys(recipeInProgressLS.meals).includes(idDetailsUrl)) {
-      changeNameBtn('Continue Recipe');
-    } else if (pathname.startsWith('/drinks')
-    && Object.keys(recipeInProgressLS.cocktails).includes(idDetailsUrl)) {
-      changeNameBtn('Continue Recipe');
-    } else {
-      changeNameBtn('Start Recipe');
-    }
-  }
-
-  function checkDoneRecipes() {
+  function isRecipeDone() {
     const doneRecipe = getDoneRecipes();
 
-    const validateDoneRecipe = doneRecipe
-      .some((id) => (id.idMeal || id.idDrink === idDetailsUrl));
+    const isDone = doneRecipe.some(({ id }) => id === idDetailsUrl);
 
-    if (doneRecipe.length > 0 && validateDoneRecipe) {
-      setDoneRecipes(true);
-    } else { setDoneRecipes(false); }
+    return isDone;
+  }
+
+  function isRecipeInProgress() {
+    const { meals, cocktails } = getInProgressRecipes();
+    const recipes = pathname.startsWith('/foods') ? meals : cocktails;
+
+    const recipeIds = Object.keys(recipes);
+    const isInProgress = recipeIds.includes(idDetailsUrl);
+
+    return isInProgress;
   }
 
   useEffect(() => {
     if (pathname.includes('foods')) setpageDrinkOrFood('Food');
     if (pathname.includes('drinks')) setpageDrinkOrFood('Drinks');
     handleResponseApiDetails(idDetailsUrl);
-    checkDoneRecipes();
-    return () => {
-      setRecipeStarted(false);
-    };
   }, []);
 
   useEffect(() => {
     if (responseApiDetails.length > 0) {
       filterIngredientsAndMeasure();
-      changeRecipeProgress();
     }
   }, [responseApiDetails]);
-
-  useEffect(() => {
-    if (responseApiDetails.length > 0 && recipeStarted) {
-      changeRecipeProgress();
-    }
-  }, [recipeStarted]);
 
   return (
     <main>
@@ -179,25 +158,22 @@ export default function Details() {
 
           <RecommendationCard />
 
-          {pageDrinkOrFood === 'Food'
-        && (
-          <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
-        )}
+          {pageDrinkOrFood === 'Food' && (
+            <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
+          )}
 
-          {
-            !doneRecipes
-         && (
-           <button
-             ref={ BUTTON_START_RECIPE }
-             data-testid="start-recipe-btn"
-             type="button"
-             className="btn-StartRecipe"
-             onClick={ () => startRecipeBtn() }
-           >
-             Start Recipe
-           </button>
-         )
-          }
+          {!isRecipeDone() && (
+            <button
+              data-testid="start-recipe-btn"
+              type="button"
+              className="btn-StartRecipe"
+              onClick={
+                isRecipeInProgress() ? redirectToRecipeProgress : startRecipe
+              }
+            >
+              { isRecipeInProgress() ? 'Continue Recipe' : 'Start Recipe' }
+            </button>
+          )}
 
         </section>
       ))}

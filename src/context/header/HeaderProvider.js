@@ -22,11 +22,7 @@ export default function HeaderProvider({ children }) {
 
   const [idDetails, setIdDetails] = useState();
 
-  const [recipeStarted, setRecipeStarted] = useState(false);
-
   const [favorited, setFavorited] = useState(false);
-
-  const [doneRecipesBackUpState, setDoneRecipesBackUpState] = useState();
 
   const history = useHistory();
 
@@ -87,12 +83,8 @@ export default function HeaderProvider({ children }) {
     handleMainCardsApi,
     idDetails,
     setIdDetails,
-    setRecipeStarted,
-    recipeStarted,
     favorited,
     setFavorited,
-    doneRecipesBackUpState,
-    setDoneRecipesBackUpState,
     setIngredientFilter,
   };
   return (

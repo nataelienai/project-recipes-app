@@ -14,21 +14,24 @@ export default function MainCards() {
 
   const history = useHistory();
 
-  function redirectCards(id) {
+  function redirectCards(id, type) {
     setIdDetails(id);
-    if (pageDrinkOrFood === 'Food') {
-      history.push(`/foods/${id}`);
-    } else { history.push(`/drinks/${id}`); }
+    if (type === 'food' || type === 'Food') history.push(`/foods/${id}`);
+    else history.push(`/drinks/${id}`);
   }
 
   function cards(data) {
     return data.map((item, i) => i < MAX_CARDS && (
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={ 0 }
         key={ i }
-        data-testid={ `${i}-recipe-card` }
+        className="card-main"
         onClick={
-          () => redirectCards(item.idMeal || item.idDrink)
+          () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
+        }
+        onKeyDown={
+          () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
         }
       >
         <img
@@ -37,11 +40,17 @@ export default function MainCards() {
           src={ pageDrinkOrFood === 'Food'
             ? `${item.strMealThumb}` : `${item.strDrinkThumb}` }
         />
-        <span data-testid={ `${i}-card-name` }>
-          {' '}
-          { item.strMeal || item.strDrink }
-        </span>
-      </button>));
+        <div className="container-card-main-infos">
+          <span className="card-main-name">
+            {' '}
+            { item.strMeal || item.strDrink }
+          </span>
+          
+          <span className="card-main-info">
+            {item.strAlcoholic || item.strArea}
+          </span>
+        </div>
+      </div>));
   }
 
   useEffect(() => {
@@ -49,7 +58,7 @@ export default function MainCards() {
   }, []);
 
   return (
-    <section data-testid="meals-section">
+    <section className="cards-content" data-testid="meals-section">
       {cards(dataApi)}
     </section>
   );

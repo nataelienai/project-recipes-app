@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import LoginContext from '../context/login/LoginContext';
+import '../styles/Login.css';
 
 function Login() {
   const history = useHistory();
@@ -39,37 +40,43 @@ function Login() {
 
   return (
     <div>
-      <form onSubmit={ btnLocalStorage }>
-
-        <h1>Login</h1>
-
-        <input
-          type="text"
-          name="email_input"
-          placeholder="Email"
-          data-testid="email-input"
-          value={ email }
-          onChange={ ({ target: { value } }) => setEmail(value) }
-        />
-
-        <input
-          type="text"
-          name="password-input"
-          placeholder="Password"
-          data-testid="password-input"
-          value={ password }
-          onChange={ ({ target: { value } }) => setPassword(value) }
-        />
-
+      <form className="dropdown-menu p-4 login-form" onSubmit={ btnLocalStorage }>
+        <div className="mb-3">
+          <label htmlFor="exampleDropdownFormEmail2" className="form-label">
+            Email
+            <input
+              type="email"
+              className="form-control"
+              id="exampleDropdownFormEmail2"
+              placeholder="email@example.com"
+              value={ email }
+              onChange={ ({ target: { value } }) => setEmail(value) }
+            />
+          </label>
+        </div>
+        <div className="mb-3">
+          <label
+            htmlFor="exampleDropdownFormPassword2"
+            className="form-label"
+          >
+            Password
+            <input
+              type="password"
+              className="form-control"
+              id="exampleDropdownFormPassword2"
+              placeholder="Password"
+              value={ password }
+              onChange={ ({ target: { value } }) => setPassword(value) }
+            />
+          </label>
+        </div>
         <button
           type="submit"
-          name="login_submit_btn"
-          data-testid="login-submit-btn"
           disabled={ btn.disabled }
+          className="btn btn-primary"
         >
-          Enter
+          Sign in
         </button>
-
       </form>
     </div>
   );

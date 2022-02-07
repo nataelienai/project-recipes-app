@@ -4,6 +4,7 @@ import HeaderProvider from './context/header/HeaderProvider';
 import LoginProvider from './context/login/LoginProvider';
 import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
+import './App.css';
 import Details from './pages/Details';
 import DoneRecipes from './pages/DoneRecipes';
 import Drinks from './pages/Drinks';
