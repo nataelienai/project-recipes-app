@@ -24,6 +24,8 @@ img, .image-DoneCard {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  max-height: 76vh;
+  overflow-y: scroll;
 
 }
 .filters-button{
