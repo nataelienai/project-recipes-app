@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { getFoodsMainPageApi, getDrinksMainPageApi } from '../services/api';
+import { getMeals, getDrinks } from '../services/api';
 
 const MAX_CARDS = 6;
 
-export default function RecommendationCard() {
-  const [dataApi, SetdataApi] = useState([]);
+export default function RecommendationCards() {
+  const [recipes, setRecipes] = useState([]);
   const { pathname } = useLocation();
   const history = useHistory();
   const isFood = pathname.startsWith('/foods');
@@ -13,44 +13,49 @@ export default function RecommendationCard() {
   useEffect(() => {
     function fetchRecipes() {
       if (!isFood) {
-        getFoodsMainPageApi().then((data) => SetdataApi(data.meals));
+        getMeals().then(setRecipes);
       } else {
-        getDrinksMainPageApi().then((data) => SetdataApi(data.drinks));
+        getDrinks().then(setRecipes);
       }
     }
     fetchRecipes();
   }, [isFood]);
 
-  function redirectCards(id) {
+  function redirectToRecipeDetails(id) {
     if (!isFood) history.push(`/foods/${id}`);
     else history.push(`/drinks/${id}`);
   }
 
+  function handleKeyPress(event, id) {
+    if (event.key === 'Enter') {
+      redirectToRecipeDetails(id);
+    }
+  }
+
   return (
     <section className="carousel">
-      {dataApi.map((card, index) => index < MAX_CARDS && (
+      {recipes.slice(0, MAX_CARDS).map((recipe, index) => (
         <section
           key={ index }
           data-testid={ `${index}-recomendation-card` }
           role="link"
           tabIndex={ 0 }
-          onClick={ () => redirectCards(card.idMeal || card.idDrink) }
-          onKeyDown={ (event) => {
-            if (event.key === 'Enter') redirectCards(card.idMeal || card.idDrink);
-          } }
+          onClick={ () => redirectToRecipeDetails(recipe.idMeal || recipe.idDrink) }
+          onKeyDown={ (e) => handleKeyPress(e, recipe.idMeal || recipe.idDrink) }
         >
           <img
-            data-testid={ `${index}-card-img` }
+            src={ recipe.strMealThumb || recipe.strDrinkThumb }
             alt="card"
-            src={ card.strMealThumb || card.strDrinkThumb }
+            data-testid={ `${index}-card-img` }
           />
           <span data-testid={ `${index}-recomendation-title` }>
-            { card.strDrink || card.strMeal }
+            {recipe.strDrink || recipe.strMeal}
           </span>
           <span data-testid="recipe-category">
-            { card.strAlcoholic || card.strCategory}
+            {recipe.strAlcoholic || recipe.strCategory}
           </span>
-        </section>))}
+        </section>
+      ))}
     </section>
   );
 }

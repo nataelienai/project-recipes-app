@@ -1,16 +1,10 @@
-import React, { useEffect, useContext } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import HeaderContext from '../context/header/HeaderContext';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 export default function Explore() {
   const history = useHistory();
-  const location = useLocation();
-  const { setSearchButton } = useContext(HeaderContext);
-  useEffect(() => {
-    if (location.pathname === '/explore') setSearchButton(false);
-  }, []);
 
   return (
     <>

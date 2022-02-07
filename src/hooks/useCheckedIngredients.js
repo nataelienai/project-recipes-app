@@ -4,20 +4,20 @@ import { getInProgressRecipes, setInProgressRecipes } from '../services/localSto
 
 export default function useCheckedIngredients() {
   const [checkedIngredients, setCheckedIngredients] = useState([]);
-  const { recipeId } = useParams();
+  const { id } = useParams();
   const { pathname } = useLocation();
 
   useEffect(() => {
     const inProgressRecipes = getInProgressRecipes();
 
     const storedCheckedIngredients = pathname.startsWith('/foods')
-      ? inProgressRecipes.meals[recipeId]
-      : inProgressRecipes.cocktails[recipeId];
+      ? inProgressRecipes.meals[id]
+      : inProgressRecipes.cocktails[id];
 
     if (storedCheckedIngredients) {
       setCheckedIngredients(storedCheckedIngredients);
     }
-  }, [recipeId, pathname]);
+  }, [id, pathname]);
 
   useEffect(() => {
     const inProgressRecipes = getInProgressRecipes();
@@ -31,10 +31,10 @@ export default function useCheckedIngredients() {
       ...inProgressRecipes,
       [recipeType]: {
         ...inProgressRecipes[recipeType],
-        [recipeId]: checkedIngredients,
+        [id]: checkedIngredients,
       },
     });
-  }, [checkedIngredients, pathname, recipeId]);
+  }, [checkedIngredients, pathname, id]);
 
   return [checkedIngredients, setCheckedIngredients];
 }

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { getMealsApi, getMealsByNationalityApi } from '../services/api';
+import { getMeals, getMealsByNationality } from '../services/api';
 
 export default function useMealsByNationality(nationality) {
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
     if (nationality) {
-      getMealsByNationalityApi(nationality).then(setMeals);
+      getMealsByNationality(nationality).then(setMeals);
     } else {
-      getMealsApi().then(setMeals);
+      getMeals().then(setMeals);
     }
   }, [nationality]);
 

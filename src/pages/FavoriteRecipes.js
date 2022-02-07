@@ -1,17 +1,14 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import HeaderContext from '../context/header/HeaderContext';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import { getfavoriteRecipes } from '../services/localStorage';
-import FiltersButtonsRecipes from '../components/FiltersButtonsRecipes';
+import RecipeTypeFilterButtons from '../components/RecipeTypeFilterButtons';
 import FavoriteButton from '../components/FavoriteButton';
 import ShareButton from '../components/ShareButton';
+import { getFavoriteRecipes } from '../services/localStorage';
 
 export default function FavoriteRecipes() {
-  const { setSearchButton } = useContext(HeaderContext);
   const [activeFilterFn, setActiveFilterFn] = useState(() => () => true);
   const [favorites, setFavorites] = useState([]);
-  const location = useLocation();
   const history = useHistory();
 
   function redirectCards(id, type) {
@@ -20,35 +17,23 @@ export default function FavoriteRecipes() {
   }
 
   function fetchRecipes() {
-    setFavorites(getfavoriteRecipes());
+    setFavorites(getFavoriteRecipes());
   }
 
   useEffect(() => {
-    if (location.pathname === '/favorite-recipes') setSearchButton(false);
     fetchRecipes();
-  }, [location, setSearchButton]);
+  }, []);
 
   const filteredFavorites = favorites.filter(activeFilterFn);
 
   return (
     <div>
       <Header title="Favorite Recipes" />
-      <FiltersButtonsRecipes
+      <RecipeTypeFilterButtons
         setActiveFilterFn={ setActiveFilterFn }
       />
       {filteredFavorites.map((food, index) => (
         <div key={ food.id }>
-          <FavoriteButton
-            recipe={ food }
-            isFood={ food.type === 'food' }
-            testId={ `${index}-horizontal-favorite-btn` }
-            onToggle={ () => fetchRecipes() }
-          />
-          <ShareButton
-            recipeId={ food.id }
-            isFood={ food.type === 'food' }
-            testId={ `${index}-horizontal-share-btn` }
-          />
           <div
             onClick={ () => redirectCards(food.id, food.type) }
             onKeyDown={ (e) => {
@@ -63,15 +48,26 @@ export default function FavoriteRecipes() {
               data-testid={ `${index}-horizontal-image` }
               src={ food.image }
             />
-            <h1 data-testid={ `${index}-horizontal-name` }>
+            <h2 data-testid={ `${index}-horizontal-name` }>
               {food.name}
-            </h1>
+            </h2>
           </div>
           <p data-testid={ `${index}-horizontal-top-text` }>
             { food.alcoholicOrNot
               ? (`${food.nationality} - ${food.category} - ${food.alcoholicOrNot}`)
               : (`${food.nationality} - ${food.category}`) }
           </p>
+          <FavoriteButton
+            recipe={ food }
+            isFood={ food.type === 'food' }
+            testId={ `${index}-horizontal-favorite-btn` }
+            onToggle={ () => fetchRecipes() }
+          />
+          <ShareButton
+            recipeId={ food.id }
+            isFood={ food.type === 'food' }
+            testId={ `${index}-horizontal-share-btn` }
+          />
         </div>
       ))}
     </div>

@@ -1,21 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import HeaderContext from '../context/header/HeaderContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
-export default function Header({ title }) {
-  const { searchButton } = useContext(HeaderContext);
-
+export default function Header({ title, hasSearchButton }) {
+  const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const history = useHistory();
-
-  const [inputSearch, setInputSearch] = useState(false);
 
   return (
     <header>
-
       <button
         type="button"
         title="Profile"
@@ -25,12 +20,11 @@ export default function Header({ title }) {
       </button>
 
       <span data-testid="page-title">{title}</span>
-
       {
-        searchButton && (
+        hasSearchButton && (
           <button
             type="button"
-            onClick={ () => setInputSearch(!inputSearch) }
+            onClick={ () => setIsSearchInputVisible(!isSearchInputVisible) }
           >
             <img
               src={ searchIcon }
@@ -40,12 +34,12 @@ export default function Header({ title }) {
           </button>
         )
       }
-
-      {inputSearch && <SearchBar />}
-
+      {isSearchInputVisible && <SearchBar />}
     </header>
   );
 }
+
 Header.propTypes = {
   title: PropTypes.string,
+  hasSearchButton: PropTypes.bool,
 }.isRequired;

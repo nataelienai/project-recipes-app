@@ -1,19 +1,12 @@
-import React, { useEffect, useContext } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import HeaderContext from '../context/header/HeaderContext';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { clearStorage, getUser } from '../services/localStorage';
 
 function Profile() {
   const history = useHistory();
-  const location = useLocation();
   const { email } = getUser();
-  const { setSearchButton } = useContext(HeaderContext);
-
-  useEffect(() => {
-    if (location.pathname === '/profile') setSearchButton(false);
-  }, [location, setSearchButton]);
 
   return (
     <>

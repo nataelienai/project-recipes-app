@@ -10,8 +10,8 @@ import '../styles/RecipeInProgress.css';
 
 export default function RecipeInProgress() {
   const { pathname } = useLocation();
-  const { recipeId } = useParams();
-  const recipe = useRecipeDetailsById(recipeId);
+  const { id } = useParams();
+  const recipe = useRecipeDetailsById(id);
   const ingredients = useIngredientsFromRecipe(recipe);
   const isFood = pathname.startsWith('/foods');
 
@@ -44,7 +44,7 @@ export default function RecipeInProgress() {
         />
         <h1 data-testid="recipe-title">{name}</h1>
         <FavoriteButton recipe={ recipe } isFood={ isFood } testId="favorite-btn" />
-        <ShareButton recipeId={ recipeId } isFood={ isFood } testId="share-btn" />
+        <ShareButton recipeId={ id } isFood={ isFood } testId="share-btn" />
         <h2 data-testid="recipe-category">{category}</h2>
         <IngredientCheckList ingredients={ ingredients } />
         <p data-testid="instructions">{instructions}</p>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function FiltersButtonsRecipes({ setActiveFilterFn }) {
+export default function RecipeTypeFilterButtons({ setActiveFilterFn }) {
   function handleFiltersButtons(type) {
     const filterFunctions = {
       Food: (recipe) => recipe.type === 'food',
@@ -9,7 +9,6 @@ export default function FiltersButtonsRecipes({ setActiveFilterFn }) {
     };
 
     let activeFilterFn = filterFunctions[type];
-
     if (!activeFilterFn) {
       activeFilterFn = () => true;
     }
@@ -43,6 +42,6 @@ export default function FiltersButtonsRecipes({ setActiveFilterFn }) {
   );
 }
 
-FiltersButtonsRecipes.propTypes = {
+RecipeTypeFilterButtons.propTypes = {
   setActiveFilterFn: PropTypes.func.isRequired,
 };

@@ -3,7 +3,7 @@ import { useLocation, useHistory, useParams } from 'react-router-dom';
 import useRecipeDetailsById from '../hooks/useRecipeDetailsById';
 import useIngredientsFromRecipe from '../hooks/useIngredientsFromRecipe';
 import IngredientList from '../components/IngredientList';
-import RecommendationCard from '../components/RecommendationCard';
+import RecommendationCards from '../components/RecommendationCards';
 import VideoCard from '../components/VideoCard';
 import {
   getDoneRecipes,
@@ -13,11 +13,11 @@ import FavoriteButton from '../components/FavoriteButton';
 import ShareButton from '../components/ShareButton';
 import '../styles/DetailScreen.css';
 
-export default function Details() {
-  const { idDetailsUrl } = useParams();
+export default function RecipeDetails() {
+  const { id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
-  const recipe = useRecipeDetailsById(idDetailsUrl);
+  const recipe = useRecipeDetailsById(id);
   const ingredients = useIngredientsFromRecipe(recipe);
   const isFood = pathname.startsWith('/foods');
 
@@ -36,7 +36,7 @@ export default function Details() {
       setInProgressRecipes({
         meals: {
           ...meals,
-          [idDetailsUrl]: [],
+          [id]: [],
         },
         cocktails,
       });
@@ -45,7 +45,7 @@ export default function Details() {
         meals,
         cocktails: {
           ...cocktails,
-          [idDetailsUrl]: [],
+          [id]: [],
         },
       });
     }
@@ -54,7 +54,7 @@ export default function Details() {
 
   function isRecipeDone() {
     const doneRecipes = getDoneRecipes();
-    const isDone = doneRecipes.some(({ id }) => id === idDetailsUrl);
+    const isDone = doneRecipes.some((doneRecipe) => doneRecipe.id === id);
 
     return isDone;
   }
@@ -63,7 +63,7 @@ export default function Details() {
     const { meals, cocktails } = getInProgressRecipes();
     const inProgressRecipes = isFood ? meals : cocktails;
     const inProgressRecipeIds = Object.keys(inProgressRecipes);
-    const isInProgress = inProgressRecipeIds.includes(idDetailsUrl);
+    const isInProgress = inProgressRecipeIds.includes(id);
 
     return isInProgress;
   }
@@ -81,7 +81,7 @@ export default function Details() {
         </h1>
 
         <FavoriteButton recipe={ recipe } isFood={ isFood } testId="favorite-btn" />
-        <ShareButton recipeId={ idDetailsUrl } isFood={ isFood } testId="share-btn" />
+        <ShareButton recipeId={ id } isFood={ isFood } testId="share-btn" />
 
         <h2 data-testid="recipe-category">
           {recipe.strAlcoholic || recipe.strCategory }
@@ -93,9 +93,9 @@ export default function Details() {
           {recipe.strInstructions}
         </p>
 
-        <RecommendationCard />
+        <RecommendationCards />
 
-        {isFood && (
+        {isFood && recipe.strYoutube && (
           <VideoCard src={ `${handleYoutubeSrc(recipe.strYoutube)}` } />
         )}
 

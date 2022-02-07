@@ -1,134 +1,118 @@
 import React, { useContext, useState } from 'react';
-import HeaderContext from '../context/header/HeaderContext';
+import { useLocation } from 'react-router-dom';
+import RecipesContext from '../context/recipes/RecipesContext';
 import {
-  getFoodIngredientApi,
-  getFoodNameApi,
-  getFoodFirstletterApi,
-  getDrinkIngredientApi,
-  getDrinkNameApi,
-  getDrinkFirstletterApi,
+  getMealsByIngredientName,
+  getMealsByName,
+  getMealsByFirstLetter,
+  getDrinksByIngredientName,
+  getDrinksByName,
+  getDrinksByFirstLetter,
 } from '../services/api';
 
 const INITIAL_STATE = {
-  inputTextSearch: '',
-  searchRadioBtn: '',
-
+  searchText: '',
+  searchCategory: '',
 };
 
 export default function SearchBar() {
-  const [inputsLocalState, setInputsLocalState] = useState(INITIAL_STATE);
-  const { inputTextSearch, searchRadioBtn } = inputsLocalState;
-  const {
-    setdataApi,
-    pageDrinkOrFood,
-  } = useContext(HeaderContext);
+  const [inputValues, setInputValues] = useState(INITIAL_STATE);
+  const { setPageRecipes } = useContext(RecipesContext);
+  const { pathname } = useLocation();
+  const { searchText, searchCategory } = inputValues;
+  const isFoodPage = pathname.startsWith('/foods');
 
-  function handleSearchInputs({ target }) {
-    const formData = { ...inputsLocalState };
-    formData[target.name] = target.value;
-    setInputsLocalState(formData);
+  function handleInputChange({ target: { name, value } }) {
+    setInputValues({ ...inputValues, [name]: value });
   }
 
-  function AlertEmptyApiResponse(data) {
-    if (data !== null) {
-      setdataApi(data);
-    } else {
+  function saveRecipesOrAlertIfThereIsNone(data) {
+    if (!data) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      return;
     }
-  }
-  function handleFetchs(type, info, pageType) {
-    switch (type) {
-    case 'Ingredient':
-      if (pageType === 'Drink') {
-        getDrinkIngredientApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
-      } else {
-        getFoodIngredientApi(info).then((data) => AlertEmptyApiResponse(data.meals));
-      }
-      break;
-
-    case 'Name':
-      if (pageType === 'Drink') {
-        getDrinkNameApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
-      } else {
-        getFoodNameApi(info).then((data) => AlertEmptyApiResponse(data.meals));
-      }
-
-      break;
-
-    case 'First letter':
-      if (info.length > 1) {
-        global.alert('Your search must have only 1 (one) character');
-      } else if (pageType === 'Drink') {
-        getDrinkFirstletterApi(info).then((data) => AlertEmptyApiResponse(data.drinks));
-      } else {
-        getFoodFirstletterApi(info)
-          .then((data) => AlertEmptyApiResponse(data.meals));
-      }
-      break;
-    default: {
-      global.alert('escolha uma categoria');
-    }
-    }
+    setPageRecipes(data);
   }
 
-  function handleClick() {
-    handleFetchs(searchRadioBtn, inputTextSearch, pageDrinkOrFood);
+  function fetchRecipesWithSearchInput() {
+    const pageType = isFoodPage ? 'food' : 'drink';
+    const fetchFunctions = {
+      food: {
+        ingredient: getMealsByIngredientName,
+        name: getMealsByName,
+        firstLetter: getMealsByFirstLetter,
+      },
+      drink: {
+        ingredient: getDrinksByIngredientName,
+        name: getDrinksByName,
+        firstLetter: getDrinksByFirstLetter,
+      },
+    };
+    if (!searchCategory) {
+      global.alert('Choose a category');
+      return;
+    }
+    if (searchCategory === 'firstLetter' && searchText.length !== 1) {
+      global.alert('Your search must have only 1 (one) character');
+      return;
+    }
+    const fetchRecipesBySearchText = fetchFunctions[pageType][searchCategory];
+    fetchRecipesBySearchText(searchText).then(saveRecipesOrAlertIfThereIsNone);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    fetchRecipesWithSearchInput();
   }
 
   return (
-    <div>
+    <form onSubmit={ handleSubmit }>
       <input
         type="text"
+        name="searchText"
+        value={ searchText }
+        onChange={ handleInputChange }
         data-testid="search-input"
-        onChange={ (e) => handleSearchInputs(e) }
-        name="inputTextSearch"
-        value={ inputTextSearch }
       />
       <label htmlFor="radio-ingredient">
-
         <input
           id="radio-ingredient"
           type="radio"
+          name="searchCategory"
+          value="ingredient"
+          onChange={ handleInputChange }
           data-testid="ingredient-search-radio"
-          name="searchRadioBtn"
-          onChange={ (e) => handleSearchInputs(e) }
-          value="Ingredient"
         />
         Ingredient
       </label>
-
       <label htmlFor="radio-name">
-
         <input
           id="radio-name"
           type="radio"
+          name="searchCategory"
+          value="name"
+          onChange={ handleInputChange }
           data-testid="name-search-radio"
-          name="searchRadioBtn"
-          onChange={ (e) => handleSearchInputs(e) }
-          value="Name"
         />
         Name
       </label>
-
       <label htmlFor="radio-first-letter">
         <input
           id="radio-first-letter"
           type="radio"
+          name="searchCategory"
+          value="firstLetter"
+          onChange={ handleInputChange }
           data-testid="first-letter-search-radio"
-          onChange={ (e) => handleSearchInputs(e) }
-          name="searchRadioBtn"
-          value="First letter"
         />
         First letter
       </label>
-
       <button
         type="submit"
         data-testid="exec-search-btn"
-        onClick={ () => handleClick() }
       >
         Search
       </button>
-    </div>
+    </form>
   );
 }

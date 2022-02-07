@@ -16,12 +16,14 @@ export default function IngredientCheckList({ ingredients }) {
   }, [setIsAllIngredientsChecked, checkedIngredients, ingredients]);
 
   function isIngredientChecked(ingredient) {
-    return checkedIngredients.some(({ name }) => name === ingredient.name);
+    return checkedIngredients.some(({ name, measure }) => (
+      name === ingredient.name && measure === ingredient.measure
+    ));
   }
 
   function uncheckIngredient(ingredient) {
     const decreasedCheckedIngredients = checkedIngredients.filter(
-      ({ name }) => name !== ingredient.name,
+      ({ name, measure }) => name !== ingredient.name || measure !== ingredient.measure,
     );
     setCheckedIngredients(decreasedCheckedIngredients);
   }

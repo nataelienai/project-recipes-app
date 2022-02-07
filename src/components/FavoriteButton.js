@@ -5,7 +5,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import {
   addRecipeToFavorites,
   removeRecipeFromFavorites,
-  getfavoriteRecipes,
+  getFavoriteRecipes,
 } from '../services/localStorage';
 
 export default function FavoriteButton({ recipe, isFood, testId, onToggle }) {
@@ -13,7 +13,7 @@ export default function FavoriteButton({ recipe, isFood, testId, onToggle }) {
   const recipeId = recipe.idMeal || recipe.idDrink || recipe.id;
 
   useEffect(() => {
-    const favoriteRecipes = getfavoriteRecipes();
+    const favoriteRecipes = getFavoriteRecipes();
     const isFavorite = favoriteRecipes.some(({ id }) => id === recipeId);
     setIsRecipeFavorite(isFavorite);
   }, [recipeId]);

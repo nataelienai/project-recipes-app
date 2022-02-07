@@ -39,25 +39,25 @@ export function addDoneRecipe(recipe) {
   setDoneRecipes(doneRecipes.concat(recipe));
 }
 
-export function getfavoriteRecipes() {
+export function getFavoriteRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   return doneRecipes || [];
 }
 
-export function setfavoriteRecipes(favoriteRecipes) {
+export function setFavoriteRecipes(favoriteRecipes) {
   localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
 }
 
 export function addRecipeToFavorites(recipe) {
-  const favoriteRecipes = getfavoriteRecipes();
+  const favoriteRecipes = getFavoriteRecipes();
   const newFavoriteRecipes = favoriteRecipes.concat(recipe);
-  setfavoriteRecipes(newFavoriteRecipes);
+  setFavoriteRecipes(newFavoriteRecipes);
 }
 
 export function removeRecipeFromFavorites(recipeId) {
-  const favoriteRecipes = getfavoriteRecipes();
+  const favoriteRecipes = getFavoriteRecipes();
   const newFavoriteRecipes = favoriteRecipes.filter(({ id }) => id !== recipeId);
-  setfavoriteRecipes(newFavoriteRecipes);
+  setFavoriteRecipes(newFavoriteRecipes);
 }
 
 export function clearStorage() {

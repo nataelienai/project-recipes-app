@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getNationalitiesApi } from '../services/api';
+import { getMealNationalities } from '../services/api';
 
 export default function useNationalities() {
   const [nationalities, setNationalities] = useState([]);
 
   useEffect(() => {
-    getNationalitiesApi()
+    getMealNationalities()
       .then(setNationalities);
   }, []);
 
