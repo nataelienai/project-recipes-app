@@ -44,6 +44,7 @@ export default function ButtonsCategory() {
 
   function buttons(category) {
     return category.map(({ strCategory }, i) => i < MAX_CATEGORYS && (
+
       <button
         key={ i }
         type="button"
@@ -53,6 +54,7 @@ export default function ButtonsCategory() {
       >
         {strCategory}
       </button>
+
     ));
   }
 
@@ -74,7 +76,7 @@ export default function ButtonsCategory() {
   }, []);
 
   return (
-    <section>
+    <section className="filters-button">
 
       <button
         type="button"

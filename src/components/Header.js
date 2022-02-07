@@ -5,6 +5,7 @@ import HeaderContext from '../context/header/HeaderContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
+import '../styles/Header.css';
 
 export default function Header({ title }) {
   const { searchButton } = useContext(HeaderContext);
@@ -15,16 +16,6 @@ export default function Header({ title }) {
 
   return (
     <header>
-
-      <button
-        type="button"
-        title="Profile"
-        onClick={ () => history.push('/profile') }
-      >
-        <img src={ profileIcon } alt="profile-icon" data-testid="profile-top-btn" />
-      </button>
-
-      <span data-testid="page-title">{title}</span>
 
       {
         searchButton && (
@@ -40,6 +31,16 @@ export default function Header({ title }) {
           </button>
         )
       }
+
+      <span className="page-title">{title}</span>
+
+      <button
+        type="button"
+        title="Profile"
+        onClick={ () => history.push('/profile') }
+      >
+        <img src={ profileIcon } alt="profile-icon" data-testid="profile-top-btn" />
+      </button>
 
       {inputSearch && <SearchBar />}
 
