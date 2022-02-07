@@ -13,7 +13,7 @@ export default function FinishRecipeButton({ recipe }) {
 
   function getCurrentDate() {
     const date = new Date();
-    return date.toLocaleTimeString('pt-BR');
+    return date.toLocaleDateString('pt-BR');
   }
 
   function splitRecipeTags(tags) {

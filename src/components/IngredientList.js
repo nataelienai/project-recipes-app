@@ -16,12 +16,12 @@ export default function IngredientList({ ingredients }) {
   }, [setIsAllIngredientsChecked, checkedIngredients, ingredients]);
 
   function isIngredientChecked(ingredient) {
-    return checkedIngredients.includes(ingredient);
+    return checkedIngredients.some(({ name }) => name === ingredient.name);
   }
 
   function uncheckIngredient(ingredient) {
     const decreasedCheckedIngredients = checkedIngredients.filter(
-      (checkedIngredient) => checkedIngredient !== ingredient,
+      ({ name }) => name !== ingredient.name,
     );
     setCheckedIngredients(decreasedCheckedIngredients);
   }
@@ -43,8 +43,9 @@ export default function IngredientList({ ingredients }) {
     <ul>
       {ingredients.map((ingredient, index) => (
         <IngredientListItem
-          key={ ingredient }
-          ingredient={ ingredient }
+          key={ ingredient.name }
+          name={ ingredient.name }
+          measure={ ingredient.measure }
           index={ index }
           checked={ isIngredientChecked(ingredient) }
           onToggle={ () => toggleIngredient(ingredient) }
@@ -55,5 +56,5 @@ export default function IngredientList({ ingredients }) {
 }
 
 IngredientList.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
