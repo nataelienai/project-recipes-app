@@ -44,17 +44,17 @@ export default function ButtonsCategory() {
 
   function buttons(category) {
     return category.map(({ strCategory }, i) => i < MAX_CATEGORYS && (
-    
-        <button
-          key={ i }
-          type="button"
-          data-testid={ `${strCategory}-category-filter` }
-          value={ strCategory }
-          onClick={ ({ target }) => HandleClickFilters(strCategory, target) }
-        >
-          {strCategory}
-        </button>
-      
+
+      <button
+        key={ i }
+        type="button"
+        data-testid={ `${strCategory}-category-filter` }
+        value={ strCategory }
+        onClick={ ({ target }) => HandleClickFilters(strCategory, target) }
+      >
+        {strCategory}
+      </button>
+
     ));
   }
 
@@ -76,20 +76,17 @@ export default function ButtonsCategory() {
   }, []);
 
   return (
-    <section className='filters-button'>
-    
-          <button
-            type="button"
-            onClick={ () => handleMainCardsApi() }
-            data-testid="All-category-filter"
-          >
-            All
-          </button>
+    <section className="filters-button">
 
+      <button
+        type="button"
+        onClick={ () => handleMainCardsApi() }
+        data-testid="All-category-filter"
+      >
+        All
+      </button>
 
-        {buttons(buttonsCategory)}
-
-  
+      {buttons(buttonsCategory)}
 
     </section>
   );

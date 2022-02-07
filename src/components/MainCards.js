@@ -23,10 +23,14 @@ export default function MainCards() {
   function cards(data) {
     return data.map((item, i) => i < MAX_CARDS && (
       <div
-        type="button"
+        role="button"
+        tabIndex={ 0 }
         key={ i }
-        className='card-main'
+        className="card-main"
         onClick={
+          () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
+        }
+        onKeyDown={
           () => redirectCards(item.idMeal || item.idDrink, pageDrinkOrFood)
         }
       >
@@ -36,13 +40,16 @@ export default function MainCards() {
           src={ pageDrinkOrFood === 'Food'
             ? `${item.strMealThumb}` : `${item.strDrinkThumb}` }
         />
-        <span data-testid={ `${i}-card-name` }>
-          {' '}
-          { item.strMeal || item.strDrink }
-        </span>
-        <span>
-          {item.strAlcoholic || item.strArea}
-        </span>
+        <div className="container-card-main-infos">
+          <span className="card-main-name">
+            {' '}
+            { item.strMeal || item.strDrink }
+          </span>
+          
+          <span className="card-main-info">
+            {item.strAlcoholic || item.strArea}
+          </span>
+        </div>
       </div>));
   }
 
