@@ -58,7 +58,7 @@ export default function MainCards() {
   }, []);
 
   return (
-    <section className="cards-content">
+    <section className="cards-content" data-testid="meals-section">
       {cards(dataApi)}
     </section>
   );
