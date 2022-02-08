@@ -33,53 +33,57 @@ export default function SearchBar() {
   }
 
   return (
-    <form onSubmit={ handleSubmit }>
-      <input
-        type="text"
-        name="searchText"
-        value={ searchText }
-        onChange={ handleInputChange }
-        data-testid="search-input"
-      />
-      <label htmlFor="radio-ingredient">
+    <form onSubmit={ handleSubmit } className="div-inputs-search">
+      <div>
         <input
-          id="radio-ingredient"
-          type="radio"
-          name="searchCategory"
-          value="ingredient"
+          type="text"
+          name="searchText"
+          value={ searchText }
           onChange={ handleInputChange }
-          data-testid="ingredient-search-radio"
+          data-testid="search-input"
         />
-        Ingredient
-      </label>
-      <label htmlFor="radio-name">
-        <input
-          id="radio-name"
-          type="radio"
-          name="searchCategory"
-          value="name"
-          onChange={ handleInputChange }
-          data-testid="name-search-radio"
-        />
-        Name
-      </label>
-      <label htmlFor="radio-first-letter">
-        <input
-          id="radio-first-letter"
-          type="radio"
-          name="searchCategory"
-          value="firstLetter"
-          onChange={ handleInputChange }
-          data-testid="first-letter-search-radio"
-        />
-        First letter
-      </label>
-      <button
-        type="submit"
-        data-testid="exec-search-btn"
-      >
-        Search
-      </button>
+        <button
+          type="submit"
+          data-testid="exec-search-btn"
+        >
+          Search
+        </button>
+      </div>
+      <div className="radio-buttons">
+        <label htmlFor="radio-ingredient">
+          <input
+            id="radio-ingredient"
+            type="radio"
+            name="searchCategory"
+            value="ingredient"
+            onChange={ handleInputChange }
+            data-testid="ingredient-search-radio"
+          />
+          Ingredient
+        </label>
+        <label htmlFor="radio-name">
+          <input
+            id="radio-name"
+            type="radio"
+            name="searchCategory"
+            value="name"
+            onChange={ handleInputChange }
+            data-testid="name-search-radio"
+          />
+          Name
+        </label>
+        <label htmlFor="radio-first-letter">
+          <input
+            id="radio-first-letter"
+            type="radio"
+            name="searchCategory"
+            value="firstLetter"
+            onChange={ handleInputChange }
+            data-testid="first-letter-search-radio"
+          />
+          First letter
+        </label>
+      </div>
     </form>
   );
 }

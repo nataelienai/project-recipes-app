@@ -1,0 +1,52 @@
+header > button {
+  border: none;
+  border-radius: 100%;
+  height: 7vh;
+  margin: 3px 0;
+  width: 13vw;
+}
+
+header > button img {
+  background: rgba(242, 242, 243, 0);
+  max-height: 5vh;
+  object-fit: cover;
+  padding: 4px;
+
+}
+
+header {
+  background: blueviolet;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.div-inputs-search {
+  background-color: brown;
+  display: flex;
+  flex-direction: column;
+  height: 3em;
+  justify-content: space-evenly;
+  position: absolute;
+  top: 8vh;
+  width: 100vw;
+
+}
+
+.page-title {
+  font-size: xx-large;
+  margin: 0 2em;
+}
+
+.div-inputs-search .radio-buttons {
+  display: flex;
+  gap: 1em;
+}
+
+.div-inputs-search div {
+  display: flex;
+  justify-content: center;
+}

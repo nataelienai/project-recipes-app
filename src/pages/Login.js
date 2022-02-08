@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { setMealsToken, setCocktailsToken, setUser } from '../services/localStorage';
+import '../styles/Login.css';
 
 const EMAIL_REGEX = /^[\w]+([.|\-|_][A-Za-z0-9]+)*@[a-z]{2,}(\.[a-z]{2,})+$/g;
 const PASSWORD_MIN_LENGTH = 6;
@@ -31,31 +32,41 @@ function Login() {
 
   return (
     <div>
-      <form onSubmit={ handleSubmit }>
-        <h1>Login</h1>
-        <input
-          type="text"
-          name="email-input"
-          placeholder="Email"
-          data-testid="email-input"
-          value={ email }
-          onChange={ ({ target: { value } }) => setEmail(value) }
-        />
-        <input
-          type="password"
-          name="password-input"
-          placeholder="Password"
-          data-testid="password-input"
-          value={ password }
-          onChange={ ({ target: { value } }) => setPassword(value) }
-        />
+      <form className="dropdown-menu p-4 login-form" onSubmit={ handleSubmit }>
+        <div className="mb-3">
+          <label htmlFor="email-input" className="form-label">
+            Email
+            <input
+              type="email"
+              id="email-input"
+              className="form-control"
+              data-testid="email-input"
+              placeholder="email@example.com"
+              value={ email }
+              onChange={ ({ target: { value } }) => setEmail(value) }
+            />
+          </label>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password-input" className="form-label">
+            <input
+              type="password"
+              id="password-input"
+              className="form-control"
+              data-testid="password-input"
+              placeholder="Password"
+              value={ password }
+              onChange={ ({ target: { value } }) => setPassword(value) }
+            />
+          </label>
+        </div>
         <button
           type="submit"
-          name="login-submit-btn"
+          className="btn btn-primary"
           data-testid="login-submit-btn"
           disabled={ isButtonDisabled }
         >
-          Enter
+          Sign in
         </button>
       </form>
     </div>

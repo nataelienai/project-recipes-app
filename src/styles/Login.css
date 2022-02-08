@@ -1,0 +1,29 @@
+.login-form, .login-form div label {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  font-size: medium;
+  max-width: 15em;
+
+}
+
+.login-form button {
+  align-self: center;
+  font-size: large;
+  margin-top: 10%;
+  max-width: 7em;
+}
+
+.login-form {
+  border-radius: 7px;
+  box-shadow: 0 1px 7px rgb(94, 92, 92);
+  font-size: x-large;
+  gap: 1em;
+  height: 40vh;
+  left: 9vw;
+  padding: 1em;
+  position: fixed;
+  top: 20vh;
+}

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
+import '../styles/Header.css';
 
 export default function Header({ title, hasSearchButton }) {
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
@@ -19,7 +20,7 @@ export default function Header({ title, hasSearchButton }) {
         <img src={ profileIcon } alt="profile-icon" data-testid="profile-top-btn" />
       </button>
 
-      <span data-testid="page-title">{title}</span>
+      <span data-testid="page-title" className="page-title">{title}</span>
       {
         hasSearchButton && (
           <button

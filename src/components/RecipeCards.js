@@ -26,6 +26,7 @@ export default function RecipeCards({ recipes }) {
       {recipes.slice(0, MAX_CARDS).map((recipe, i) => (
         <div
           key={ recipe.strMeal || recipe.strDrink }
+          className="card-main"
           role="link"
           tabIndex={ 0 }
           onKeyPress={ (e) => handleKeyPress(e, recipe.idMeal || recipe.idDrink) }
@@ -37,9 +38,14 @@ export default function RecipeCards({ recipes }) {
             alt="card"
             data-testid={ `${i}-card-img` }
           />
-          <h2 data-testid={ `${i}-card-name` }>
-            { recipe.strMeal || recipe.strDrink }
-          </h2>
+          <div className="container-card-main-infos">
+            <h2 className="card-main-name" data-testid={ `${i}-card-name` }>
+              { recipe.strMeal || recipe.strDrink }
+            </h2>
+            <span className="card-main-info">
+              {recipe.strAlcoholic || recipe.strArea}
+            </span>
+          </div>
         </div>
       ))}
     </section>

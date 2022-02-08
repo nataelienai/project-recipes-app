@@ -23,7 +23,7 @@ export default function IngredientListItem(props) {
     </li>
   );
 }
-
+/* t */
 IngredientListItem.propTypes = {
   name: PropTypes.string.isRequired,
   measure: PropTypes.string,
