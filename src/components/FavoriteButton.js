@@ -1,70 +1,72 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import { getfavoriteRecipes, setfavoriteRecipes } from '../services/localStorage';
-import HeaderContext from '../context/header/HeaderContext';
+import {
+  addRecipeToFavorites,
+  removeRecipeFromFavorites,
+  getFavoriteRecipes,
+} from '../services/localStorage';
 
-export default function FavoriteButton({
-  responseApiDetails,
-  pageDrinkOrFood,
-  idDetailsUrl }) {
-  const { favorited, setFavorited } = useContext(HeaderContext);
-  const favoriteLS = getfavoriteRecipes();
-  function setFavoriteToLocalStorage() {
-    const newFavoriteObject = responseApiDetails
-      .map((recipe) => ({
-        id: recipe.idMeal || recipe.idDrink,
-        type: pageDrinkOrFood === 'Food' ? 'food' : 'drink',
-        nationality: recipe.strArea || '',
-        category: recipe.strCategory || '',
-        alcoholicOrNot: recipe.strAlcoholic || '',
-        name: recipe.strMeal || recipe.strDrink,
-        image: recipe.strMealThumb || recipe.strDrinkThumb,
-      }));
+export default function FavoriteButton({ recipe, isFood, testId, onToggle }) {
+  const [isRecipeFavorite, setIsRecipeFavorite] = useState(false);
+  const recipeId = recipe.idMeal || recipe.idDrink || recipe.id;
 
-    return favoriteLS.concat(newFavoriteObject);
-  }
-  function removeFavoriteOfLocalStorage() {
-    const favoritefilter = favoriteLS
-      .filter(({ id }) => id !== idDetailsUrl);
-    return favoritefilter;
-  }
-  function validadeFavoriteLS() {
-    const validateFavoriteRecipe = favoriteLS
-      .map(({ id }) => id).some((id) => id === idDetailsUrl);
-    setFavorited(validateFavoriteRecipe);
-    return validateFavoriteRecipe;
-  }
   useEffect(() => {
-    validadeFavoriteLS();
-  }, []);
+    const favoriteRecipes = getFavoriteRecipes();
+    const isFavorite = favoriteRecipes.some(({ id }) => id === recipeId);
+    setIsRecipeFavorite(isFavorite);
+  }, [recipeId]);
 
-  function handleClickFavorite() {
-    if (validadeFavoriteLS()) {
-      const removeFavorite = removeFavoriteOfLocalStorage();
-      setfavoriteRecipes(removeFavorite);
-      setFavorited(false);
-    } else {
-      const newFavorite = setFavoriteToLocalStorage();
-      setfavoriteRecipes(newFavorite);
-      setFavorited(true);
-    }
+  function favoriteRecipe() {
+    const newFavoriteRecipe = {
+      id: recipeId,
+      type: isFood ? 'food' : 'drink',
+      nationality: recipe.strArea || '',
+      category: recipe.strCategory || '',
+      alcoholicOrNot: recipe.strAlcoholic || '',
+      name: recipe.strMeal || recipe.strDrink,
+      image: recipe.strMealThumb || recipe.strDrinkThumb,
+    };
+    addRecipeToFavorites(newFavoriteRecipe);
+    setIsRecipeFavorite(true);
   }
+
+  function unfavoriteRecipe() {
+    removeRecipeFromFavorites(recipeId);
+    setIsRecipeFavorite(false);
+  }
+
+  function toggleFavorite() {
+    if (isRecipeFavorite) {
+      unfavoriteRecipe();
+    } else {
+      favoriteRecipe();
+    }
+    onToggle();
+  }
+
   return (
     <button
       type="button"
-      onClick={ () => handleClickFavorite() }
+      onClick={ toggleFavorite }
     >
       <img
-        src={ !favorited ? whiteHeartIcon : blackHeartIcon }
-        alt="favorite"
-        data-testid="favorite-btn"
+        src={ isRecipeFavorite ? blackHeartIcon : whiteHeartIcon }
+        alt="Favorite button"
+        data-testid={ testId }
       />
     </button>
   );
 }
+
 FavoriteButton.propTypes = {
-  isFavorite: PropTypes.string,
-  setFavorited: PropTypes.any,
-}.isRequired;
+  recipe: PropTypes.objectOf(PropTypes.string).isRequired,
+  isFood: PropTypes.bool.isRequired,
+  testId: PropTypes.string.isRequired,
+  onToggle: PropTypes.func,
+};
+
+FavoriteButton.defaultProps = {
+  onToggle: () => {},
+};

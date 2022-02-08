@@ -8,8 +8,8 @@ import '../styles/FinishRecipeButton.css';
 
 export default function FinishRecipeButton({ recipe }) {
   const { isAllIngredientsChecked } = useContext(RecipeInProgressContext);
-  const history = useHistory();
   const { pathname } = useLocation();
+  const history = useHistory();
 
   function getCurrentDate() {
     const date = new Date();

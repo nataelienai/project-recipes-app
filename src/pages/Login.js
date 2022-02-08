@@ -1,53 +1,46 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import LoginContext from '../context/login/LoginContext';
+import { setMealsToken, setCocktailsToken, setUser } from '../services/localStorage';
 import '../styles/Login.css';
 
-function Login() {
-  const history = useHistory();
+const EMAIL_REGEX = /^[\w]+([.|\-|_][A-Za-z0-9]+)*@[a-z]{2,}(\.[a-z]{2,})+$/g;
+const PASSWORD_MIN_LENGTH = 6;
 
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    btn,
-    setBtn,
-    mealsToken,
-    cocktailsToken,
-  } = useContext(LoginContext);
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const history = useHistory();
+  const mealsToken = 1;
+  const cocktailsToken = 1;
 
   useEffect(() => {
-    const regex = {
-      email: /^[\w]+([.|\-|_][A-Za-z0-9]+)*@[a-z]{2,}(\.[a-z]{2,})+$/g,
-      rAfterAt: /@[a-z]{2,}(\.[a-z]{2,})+$/g,
-      rAfterAtDots: /(\.[a-z]{2,})+$/g };
-    const minCharacters = 6;
-    if (email.match(regex.email) && password.length > minCharacters) {
-      setBtn({ disabled: false });
+    if (email.match(EMAIL_REGEX) && password.length > PASSWORD_MIN_LENGTH) {
+      setIsButtonDisabled(false);
     } else {
-      setBtn({ disabled: true });
+      setIsButtonDisabled(true);
     }
-  }, [email, password, setBtn]);
+  }, [email, password]);
 
-  const btnLocalStorage = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('user', JSON.stringify({ email }));
-    localStorage.setItem('mealsToken', mealsToken);
-    localStorage.setItem('cocktailsToken', cocktailsToken);
+    setUser(email);
+    setMealsToken(mealsToken);
+    setCocktailsToken(cocktailsToken);
     history.push('/foods');
   };
 
   return (
     <div>
-      <form className="dropdown-menu p-4 login-form" onSubmit={ btnLocalStorage }>
+      <form className="dropdown-menu p-4 login-form" onSubmit={ handleSubmit }>
         <div className="mb-3">
-          <label htmlFor="exampleDropdownFormEmail2" className="form-label">
+          <label htmlFor="email-input" className="form-label">
             Email
             <input
               type="email"
+              id="email-input"
               className="form-control"
-              id="exampleDropdownFormEmail2"
+              data-testid="email-input"
               placeholder="email@example.com"
               value={ email }
               onChange={ ({ target: { value } }) => setEmail(value) }
@@ -55,15 +48,12 @@ function Login() {
           </label>
         </div>
         <div className="mb-3">
-          <label
-            htmlFor="exampleDropdownFormPassword2"
-            className="form-label"
-          >
-            Password
+          <label htmlFor="password-input" className="form-label">
             <input
               type="password"
+              id="password-input"
               className="form-control"
-              id="exampleDropdownFormPassword2"
+              data-testid="password-input"
               placeholder="Password"
               value={ password }
               onChange={ ({ target: { value } }) => setPassword(value) }
@@ -72,8 +62,9 @@ function Login() {
         </div>
         <button
           type="submit"
-          disabled={ btn.disabled }
           className="btn btn-primary"
+          data-testid="login-submit-btn"
+          disabled={ isButtonDisabled }
         >
           Sign in
         </button>
