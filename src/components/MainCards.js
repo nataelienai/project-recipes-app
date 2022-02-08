@@ -45,7 +45,6 @@ export default function MainCards() {
             {' '}
             { item.strMeal || item.strDrink }
           </span>
-          
           <span className="card-main-info">
             {item.strAlcoholic || item.strArea}
           </span>
