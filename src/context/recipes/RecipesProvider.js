@@ -1,28 +1,67 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import RecipesContext from './RecipesContext';
+import RecipeFilterContext from '../recipe-filter/RecipeFilterContext';
 import {
-  getMeals,
   getDrinks,
+  getDrinksByCategory,
+  getDrinksByFirstLetter,
+  getDrinksByIngredientName,
+  getDrinksByName,
+  getMeals,
+  getMealsByCategory,
+  getMealsByFirstLetter,
+  getMealsByIngredientName,
+  getMealsByName,
 } from '../../services/api';
 
 export default function RecipesProvider({ children }) {
   const [pageRecipes, setPageRecipes] = useState([]);
+  const { filter } = useContext(RecipeFilterContext);
   const { pathname } = useLocation();
   const history = useHistory();
   const isFoodPage = pathname.startsWith('/foods');
 
   useEffect(() => {
-    function fetchPageRecipes() {
-      if (isFoodPage) {
-        getMeals().then(setPageRecipes);
-      } else {
-        getDrinks().then(setPageRecipes);
+    const filteredFetches = {
+      food: {
+        ingredient: getMealsByIngredientName,
+        name: getMealsByName,
+        firstLetter: getMealsByFirstLetter,
+        category: getMealsByCategory,
+      },
+      drink: {
+        ingredient: getDrinksByIngredientName,
+        name: getDrinksByName,
+        firstLetter: getDrinksByFirstLetter,
+        category: getDrinksByCategory,
+      },
+    };
+    const pageType = isFoodPage ? 'food' : 'drink';
+    const fetchWithFilter = filteredFetches[pageType][filter.type];
+
+    function saveRecipesOrAlertIfThereIsNone(recipes) {
+      if (!recipes) {
+        global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        return;
       }
+      setPageRecipes(recipes);
+    }
+
+    function fetchPageRecipes() {
+      if (!filter.type) {
+        if (isFoodPage) {
+          getMeals().then(setPageRecipes);
+          return;
+        }
+        getDrinks().then(setPageRecipes);
+        return;
+      }
+      fetchWithFilter(filter.text).then(saveRecipesOrAlertIfThereIsNone);
     }
     fetchPageRecipes();
-  }, [isFoodPage]);
+  }, [isFoodPage, filter]);
 
   useEffect(() => {
     function redirectToRecipeDetails() {
@@ -33,16 +72,16 @@ export default function RecipesProvider({ children }) {
       }
     }
 
-    if (pageRecipes.length === 1) {
+    const hasOneRecipe = pageRecipes.length === 1;
+    const isFilteredByCategory = filter.type === 'category';
+    if (hasOneRecipe && !isFilteredByCategory) {
       redirectToRecipeDetails();
     }
-  }, [isFoodPage, pageRecipes, history]);
-
-  const contextValue = { pageRecipes, setPageRecipes };
+  }, [isFoodPage, pageRecipes, history, filter]);
 
   return (
     <div>
-      <RecipesContext.Provider value={ contextValue }>
+      <RecipesContext.Provider value={ { pageRecipes } }>
         {children}
       </RecipesContext.Provider>
     </div>

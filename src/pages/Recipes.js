@@ -7,9 +7,9 @@ import RecipeCards from '../components/RecipeCards';
 import RecipesContext from '../context/recipes/RecipesContext';
 
 export default function Recipes() {
+  const { pageRecipes } = useContext(RecipesContext);
   const { pathname } = useLocation();
   const isFood = pathname.startsWith('/foods');
-  const { pageRecipes } = useContext(RecipesContext);
 
   return (
     <>

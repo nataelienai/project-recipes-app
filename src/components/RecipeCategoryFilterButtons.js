@@ -1,37 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import RecipesContext from '../context/recipes/RecipesContext';
+import RecipeFilterContext from '../context/recipe-filter/RecipeFilterContext';
 import {
-  getMeals,
-  getDrinks,
   getFoodCategories,
   getDrinkCategories,
-  getMealsByCategory,
-  getDrinksByCategory,
 } from '../services/api';
 
 const MAX_CATEGORIES = 5;
 
 export default function RecipeCategoryFilterButtons() {
   const [recipeCategories, setRecipeCategories] = useState([]);
-  const { setPageRecipes } = useContext(RecipesContext);
+  const { setFilter, filter } = useContext(RecipeFilterContext);
   const { pathname } = useLocation();
   const isFoodPage = pathname.startsWith('/foods');
 
   function fetchRecipesByCategory(category) {
-    if (category === 'all') {
-      if (isFoodPage) {
-        getMeals().then(setPageRecipes);
-      } else {
-        getDrinks().then(setPageRecipes);
-      }
+    if (category === 'all' || filter.text === category) {
+      setFilter({ type: '', text: '' });
       return;
     }
-    if (isFoodPage) {
-      getMealsByCategory(category).then(setPageRecipes);
-    } else {
-      getDrinksByCategory(category).then(setPageRecipes);
-    }
+    setFilter({ type: 'category', text: category });
   }
 
   function handleClick({ target: { value } }) {

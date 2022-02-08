@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import RecipesProvider from './context/recipes/RecipesProvider';
+import RecipeFilterProvider from './context/recipe-filter/RecipeFilterProvider';
 import RecipeInProgressProvider
 from './context/recipe-in-progress/RecipeInProgressProvider';
 import RecipeDetails from './pages/RecipeDetails';
@@ -23,9 +24,11 @@ function App() {
       </Route>
 
       <Route exact path={ ['/foods', '/drinks'] }>
-        <RecipesProvider>
-          <Recipes />
-        </RecipesProvider>
+        <RecipeFilterProvider>
+          <RecipesProvider>
+            <Recipes />
+          </RecipesProvider>
+        </RecipeFilterProvider>
       </Route>
 
       <Route exact path={ ['/foods/:id', '/drinks/:id'] }>
@@ -47,13 +50,17 @@ function App() {
       </Route>
 
       <Route exact path={ ['/explore/foods/ingredients', '/explore/drinks/ingredients'] }>
-        <ExploreIngredients />
+        <RecipeFilterProvider>
+          <ExploreIngredients />
+        </RecipeFilterProvider>
       </Route>
 
       <Route exact path="/explore/foods/nationalities">
-        <RecipesProvider>
-          <ExploreNationalities />
-        </RecipesProvider>
+        <RecipeFilterProvider>
+          <RecipesProvider>
+            <ExploreNationalities />
+          </RecipesProvider>
+        </RecipeFilterProvider>
       </Route>
 
       <Route exact path="/explore/drinks/nationalities">

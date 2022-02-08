@@ -1,14 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import RecipesContext from '../context/recipes/RecipesContext';
-import {
-  getMealsByIngredientName,
-  getMealsByName,
-  getMealsByFirstLetter,
-  getDrinksByIngredientName,
-  getDrinksByName,
-  getDrinksByFirstLetter,
-} from '../services/api';
+import RecipeFilterContext from '../context/recipe-filter/RecipeFilterContext';
 
 const INITIAL_STATE = {
   searchText: '',
@@ -17,37 +8,14 @@ const INITIAL_STATE = {
 
 export default function SearchBar() {
   const [inputValues, setInputValues] = useState(INITIAL_STATE);
-  const { setPageRecipes } = useContext(RecipesContext);
-  const { pathname } = useLocation();
+  const { setFilter } = useContext(RecipeFilterContext);
   const { searchText, searchCategory } = inputValues;
-  const isFoodPage = pathname.startsWith('/foods');
 
   function handleInputChange({ target: { name, value } }) {
     setInputValues({ ...inputValues, [name]: value });
   }
 
-  function saveRecipesOrAlertIfThereIsNone(data) {
-    if (!data) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      return;
-    }
-    setPageRecipes(data);
-  }
-
-  function fetchRecipesWithSearchInput() {
-    const pageType = isFoodPage ? 'food' : 'drink';
-    const fetchFunctions = {
-      food: {
-        ingredient: getMealsByIngredientName,
-        name: getMealsByName,
-        firstLetter: getMealsByFirstLetter,
-      },
-      drink: {
-        ingredient: getDrinksByIngredientName,
-        name: getDrinksByName,
-        firstLetter: getDrinksByFirstLetter,
-      },
-    };
+  function saveSearchInput() {
     if (!searchCategory) {
       global.alert('Choose a category');
       return;
@@ -56,13 +24,12 @@ export default function SearchBar() {
       global.alert('Your search must have only 1 (one) character');
       return;
     }
-    const fetchRecipesBySearchText = fetchFunctions[pageType][searchCategory];
-    fetchRecipesBySearchText(searchText).then(saveRecipesOrAlertIfThereIsNone);
+    setFilter({ type: searchCategory, text: searchText });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    fetchRecipesWithSearchInput();
+    saveSearchInput();
   }
 
   return (
