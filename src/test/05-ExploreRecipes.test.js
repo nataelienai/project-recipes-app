@@ -7,6 +7,9 @@ import '@testing-library/jest-dom';
 
 const EXPLORE_FOODS_ROUTE = '/explore/foods';
 const EXPLORE_DRINKS_ROUTE = '/explore/drinks';
+const EXPLORE_FOODS_BY_INGREDIENT_ROUTE = '/explore/foods/ingredients';
+const EXPLORE_DRINKS_BY_INGREDIENT_ROUTE = '/explore/drinks/ingredients';
+const EXPLORE_FOODS_BY_NATIONALITY_ROUTE = '/explore/foods/nationalities';
 const EXPLORE_BY_INGREDIENT_TEST_ID = 'explore-by-ingredient';
 const EXPLORE_BY_NATIONALITY_TEST_ID = 'explore-by-nationality';
 const SURPRISE_ME_TEST_ID = 'explore-surprise';
@@ -80,7 +83,7 @@ describe('Explore Foods e Explore Drinks', () => {
       const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
       userEvent.click(exploreByIngredientBtn);
 
-      expect(history.location.pathname).toBe('/explore/foods/ingredients');
+      expect(history.location.pathname).toBe(EXPLORE_FOODS_BY_INGREDIENT_ROUTE);
     });
 
     it('Ao clicar em "By Ingredient", explora bebidas por ingrediente', () => {
@@ -89,12 +92,19 @@ describe('Explore Foods e Explore Drinks', () => {
       const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
       userEvent.click(exploreByIngredientBtn);
 
-      expect(history.location.pathname).toBe('/explore/drinks/ingredients');
+      expect(history.location.pathname).toBe(EXPLORE_DRINKS_BY_INGREDIENT_ROUTE);
     });
   });
 
   describe('73 - Ao clicar em "By Nationality", explora comida por nacionalidade', () => {
-    it.todo('A rota deve mudar para tela de explorar por nacionalidades');
+    it('A rota deve mudar para tela de explorar por nacionalidades', () => {
+      const { history } = renderWithRouter(<App />, { route: EXPLORE_FOODS_ROUTE });
+
+      const exploreByNationalityBtn = screen.getByTestId(EXPLORE_BY_NATIONALITY_TEST_ID);
+      userEvent.click(exploreByNationalityBtn);
+
+      expect(history.location.pathname).toBe(EXPLORE_FOODS_BY_NATIONALITY_ROUTE);
+    });
   });
 
   describe('74 - Ao clicar em "Surprise me!", vai para uma receita aleatória', () => {
