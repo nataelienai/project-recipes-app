@@ -1,9 +1,34 @@
+import React from 'react';
+import { screen } from '@testing-library/react';
+import App from '../App';
+import renderWithRouter from './renderWithRouter';
 import '@testing-library/jest-dom';
 
 describe('Explore Foods e Explore Drinks', () => {
   describe('70 - Implemente os elementos da tela de explorar bebidas ou comidas', () => {
-    test.todo('Tem os data-testids corretos para a tela de explorar comidas');
-    test.todo('Tem os data-testids corretos para a tela de explorar bebidas');
+    test('Tem os data-testids corretos para a tela de explorar comidas', () => {
+      renderWithRouter(<App />, { route: '/explore/foods' });
+
+      const exploreByIngredientBtn = screen.getByTestId('explore-by-ingredient');
+      const exploreByNationalityBtn = screen.getByTestId('explore-by-nationality');
+      const surpriseMeBtn = screen.getByTestId('explore-surprise');
+
+      expect(exploreByIngredientBtn).toBeInTheDocument();
+      expect(exploreByNationalityBtn).toBeInTheDocument();
+      expect(surpriseMeBtn).toBeInTheDocument();
+    });
+
+    test('Tem os data-testids corretos para a tela de explorar bebidas', () => {
+      renderWithRouter(<App />, { route: '/explore/drinks' });
+
+      const exploreByIngredientBtn = screen.getByTestId('explore-by-ingredient');
+      const exploreByNationalityBtn = screen.queryByTestId('explore-by-nationality');
+      const surpriseMeBtn = screen.getByTestId('explore-surprise');
+
+      expect(exploreByIngredientBtn).toBeInTheDocument();
+      expect(exploreByNationalityBtn).not.toBeInTheDocument();
+      expect(surpriseMeBtn).toBeInTheDocument();
+    });
   });
 
   describe('71 - Botões de explorar por ingrediente, nacionalidade e receita aleatória',
