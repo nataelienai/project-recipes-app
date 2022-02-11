@@ -1,9 +1,12 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import '@testing-library/jest-dom';
 
+const EXPLORE_FOODS_ROUTE = '/explore/foods';
+const EXPLORE_DRINKS_ROUTE = '/explore/drinks';
 const EXPLORE_BY_INGREDIENT_TEST_ID = 'explore-by-ingredient';
 const EXPLORE_BY_NATIONALITY_TEST_ID = 'explore-by-nationality';
 const SURPRISE_ME_TEST_ID = 'explore-surprise';
@@ -11,7 +14,7 @@ const SURPRISE_ME_TEST_ID = 'explore-surprise';
 describe('Explore Foods e Explore Drinks', () => {
   describe('70 - Implemente os elementos da tela de explorar bebidas ou comidas', () => {
     it('Tem os data-testids corretos para a tela de explorar comidas', () => {
-      renderWithRouter(<App />, { route: '/explore/foods' });
+      renderWithRouter(<App />, { route: EXPLORE_FOODS_ROUTE });
 
       const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
       const exploreByNationalityBtn = screen.getByTestId(EXPLORE_BY_NATIONALITY_TEST_ID);
@@ -23,7 +26,7 @@ describe('Explore Foods e Explore Drinks', () => {
     });
 
     it('Tem os data-testids corretos para a tela de explorar bebidas', () => {
-      renderWithRouter(<App />, { route: '/explore/drinks' });
+      renderWithRouter(<App />, { route: EXPLORE_DRINKS_ROUTE });
 
       const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
       const exploreByNationalityBtn = screen.queryByTestId(
@@ -41,7 +44,7 @@ describe('Explore Foods e Explore Drinks', () => {
     () => {
       it('Explore Foods tem os botões "By Ingredient", "By Nationality" e "Suprise me!"',
         () => {
-          renderWithRouter(<App />, { route: '/explore/foods' });
+          renderWithRouter(<App />, { route: EXPLORE_FOODS_ROUTE });
 
           const exploreByIngredientBtn = screen.getByTestId(
             EXPLORE_BY_INGREDIENT_TEST_ID,
@@ -56,7 +59,7 @@ describe('Explore Foods e Explore Drinks', () => {
           expect(surpriseMeBtn).toHaveTextContent('Surprise me!');
         });
       it('Explore Drinks tem os botões "By Ingredient" e "Surprise me!"', () => {
-        renderWithRouter(<App />, { route: '/explore/drinks' });
+        renderWithRouter(<App />, { route: EXPLORE_DRINKS_ROUTE });
 
         const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
         const exploreByNationalityBtn = screen.queryByTestId(
@@ -71,8 +74,23 @@ describe('Explore Foods e Explore Drinks', () => {
     });
 
   describe('72 - Ao clicar em "By Ingredient", explora receita por ingrediente', () => {
-    it.todo('Ao clicar em "By Ingredient", explora comidas por ingrediente');
-    it.todo('Ao clicar em "By Ingredient", explora bebidas por ingrediente');
+    it('Ao clicar em "By Ingredient", explora comidas por ingrediente', () => {
+      const { history } = renderWithRouter(<App />, { route: EXPLORE_FOODS_ROUTE });
+
+      const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
+      userEvent.click(exploreByIngredientBtn);
+
+      expect(history.location.pathname).toBe('/explore/foods/ingredients');
+    });
+
+    it('Ao clicar em "By Ingredient", explora bebidas por ingrediente', () => {
+      const { history } = renderWithRouter(<App />, { route: EXPLORE_DRINKS_ROUTE });
+
+      const exploreByIngredientBtn = screen.getByTestId(EXPLORE_BY_INGREDIENT_TEST_ID);
+      userEvent.click(exploreByIngredientBtn);
+
+      expect(history.location.pathname).toBe('/explore/drinks/ingredients');
+    });
   });
 
   describe('73 - Ao clicar em "By Nationality", explora comida por nacionalidade', () => {
