@@ -1,7 +1,7 @@
-import drinks from './drinks';
-import meals from './meals';
-import singleMeal from './singleMeal';
-import singleDrink from './singleDrink';
+import drinks from '../../../cypress/mocks/drinks';
+import meals from '../../../cypress/mocks/meals';
+import oneDrink from '../../../cypress/mocks/oneDrink';
+import oneMeal from '../../../cypress/mocks/oneMeal';
 import {
   DRINKS_ENDPOINT,
   MEALS_ENDPOINT,
@@ -12,8 +12,8 @@ import {
 const endpointPromises = {
   [DRINKS_ENDPOINT]: Promise.resolve(drinks),
   [MEALS_ENDPOINT]: Promise.resolve(meals),
-  [RANDOM_DRINK_ENDPOINT]: Promise.resolve(singleDrink),
-  [RANDOM_MEAL_ENDPOINT]: Promise.resolve(singleMeal),
+  [RANDOM_DRINK_ENDPOINT]: Promise.resolve(oneDrink),
+  [RANDOM_MEAL_ENDPOINT]: Promise.resolve(oneMeal),
 };
 
 const fetch = async (url) => ({

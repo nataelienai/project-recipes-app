@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import '@testing-library/jest-dom';
-import singleDrink from './mocks/singleDrink';
-import singleMeal from './mocks/singleMeal';
+import oneDrink from '../../cypress/mocks/oneDrink';
+import oneMeal from '../../cypress/mocks/oneMeal';
 import { RANDOM_MEAL_ENDPOINT, RANDOM_DRINK_ENDPOINT } from './mocks/endpoints';
 import fetchMock from './mocks/fetch';
 
@@ -125,8 +125,8 @@ describe('Explore Foods e Explore Drinks', () => {
       });
       expect(fetch).toHaveBeenCalledWith(RANDOM_MEAL_ENDPOINT);
 
-      const mealId = singleMeal.meals[0].idMeal;
-      expect(history.location.pathname).toBe(`${FOODS_ROUTE}/${mealId}`)
+      const mealId = oneMeal.meals[0].idMeal;
+      expect(history.location.pathname).toBe(`${FOODS_ROUTE}/${mealId}`);
 
       global.fetch.mockRestore();
     });
@@ -142,7 +142,7 @@ describe('Explore Foods e Explore Drinks', () => {
       });
       expect(fetch).toHaveBeenCalledWith(RANDOM_DRINK_ENDPOINT);
 
-      const drinkId = singleDrink.drinks[0].idDrink;
+      const drinkId = oneDrink.drinks[0].idDrink;
       expect(history.location.pathname).toBe(`${DRINKS_ROUTE}/${drinkId}`);
 
       global.fetch.mockRestore();
