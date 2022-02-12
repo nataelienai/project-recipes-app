@@ -1,10 +1,16 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import '@testing-library/jest-dom';
+import singleDrink from './mocks/singleDrink';
+import singleMeal from './mocks/singleMeal';
+import { RANDOM_MEAL_ENDPOINT, RANDOM_DRINK_ENDPOINT } from './mocks/endpoints';
+import fetchMock from './mocks/fetch';
 
+const FOODS_ROUTE = '/foods';
+const DRINKS_ROUTE = '/drinks';
 const EXPLORE_FOODS_ROUTE = '/explore/foods';
 const EXPLORE_DRINKS_ROUTE = '/explore/drinks';
 const EXPLORE_FOODS_BY_INGREDIENT_ROUTE = '/explore/foods/ingredients';
@@ -108,7 +114,38 @@ describe('Explore Foods e Explore Drinks', () => {
   });
 
   describe('74 - Ao clicar em "Surprise me!", vai para uma receita aleatória', () => {
-    it.todo('Ao clicar em "Surprise me!", vai para uma comida aleatória');
-    it.todo('Ao clicar em "Surprise me!", vai para uma bebida aleatória');
+    it('Ao clicar em "Surprise me!", vai para uma comida aleatória', async () => {
+      const { history } = renderWithRouter(<App />, { route: EXPLORE_FOODS_ROUTE });
+
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      const surpriseMeBtn = screen.getByTestId(SURPRISE_ME_TEST_ID);
+      await act(async () => {
+        userEvent.click(surpriseMeBtn);
+      });
+      expect(fetch).toHaveBeenCalledWith(RANDOM_MEAL_ENDPOINT);
+
+      const mealId = singleMeal.meals[0].idMeal;
+      expect(history.location.pathname).toBe(`${FOODS_ROUTE}/${mealId}`)
+
+      global.fetch.mockRestore();
+    });
+
+    it('Ao clicar em "Surprise me!", vai para uma bebida aleatória', async () => {
+      const { history } = renderWithRouter(<App />, { route: EXPLORE_DRINKS_ROUTE });
+
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      const surpriseMeBtn = screen.getByTestId(SURPRISE_ME_TEST_ID);
+      await act(async () => {
+        userEvent.click(surpriseMeBtn);
+      });
+      expect(fetch).toHaveBeenCalledWith(RANDOM_DRINK_ENDPOINT);
+
+      const drinkId = singleDrink.drinks[0].idDrink;
+      expect(history.location.pathname).toBe(`${DRINKS_ROUTE}/${drinkId}`);
+
+      global.fetch.mockRestore();
+    });
   });
 });
