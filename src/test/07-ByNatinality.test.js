@@ -1,83 +1,181 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
+import fetchMock from './mocks/fetch';
+import nationalitiesMock from '../../cypress/mocks/areas';
+import mealsMock from '../../cypress/mocks/meals';
+import italianMealsMock from '../../cypress/mocks/italianMeals';
+import {
+  NATIONALITIES_ENDPOINT,
+  MEALS_ENDPOINT,
+  MEAL_BY_NATIONALITY_ENDPOINT,
+} from './mocks/endpoints';
 
-const url = '/explore/foods/nationalities';
+const EXPLORE_FOOD_NATIONALITIES_ROUTE = '/explore/foods/nationalities';
+const EXPLORE_DRINK_NATIONALITIES_ROUTE = '/explore/drinks/nationalities';
+const NATIONALITY_FILTER_TEST_ID = 'explore-by-nationality-dropdown';
+const MAX_NUMBER_OF_MEALS = 12;
 
-describe(
-  'Testa todos os elementos da página de By Nationality', () => {
-    test('01-Verificando se o icone profile existe.', () => {
-      renderWithRouter(<App />, { route: url });
-      const PROFILE_ICON = screen.getByTestId('profile-top-btn');
-      expect(PROFILE_ICON).toBeInTheDocument();
+function assertExistenceOfFirstMeals(meals, limit = MAX_NUMBER_OF_MEALS) {
+  meals.slice(0, limit).forEach((meal, index) => {
+    const recipeCard = screen.getByTestId(`${index}-recipe-card`);
+    const cardImage = screen.getByTestId(`${index}-card-img`);
+    const cardName = screen.getByTestId(`${index}-card-name`);
+
+    expect(recipeCard).toBeInTheDocument();
+    expect(cardImage).toHaveAttribute('src', meal.strMealThumb);
+    expect(cardName).toHaveTextContent(meal.strMeal);
+  });
+  const recipeCard = screen.queryByTestId(`${limit}-recipe-card`);
+  const cardImage = screen.queryByTestId(`${limit}-card-img`);
+  const cardName = screen.queryByTestId(`${limit}-card-name`);
+
+  expect(recipeCard).not.toBeInTheDocument();
+  expect(cardImage).not.toBeInTheDocument();
+  expect(cardName).not.toBeInTheDocument();
+}
+
+describe('Explore By Nationality', () => {
+  describe('78 - A tela deve conter os atributos descritos no protótipo', () => {
+    it('Há os data-testids de 12 cards e de todas as nacionalidades', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      expect(nationalityFilter).toBeInTheDocument();
+
+      nationalitiesMock.meals.forEach(({ strArea: nationality }) => {
+        const nationalityOption = screen.getByTestId(`${nationality}-option`);
+        expect(nationalityOption).toBeInTheDocument();
+      });
+
+      const NUMBER_OF_CARDS = 12;
+      for (let index = 0; index < NUMBER_OF_CARDS; index += 1) {
+        const recipeCard = screen.getByTestId(`${index}-recipe-card`);
+        const cardImage = screen.getByTestId(`${index}-card-img`);
+        const cardName = screen.getByTestId(`${index}-card-name`);
+
+        expect(recipeCard).toBeInTheDocument();
+        expect(cardImage).toBeInTheDocument();
+        expect(cardName).toBeInTheDocument();
+      }
+
+      const recipeCard = screen.queryByTestId('12-recipe-card');
+      const cardImage = screen.queryByTestId('12-card-img');
+      const cardName = screen.queryByTestId('12-card-name');
+
+      expect(recipeCard).not.toBeInTheDocument();
+      expect(cardImage).not.toBeInTheDocument();
+      expect(cardName).not.toBeInTheDocument();
+
+      global.fetch.mockRestore();
+    });
+  });
+
+  describe('79 - A tela tem as especificações da tela principal de receitas', () => {
+    it('Devem ser carregadas as 12 primeiras receitas de comidas', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+      expect(fetch).toHaveBeenCalledWith(NATIONALITIES_ENDPOINT);
+      expect(fetch).toHaveBeenCalledWith(MEALS_ENDPOINT);
+      assertExistenceOfFirstMeals(mealsMock.meals);
+
+      global.fetch.mockRestore();
     });
 
-    test('02-Verificando se o tituloExplore Nationalities existe.', () => {
-      renderWithRouter(<App />, { route: url });
-      const TITLE_EXP = screen.getByText('Explore Nationalities');
-      expect(TITLE_EXP).toBeInTheDocument();
+    it('Os dados filtrados da API mudam conforme o filtro de nacionalidade', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      await act(async () => {
+        userEvent.selectOptions(nationalityFilter, 'Italian');
+      });
+      expect(fetch).toHaveBeenCalledWith(MEAL_BY_NATIONALITY_ENDPOINT);
+      assertExistenceOfFirstMeals(italianMealsMock.meals);
+
+      global.fetch.mockRestore();
     });
 
-    test('03-Verificando se existe 12 igredients cards', async () => {
-      renderWithRouter(<App />, { route: '/foods' });
-      const MAIN_SECTION = await screen.findAllByTestId(/[0-9]-recipe-card/);
-      const size = 12;
-      expect(MAIN_SECTION).toHaveLength(size);
-    });
+    it('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita',
+      async () => {
+        jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+        let history;
 
-    test('04-Verificando se o card redireciona', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const BY_ING_BUTTON = await screen.findByTestId('0-card-img');
-      userEvent.click(BY_ING_BUTTON);
-      const mock = '/foods/52977';
-      expect(history.location.pathname).toBe(mock);
-    });
+        await act(async () => {
+          const renderResult = (
+            renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE })
+          );
+          history = renderResult.history;
+        });
 
-    test('09-Verificando se o botão DRINKS existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
-      expect(DRINKS_BUTTON).toBeInTheDocument();
-    });
+        const recipeCard = screen.getByTestId('0-recipe-card');
+        await act(async () => {
+          userEvent.click(recipeCard);
+        });
 
-    test('10-Verificando se o botão DRINKS redireciona para /drinks', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
-      userEvent.click(DRINKS_BUTTON);
-      expect(history.location.pathname).toBe('/drinks');
-    });
+        const mealId = mealsMock.meals[0].idMeal;
+        expect(history.location.pathname).toBe(`/foods/${mealId}`);
 
-    test('11-Verificando se o botão EXPLORE existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
-      expect(EXPLORE_BUTTON).toBeInTheDocument();
-    });
+        global.fetch.mockRestore();
+      });
+  });
 
-    test('12-Verificando se o botão EXPLORE redireciona para /explore', async () => {
-      const { history } = renderWithRouter(<App />, { route: '/foods' });
-      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
-      userEvent.click(EXPLORE_BUTTON);
-      expect(history.location.pathname).toBe('/explore');
-    });
+  describe('80 - O dropdown contém todas as áreas retornadas da API', () => {
+    it('O dropdown deve conter todas as áreas retornadas da API e a opção "All"',
+      async () => {
+        jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
 
-    test('13-Verificando se o botão FOOD existe', async () => {
-      renderWithRouter(<App />, { route: '/foods' });
-      const EXPLORE_BUTTON = await screen.findByTestId('food-bottom-btn');
-      expect(EXPLORE_BUTTON).toBeInTheDocument();
-    });
+        await act(async () => {
+          renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+        });
 
-    test('14-Verificando se o botão FOOD redireciona para /foods', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const FOOD_BUTTON = await screen.findByTestId('food-bottom-btn');
-      userEvent.click(FOOD_BUTTON);
-      expect(history.location.pathname).toBe('/foods');
-    });
+        const allNationalitiesOption = screen.getByTestId('All-option');
+        expect(allNationalitiesOption).toBeInTheDocument();
 
-    // test('?', () => {
-    //   renderWithRouter(<App />);
-    // });
-  },
-);
+        nationalitiesMock.meals.forEach(({ strArea: nationality }) => {
+          const nationalityOption = screen.getByTestId(`${nationality}-option`);
+          expect(nationalityOption).toBeInTheDocument();
+        });
+
+        global.fetch.mockRestore();
+      });
+
+    it('A opção "All" retorna as receitas sem nenhum filtro', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      await act(async () => {
+        userEvent.selectOptions(nationalityFilter, 'All');
+      });
+      assertExistenceOfFirstMeals(mealsMock.meals);
+
+      global.fetch.mockRestore();
+    });
+  });
+
+  describe('81 - Deve haver apenas a rota /explore/foods/nationalities', () => {
+    it('A rota /explore/drinks/nationalities retorna um erro de "Not Found"', () => {
+      renderWithRouter(<App />, { route: EXPLORE_DRINK_NATIONALITIES_ROUTE });
+
+      const errorMessage = screen.getByText('Not Found');
+      expect(errorMessage).toBeInTheDocument();
+    });
+  });
+});
