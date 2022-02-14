@@ -15,6 +15,7 @@ import {
 } from './mocks/endpoints';
 
 const EXPLORE_FOOD_NATIONALITIES_ROUTE = '/explore/foods/nationalities';
+const EXPLORE_DRINK_NATIONALITIES_ROUTE = '/explore/drinks/nationalities';
 const NATIONALITY_FILTER_TEST_ID = 'explore-by-nationality-dropdown';
 const MAX_NUMBER_OF_MEALS = 12;
 
@@ -151,6 +152,7 @@ describe('Explore By Nationality', () => {
 
         global.fetch.mockRestore();
       });
+
     it('A opção "All" retorna as receitas sem nenhum filtro', async () => {
       jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
 
@@ -169,6 +171,11 @@ describe('Explore By Nationality', () => {
   });
 
   describe('81 - Deve haver apenas a rota /explore/foods/nationalities', () => {
-    test.todo('A rota /explore/drinks/nationalities retorna um erro de "Not Found"');
+    it('A rota /explore/drinks/nationalities retorna um erro de "Not Found"', () => {
+      renderWithRouter(<App />, { route: EXPLORE_DRINK_NATIONALITIES_ROUTE });
+
+      const errorMessage = screen.getByText('Not Found');
+      expect(errorMessage).toBeInTheDocument();
+    });
   });
 });
