@@ -4,7 +4,8 @@ import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import fetchMock from './mocks/fetch';
-import nationalities from '../../cypress/mocks/areas';
+import nationalitiesMock from '../../cypress/mocks/areas';
+import mealsMock from '../../cypress/mocks/meals';
 import { NATIONALITIES_ENDPOINT, MEALS_ENDPOINT } from './mocks/endpoints';
 
 const EXPLORE_FOOD_NATIONALITIES_ROUTE = '/explore/foods/nationalities';
@@ -25,7 +26,7 @@ describe('Explore By Nationality', () => {
       const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
       expect(nationalityFilter).toBeInTheDocument();
 
-      nationalities.meals.forEach(({ strArea: nationality }) => {
+      nationalitiesMock.meals.forEach(({ strArea: nationality }) => {
         const nationalityOption = screen.getByTestId(`${nationality}-option`);
         expect(nationalityOption).toBeInTheDocument();
       });
@@ -54,7 +55,34 @@ describe('Explore By Nationality', () => {
   });
 
   describe('79 - A tela tem as especificações da tela principal de receitas', () => {
-    test.todo('Devem ser carregadas as 12 primeiras receitas de comidas');
+    it('Devem ser carregadas as 12 primeiras receitas de comidas', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const NUMBER_OF_CARDS = 12;
+      mealsMock.meals.slice(0, NUMBER_OF_CARDS).forEach((meal, index) => {
+        const recipeCard = screen.getByTestId(`${index}-recipe-card`);
+        const cardImage = screen.getByTestId(`${index}-card-img`);
+        const cardName = screen.getByTestId(`${index}-card-name`);
+
+        expect(recipeCard).toBeInTheDocument();
+        expect(cardImage).toHaveAttribute('src', meal.strMealThumb);
+        expect(cardName).toHaveTextContent(meal.strMeal);
+      });
+      const recipeCard = screen.queryByTestId('12-recipe-card');
+      const cardImage = screen.queryByTestId('12-card-img');
+      const cardName = screen.queryByTestId('12-card-name');
+
+      expect(recipeCard).not.toBeInTheDocument();
+      expect(cardImage).not.toBeInTheDocument();
+      expect(cardName).not.toBeInTheDocument();
+
+      global.fetch.mockRestore();
+    });
+
     test.todo('Os dados filtrados da API devem mudar conforme o filtro de nacionalidade');
     test.todo('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita');
   });
