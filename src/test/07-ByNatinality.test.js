@@ -108,7 +108,28 @@ describe('Explore By Nationality', () => {
       global.fetch.mockRestore();
     });
 
-    test.todo('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita');
+    it('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita',
+      async () => {
+        jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+        let history;
+
+        await act(async () => {
+          const renderResult = (
+            renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE })
+          );
+          history = renderResult.history;
+        });
+
+        const recipeCard = screen.getByTestId('0-recipe-card');
+        await act(async () => {
+          userEvent.click(recipeCard);
+        });
+
+        const mealId = mealsMock.meals[0].idMeal;
+        expect(history.location.pathname).toBe(`/foods/${mealId}`);
+
+        global.fetch.mockRestore();
+      });
   });
 
   describe('80 - O dropdown contém todas as áreas retornadas da API', () => {
