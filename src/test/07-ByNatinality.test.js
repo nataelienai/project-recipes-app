@@ -1,83 +1,22 @@
-import React from 'react';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-
 import '@testing-library/jest-dom';
-import App from '../App';
-import renderWithRouter from './renderWithRouter';
 
-const url = '/explore/foods/nationalities';
+describe('Explore By Nationality', () => {
+  describe('78 - A tela deve conter os atributos descritos no protótipo', () => {
+    test.todo('Há os data-testids de 12 cards e de todas as nacionalidades');
+  });
 
-describe(
-  'Testa todos os elementos da página de By Nationality', () => {
-    test('01-Verificando se o icone profile existe.', () => {
-      renderWithRouter(<App />, { route: url });
-      const PROFILE_ICON = screen.getByTestId('profile-top-btn');
-      expect(PROFILE_ICON).toBeInTheDocument();
-    });
+  describe('79 - A tela tem as especificações da tela principal de receitas', () => {
+    test.todo('Devem ser carregadas as 12 primeiras receitas de comidas');
+    test.todo('Os dados filtrados da API devem mudar conforme o filtro de nacionalidade');
+    test.todo('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita');
+  });
 
-    test('02-Verificando se o tituloExplore Nationalities existe.', () => {
-      renderWithRouter(<App />, { route: url });
-      const TITLE_EXP = screen.getByText('Explore Nationalities');
-      expect(TITLE_EXP).toBeInTheDocument();
-    });
+  describe('80 - O dropdown contém todas as áreas retornadas da API', () => {
+    test.todo('O dropdown deve conter todas as áreas retornadas da API e a opção "All"');
+    test.todo('A opção "All" retorna as receitas sem nenhum filtro');
+  });
 
-    test('03-Verificando se existe 12 igredients cards', async () => {
-      renderWithRouter(<App />, { route: '/foods' });
-      const MAIN_SECTION = await screen.findAllByTestId(/[0-9]-recipe-card/);
-      const size = 12;
-      expect(MAIN_SECTION).toHaveLength(size);
-    });
-
-    test('04-Verificando se o card redireciona', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const BY_ING_BUTTON = await screen.findByTestId('0-card-img');
-      userEvent.click(BY_ING_BUTTON);
-      const mock = '/foods/52977';
-      expect(history.location.pathname).toBe(mock);
-    });
-
-    test('09-Verificando se o botão DRINKS existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
-      expect(DRINKS_BUTTON).toBeInTheDocument();
-    });
-
-    test('10-Verificando se o botão DRINKS redireciona para /drinks', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
-      userEvent.click(DRINKS_BUTTON);
-      expect(history.location.pathname).toBe('/drinks');
-    });
-
-    test('11-Verificando se o botão EXPLORE existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
-      expect(EXPLORE_BUTTON).toBeInTheDocument();
-    });
-
-    test('12-Verificando se o botão EXPLORE redireciona para /explore', async () => {
-      const { history } = renderWithRouter(<App />, { route: '/foods' });
-      const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
-      userEvent.click(EXPLORE_BUTTON);
-      expect(history.location.pathname).toBe('/explore');
-    });
-
-    test('13-Verificando se o botão FOOD existe', async () => {
-      renderWithRouter(<App />, { route: '/foods' });
-      const EXPLORE_BUTTON = await screen.findByTestId('food-bottom-btn');
-      expect(EXPLORE_BUTTON).toBeInTheDocument();
-    });
-
-    test('14-Verificando se o botão FOOD redireciona para /foods', async () => {
-      const { history } = renderWithRouter(<App />, { route: url });
-      const FOOD_BUTTON = await screen.findByTestId('food-bottom-btn');
-      userEvent.click(FOOD_BUTTON);
-      expect(history.location.pathname).toBe('/foods');
-    });
-
-    // test('?', () => {
-    //   renderWithRouter(<App />);
-    // });
-  },
-);
+  describe('81 - Deve haver apenas a rota /explore/foods/nationalities', () => {
+    test.todo('A rota /explore/drinks/nationalities retorna um erro de "Not Found"');
+  });
+});
