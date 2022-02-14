@@ -133,8 +133,39 @@ describe('Explore By Nationality', () => {
   });
 
   describe('80 - O dropdown contém todas as áreas retornadas da API', () => {
-    test.todo('O dropdown deve conter todas as áreas retornadas da API e a opção "All"');
-    test.todo('A opção "All" retorna as receitas sem nenhum filtro');
+    it('O dropdown deve conter todas as áreas retornadas da API e a opção "All"',
+      async () => {
+        jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+        await act(async () => {
+          renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+        });
+
+        const allNationalitiesOption = screen.getByTestId('All-option');
+        expect(allNationalitiesOption).toBeInTheDocument();
+
+        nationalitiesMock.meals.forEach(({ strArea: nationality }) => {
+          const nationalityOption = screen.getByTestId(`${nationality}-option`);
+          expect(nationalityOption).toBeInTheDocument();
+        });
+
+        global.fetch.mockRestore();
+      });
+    it('A opção "All" retorna as receitas sem nenhum filtro', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      await act(async () => {
+        userEvent.selectOptions(nationalityFilter, 'All');
+      });
+      assertExistenceOfFirstMeals(mealsMock.meals);
+
+      global.fetch.mockRestore();
+    });
   });
 
   describe('81 - Deve haver apenas a rota /explore/foods/nationalities', () => {
