@@ -1,8 +1,56 @@
+import React from 'react';
+import { screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import App from '../App';
+import renderWithRouter from './renderWithRouter';
+import fetchMock from './mocks/fetch';
+import nationalities from '../../cypress/mocks/areas';
+import { NATIONALITIES_ENDPOINT, MEALS_ENDPOINT } from './mocks/endpoints';
+
+const EXPLORE_FOOD_NATIONALITIES_ROUTE = '/explore/foods/nationalities';
+const NATIONALITY_FILTER_TEST_ID = 'explore-by-nationality-dropdown';
 
 describe('Explore By Nationality', () => {
   describe('78 - A tela deve conter os atributos descritos no protótipo', () => {
-    test.todo('Há os data-testids de 12 cards e de todas as nacionalidades');
+    it('Há os data-testids de 12 cards e de todas as nacionalidades', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      expect(fetch).toHaveBeenCalledWith(NATIONALITIES_ENDPOINT);
+      expect(fetch).toHaveBeenCalledWith(MEALS_ENDPOINT);
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      expect(nationalityFilter).toBeInTheDocument();
+
+      nationalities.meals.forEach(({ strArea: nationality }) => {
+        const nationalityOption = screen.getByTestId(`${nationality}-option`);
+        expect(nationalityOption).toBeInTheDocument();
+      });
+
+      const NUMBER_OF_CARDS = 12;
+      for (let index = 0; index < NUMBER_OF_CARDS; index += 1) {
+        const recipeCard = screen.getByTestId(`${index}-recipe-card`);
+        const cardImage = screen.getByTestId(`${index}-card-img`);
+        const cardName = screen.getByTestId(`${index}-card-name`);
+
+        expect(recipeCard).toBeInTheDocument();
+        expect(cardImage).toBeInTheDocument();
+        expect(cardName).toBeInTheDocument();
+      }
+
+      const recipeCard = screen.queryByTestId('12-recipe-card');
+      const cardImage = screen.queryByTestId('12-card-img');
+      const cardName = screen.queryByTestId('12-card-name');
+
+      expect(recipeCard).not.toBeInTheDocument();
+      expect(cardImage).not.toBeInTheDocument();
+      expect(cardName).not.toBeInTheDocument();
+
+      global.fetch.mockRestore();
+    });
   });
 
   describe('79 - A tela tem as especificações da tela principal de receitas', () => {
