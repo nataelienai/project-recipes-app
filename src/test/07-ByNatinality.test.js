@@ -1,15 +1,41 @@
 import React from 'react';
 import { screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import fetchMock from './mocks/fetch';
 import nationalitiesMock from '../../cypress/mocks/areas';
 import mealsMock from '../../cypress/mocks/meals';
-import { NATIONALITIES_ENDPOINT, MEALS_ENDPOINT } from './mocks/endpoints';
+import italianMealsMock from '../../cypress/mocks/italianMeals';
+import {
+  NATIONALITIES_ENDPOINT,
+  MEALS_ENDPOINT,
+  MEAL_BY_NATIONALITY_ENDPOINT,
+} from './mocks/endpoints';
 
 const EXPLORE_FOOD_NATIONALITIES_ROUTE = '/explore/foods/nationalities';
 const NATIONALITY_FILTER_TEST_ID = 'explore-by-nationality-dropdown';
+const MAX_NUMBER_OF_MEALS = 12;
+
+function assertExistenceOfFirstMeals(meals, limit = MAX_NUMBER_OF_MEALS) {
+  meals.slice(0, limit).forEach((meal, index) => {
+    const recipeCard = screen.getByTestId(`${index}-recipe-card`);
+    const cardImage = screen.getByTestId(`${index}-card-img`);
+    const cardName = screen.getByTestId(`${index}-card-name`);
+
+    expect(recipeCard).toBeInTheDocument();
+    expect(cardImage).toHaveAttribute('src', meal.strMealThumb);
+    expect(cardName).toHaveTextContent(meal.strMeal);
+  });
+  const recipeCard = screen.queryByTestId(`${limit}-recipe-card`);
+  const cardImage = screen.queryByTestId(`${limit}-card-img`);
+  const cardName = screen.queryByTestId(`${limit}-card-name`);
+
+  expect(recipeCard).not.toBeInTheDocument();
+  expect(cardImage).not.toBeInTheDocument();
+  expect(cardName).not.toBeInTheDocument();
+}
 
 describe('Explore By Nationality', () => {
   describe('78 - A tela deve conter os atributos descritos no protótipo', () => {
@@ -19,9 +45,6 @@ describe('Explore By Nationality', () => {
       await act(async () => {
         renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
       });
-
-      expect(fetch).toHaveBeenCalledWith(NATIONALITIES_ENDPOINT);
-      expect(fetch).toHaveBeenCalledWith(MEALS_ENDPOINT);
 
       const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
       expect(nationalityFilter).toBeInTheDocument();
@@ -61,29 +84,30 @@ describe('Explore By Nationality', () => {
       await act(async () => {
         renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
       });
-
-      const NUMBER_OF_CARDS = 12;
-      mealsMock.meals.slice(0, NUMBER_OF_CARDS).forEach((meal, index) => {
-        const recipeCard = screen.getByTestId(`${index}-recipe-card`);
-        const cardImage = screen.getByTestId(`${index}-card-img`);
-        const cardName = screen.getByTestId(`${index}-card-name`);
-
-        expect(recipeCard).toBeInTheDocument();
-        expect(cardImage).toHaveAttribute('src', meal.strMealThumb);
-        expect(cardName).toHaveTextContent(meal.strMeal);
-      });
-      const recipeCard = screen.queryByTestId('12-recipe-card');
-      const cardImage = screen.queryByTestId('12-card-img');
-      const cardName = screen.queryByTestId('12-card-name');
-
-      expect(recipeCard).not.toBeInTheDocument();
-      expect(cardImage).not.toBeInTheDocument();
-      expect(cardName).not.toBeInTheDocument();
+      expect(fetch).toHaveBeenCalledWith(NATIONALITIES_ENDPOINT);
+      expect(fetch).toHaveBeenCalledWith(MEALS_ENDPOINT);
+      assertExistenceOfFirstMeals(mealsMock.meals);
 
       global.fetch.mockRestore();
     });
 
-    test.todo('Os dados filtrados da API devem mudar conforme o filtro de nacionalidade');
+    it('Os dados filtrados da API mudam conforme o filtro de nacionalidade', async () => {
+      jest.spyOn(global, 'fetch').mockImplementation(fetchMock);
+
+      await act(async () => {
+        renderWithRouter(<App />, { route: EXPLORE_FOOD_NATIONALITIES_ROUTE });
+      });
+
+      const nationalityFilter = screen.getByTestId(NATIONALITY_FILTER_TEST_ID);
+      await act(async () => {
+        userEvent.selectOptions(nationalityFilter, 'Italian');
+      });
+      expect(fetch).toHaveBeenCalledWith(MEAL_BY_NATIONALITY_ENDPOINT);
+      assertExistenceOfFirstMeals(italianMealsMock.meals);
+
+      global.fetch.mockRestore();
+    });
+
     test.todo('Ao clicar no card, a rota deve mudar para a tela de detalhes da receita');
   });
 
