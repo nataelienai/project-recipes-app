@@ -1,9 +1,9 @@
-import drinks from '../../../cypress/mocks/drinks';
-import meals from '../../../cypress/mocks/meals';
-import italianMeals from '../../../cypress/mocks/italianMeals';
-import oneDrink from '../../../cypress/mocks/oneDrink';
-import oneMeal from '../../../cypress/mocks/oneMeal';
-import areas from '../../../cypress/mocks/areas';
+import drinks from './drinks';
+import meals from './meals';
+import italianMeals from './italianMeals';
+import oneDrink from './oneDrink';
+import oneMeal from './oneMeal';
+import areas from './areas';
 import {
   DRINKS_ENDPOINT,
   MEALS_ENDPOINT,

@@ -5,9 +5,9 @@ import '@testing-library/jest-dom';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import fetchMock from './mocks/fetch';
-import nationalitiesMock from '../../cypress/mocks/areas';
-import mealsMock from '../../cypress/mocks/meals';
-import italianMealsMock from '../../cypress/mocks/italianMeals';
+import nationalitiesMock from './mocks/areas';
+import mealsMock from './mocks/meals';
+import italianMealsMock from './mocks/italianMeals';
 import {
   NATIONALITIES_ENDPOINT,
   MEALS_ENDPOINT,

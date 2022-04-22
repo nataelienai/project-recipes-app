@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import '@testing-library/jest-dom';
-import oneDrink from '../../cypress/mocks/oneDrink';
-import oneMeal from '../../cypress/mocks/oneMeal';
+import oneDrink from './mocks/oneDrink';
+import oneMeal from './mocks/oneMeal';
 import { RANDOM_MEAL_ENDPOINT, RANDOM_DRINK_ENDPOINT } from './mocks/endpoints';
 import fetchMock from './mocks/fetch';
 
