@@ -47,65 +47,58 @@ describe(
       expect(COCKTAIL_BUTTON).toBeInTheDocument();
     });
 
-    test('07-Verificando se o botão MILK existe', async () => {
-      renderWithRouter(<App />, { route: url });
-      const MILK_BUTTON = await screen
-        .findByTestId('Milk / Float / Shake-category-filter');
-      expect(MILK_BUTTON).toBeInTheDocument();
-    });
-
-    test('08-Verificando se o botão OTHER existe', async () => {
+    test('07-Verificando se o botão OTHER existe', async () => {
       renderWithRouter(<App />, { route: url });
       const OTHER_BUTTON = await screen.findByTestId('Other/Unknown-category-filter');
       expect(OTHER_BUTTON).toBeInTheDocument();
     });
 
-    test('09-Verificando se o botão COCOA existe', async () => {
+    test('08-Verificando se o botão COCOA existe', async () => {
       renderWithRouter(<App />, { route: url });
       const COCOA_BUTTON = await screen.findByTestId('Cocoa-category-filter');
       expect(COCOA_BUTTON).toBeInTheDocument();
     });
 
-    test('10-Verificando se existe 12 drinks cards', async () => {
+    test('09-Verificando se existe 12 drinks cards', async () => {
       renderWithRouter(<App />, { route: url });
       const MAIN_SECTION = await screen.findAllByTestId(/[0-9]-recipe-card/);
       const size = 12;
       expect(MAIN_SECTION).toHaveLength(size);
     });
 
-    test('11-Verificando se o botão DRINKS existe', async () => {
+    test('10-Verificando se o botão DRINKS existe', async () => {
       renderWithRouter(<App />, { route: url });
       const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
       expect(DRINKS_BUTTON).toBeInTheDocument();
     });
 
-    test('12-Verificando se o botão DRINKS redireciona para /drinks', async () => {
+    test('11-Verificando se o botão DRINKS redireciona para /drinks', async () => {
       const { history } = renderWithRouter(<App />, { route: url });
       const DRINKS_BUTTON = await screen.findByTestId('drinks-bottom-btn');
       userEvent.click(DRINKS_BUTTON);
       expect(history.location.pathname).toBe('/drinks');
     });
 
-    test('13-Verificando se o botão EXPLORE existe', async () => {
+    test('12-Verificando se o botão EXPLORE existe', async () => {
       renderWithRouter(<App />, { route: url });
       const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
       expect(EXPLORE_BUTTON).toBeInTheDocument();
     });
 
-    test('14-Verificando se o botão EXPLORE redireciona para /explore', async () => {
+    test('13-Verificando se o botão EXPLORE redireciona para /explore', async () => {
       const { history } = renderWithRouter(<App />, { route: '/foods' });
       const EXPLORE_BUTTON = await screen.findByTestId('explore-bottom-btn');
       userEvent.click(EXPLORE_BUTTON);
       expect(history.location.pathname).toBe('/explore');
     });
 
-    test('15-Verificando se o botão FOOD existe', async () => {
+    test('14-Verificando se o botão FOOD existe', async () => {
       renderWithRouter(<App />, { route: '/foods' });
       const EXPLORE_BUTTON = await screen.findByTestId('food-bottom-btn');
       expect(EXPLORE_BUTTON).toBeInTheDocument();
     });
 
-    test('16-Verificando se o botão FOOD redireciona para /foods', async () => {
+    test('15-Verificando se o botão FOOD redireciona para /foods', async () => {
       const { history } = renderWithRouter(<App />, { route: url });
       const FOOD_BUTTON = await screen.findByTestId('food-bottom-btn');
       userEvent.click(FOOD_BUTTON);
