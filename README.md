@@ -11,7 +11,7 @@ O desenvolvimento do projeto foi realizado em conjunto com [Bruno Fay](https://g
 
 ## Tecnologias utilizadas
 
-O código foi desenvolvido utilizando a biblioteca [React](https://reactjs.org/), incluindo o [React Router](https://reactrouter.com/) para roteamento e o Context API, embutido no próprio React, para gerenciamento de estado da aplicação. Aqui, a Context API foi escolhida devido a sua menor complexidade de configuração quando comparada com a biblioteca Redux, tendo em mente que o projeto seria de porte pequeno.
+O código foi desenvolvido utilizando a biblioteca [React](https://reactjs.org/), incluindo o [React Router](https://reactrouter.com/) para roteamento, a Context API, embutida no próprio React, para gerenciamento de estado da aplicação e a [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) nos testes. Aqui, a Context API foi escolhida devido a sua menor complexidade de configuração quando comparada com a biblioteca [Redux](https://react-redux.js.org/), tendo em mente que o projeto seria de porte pequeno.
 
 Além disso, foi utilizado a API do [TheMealDB](https://www.themealdb.com/) para obter as receitas de comidas e a do [TheCocktailDB](https://www.thecocktaildb.com/) para as receitas de bebidas, sendo ambas bancos de dados abertos mantidos pela mesma comunidade.
 
